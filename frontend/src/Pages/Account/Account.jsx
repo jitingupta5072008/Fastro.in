@@ -28,7 +28,7 @@ const Account = () => {
       }
 
       try {
-        const res = await axios.get(`${USER_API_END_POINT}/profile`, {
+        const res = await axios.get(`https://fastro-in-backend.onrender.com/profile`, {
           headers: { Authorization: token }
         });
 
