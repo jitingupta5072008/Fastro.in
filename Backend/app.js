@@ -22,8 +22,11 @@ app.use(bodyParser.json());
 app.use("/api/v1/user",userRoutes)
 app.use("/api/v1/seller",sellerRoutes)
 
+app.get('/',(req,res)=>{
+  res.send("API Working")
+})
 // Database connection and server start
-app.listen(5000, () => { 
+app.listen(process.env.PORT || 5000, () => { 
     connectDB();  // Call DB connection
     console.log('Server running on port 5000');
 });
