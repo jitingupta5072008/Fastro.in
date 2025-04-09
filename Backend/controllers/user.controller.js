@@ -156,7 +156,6 @@ export const address = async (req, res) => {
     }
 }
 
-
 export const placeOrder = async (req, res) => {
     const { userId, cartItems, payment, amount,qty, sellerPhone, address,DeliveryTime } = req.body;
     try {
@@ -212,8 +211,6 @@ export const placeOrder = async (req, res) => {
         res.status(500).json({ message: "Error placing order", error: error.message });
     }
 };
-
-
 
 
 export const getUserOrders = async (req, res) => {

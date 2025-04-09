@@ -1,5 +1,5 @@
 import express from "express";
-import {address, addReview, addToCart, getRelatedProducts,  addWishlist,   categoryWiseProduct,   deleteReview,   getCategories,   getReview,   getUserOrders,  loginwithemail, placeOrder, profile, register,   searchProduct,   sendOtp,  verifyOtp, getSlider, getProductBySingleCategory, getWishlistProduct} from '../controllers/user.controller.js'
+import {address, addReview,  getRelatedProducts,  addWishlist,   categoryWiseProduct,   deleteReview,   getCategories,   getReview,   getUserOrders,  loginwithemail, placeOrder, profile, register,   searchProduct,   sendOtp,  verifyOtp, getSlider, getProductBySingleCategory, getWishlistProduct} from '../controllers/user.controller.js'
 import isAuthenticate from "../middlewares/isAuthenticated.js";
 
 const router = express.Router()
@@ -13,7 +13,7 @@ router.route('/login/otp').post(verifyOtp)
 router.route('/profile').get(isAuthenticate,profile)
 router.route('/add/address').post(isAuthenticate,address)
 
-router.route('/product/addtocart').post(isAuthenticate,addToCart)
+// router.route('/product/addtocart').post(isAuthenticate,addToCart)
 
 // router.route('/placeorder').post(isAuthenticate,placeOrder)
 router.route('/placeorder').post(placeOrder)
