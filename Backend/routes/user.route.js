@@ -38,7 +38,7 @@ router.route('/product/wishlist').post(isAuthenticate,addWishlist)
 router.route('/wishlist/products').get(isAuthenticate,getWishlistProduct)
 
 
-router.route('/products').get(products)
+router.route('/allproducts').get(products)
 router.route('/product/:id').get(singleProducts)
 
 export default router;

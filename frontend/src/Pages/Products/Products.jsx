@@ -13,7 +13,7 @@ const Products = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const url = `${USER_API_END_POINT}/products`;
+                const url = `${USER_API_END_POINT}/allproducts`;
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
