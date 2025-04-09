@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Search, User, Heart, Menu, X, ShoppingCart } from "lucide-react";
 import BottomNav from './BottomNav';
 import { Link, useLocation } from 'react-router-dom';
-import { useCart } from '../../Pages/Cart/CartContext';
+
 import axios from 'axios';
 import { USER_API_END_POINT } from '../../utils/api';
 
 const TopNav = () => {
-  const { logout } = useCart();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [menuHeight, setMenuHeight] = useState("0px");
@@ -52,6 +52,13 @@ const TopNav = () => {
     fetchSliderData();
   }, []);
 
+  const logout = () => {
+    localStorage.clear()
+    console.log('token remove from localStorage');
+    setUser(null);
+    navigate('/login');
+    console.log('logging out');
+  };
 
   const location = useLocation()
   if (location.pathname === '/cart' || location.pathname.startsWith('/address/') || location.pathname === '/seller/add-product') {

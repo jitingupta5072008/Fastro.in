@@ -280,7 +280,6 @@ export const getCategories = async (req, res) => {
     }
 }
 
-
 export const getReview = async (req, res) => {
     try {
         const comments = await Review.find({ productId: req.params.productId })
@@ -290,7 +289,6 @@ export const getReview = async (req, res) => {
         res.status(500).json({ message: "Error fetching comments", error })
     }
 }
-
 
 export const addReview = async (req, res) => {
   const { rating, productId, userId, comment } = req.body;
@@ -456,5 +454,31 @@ export const getProductBySingleCategory = async(req,res)=>{
         res.json({products});
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch Product" });
+    }
+}
+
+
+export const products = async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.json({ products });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ message: error.message });
+    }
+}
+
+export const singleProducts = async (req, res) => {
+    try {
+        const productId = req.params.id;
+            const products = await Product.findById(productId)
+            .populate('seller')
+            .populate('category', 'name'); 
+            // const seller = await Seller.findOne(products.seller)
+
+        res.json({ products});
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: err.message });
     }
 }

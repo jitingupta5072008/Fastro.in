@@ -4,7 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import {connectDB} from './utils/db.js';
 import userRoutes from './routes/user.route.js'
-import sellerRoutes from './routes/seller.route.js'
+// import sellerRoutes from './routes/seller.route.js'
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 // API's
 app.use("/api/v1/user",userRoutes)
-app.use("/api/v1/seller",sellerRoutes)
+// app.use("/api/v1/seller",sellerRoutes)
 
 app.get('/',(req,res)=>{
   res.send("API Working")

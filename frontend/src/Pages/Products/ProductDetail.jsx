@@ -1,7 +1,6 @@
 import { CheckCircle, Loader, Loader2, LoaderPinwheel, LucideLoader, MapPin, Star, Store } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { useCart } from '../Cart/CartContext';
 import axios from 'axios'
 import toast from 'react-hot-toast';
 import { SELLER_API_END_POINT, USER_API_END_POINT } from '../../utils/api';

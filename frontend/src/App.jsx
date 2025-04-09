@@ -5,14 +5,11 @@ import Home from './Pages/Home/Home';
 import ProductDetail from './Pages/Products/ProductDetail';
 import AuthForm from './component/Login/AuthForm';
 import Wishlist from './Pages/Products/Wishlist';
-import Mobile from './component/Login/Mobile';
 
 import {Toaster} from 'react-hot-toast'
 import Account from './Pages/Account/Account';
 import Address from './Pages/Address/Address';
-import AddProduct from './Pages/Seller/AddProduct/AddProduct';
 import OrderPage from './Pages/Order/OrderPage';
-import Dashboard from './Pages/Seller/Dashboard/Dashboard';
 import Search from './Pages/Search/Search';
 import FilterProduct from './Pages/category/FilterProduct';
 import CategoryProducts from './Pages/category/CategoryProducts';
@@ -42,16 +39,16 @@ function App() {
             <Route path='/login' element={<AuthForm />} />
             <Route path='/wishlist' element={<Wishlist />} />
 
-            <Route path='/seller/add-product' element={<AddProduct />} />
-            <Route path='/otplogin' element={<Mobile />} />
+
+
             <Route path='/account' element={<Account />} />
             <Route path='/address/:id' element={<Address />} />
             <Route path='/orders' element={<OrderPage />} />
             <Route path='/search' element={<Search />} />
 
-            <Route path='/seller-dashboard' element={<Dashboard />} />
 
-            {/* <Route path='/products/:name' element={<FilterProduct />} /> */}
+
+
             <Route path='/categories' element={<FilterProduct />} />
             <Route path="/products/category/:slug" element={<CategoryProducts />} />
 
