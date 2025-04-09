@@ -1,7 +1,7 @@
 import { LucideLoader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SELLER_API_END_POINT, USER_API_END_POINT } from '../../utils/api';
+import {  USER_API_END_POINT } from '../../utils/api';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
@@ -13,7 +13,7 @@ const Products = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const url = `${SELLER_API_END_POINT}/products`;
+                const url = `${USER_API_END_POINT}/products`;
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
