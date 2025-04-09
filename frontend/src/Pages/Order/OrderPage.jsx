@@ -2,16 +2,25 @@ import React, { useEffect, useState } from "react";
 import { USER_API_END_POINT } from "../../utils/api";
 import toast from "react-hot-toast";
 import { LucideLoader } from "lucide-react";
+import {  useNavigate } from "react-router-dom";
 
 const OrderPage = () => {
   const [orders, setOrders] = useState([]);
   const userId = localStorage.getItem('userId');
+  const navigate = useNavigate()
  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const token = localStorage.getItem('token');
 
     // Fetch Orders
     const fetchOrders = async () => {
+      if(!userId){
+        toast.error('Please Login First.')
+        setTimeout(() => {
+          navigate('/login')
+      }, 2000);
+      }
+
       try {
         const response = await fetch(`${USER_API_END_POINT}/orders/${userId}`, {
           headers: {
