@@ -8,11 +8,20 @@ import userRoutes from './routes/user.route.js'
 
 const app = express();
 
+const allowedOrigins = ['https://fastro.in', 'https://www.fastro.in'];
+
 app.use(cors({
-    origin: 'https://fastro.in',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  }));
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman or server-to-server)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
   
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))

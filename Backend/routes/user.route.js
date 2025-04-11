@@ -19,7 +19,7 @@ router.route('/add/address').post(isAuthenticate,address)
 
 router.route('/placeorder').post(placeOrder)
 
-router.route('/orders/:userId').get(isAuthenticate,getUserOrders)
+router.route('/orders').get(isAuthenticate,getUserOrders)
 router.route('/searchproducts').get(searchProduct)
 router.route('/products').get(categoryWiseProduct)
 router.route('/categories').get(getCategories)

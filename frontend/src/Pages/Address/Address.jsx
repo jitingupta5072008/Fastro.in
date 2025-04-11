@@ -62,6 +62,7 @@ const Address = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem("token")
+        if(!formData) return toast.error('Add Address before place order')
         try {
             const res = await axios.post(
                 `${USER_API_END_POINT}/add/address`,
@@ -99,7 +100,6 @@ const Address = () => {
 
     const userId = localStorage.getItem("userId")
 
-    console.log(DeliveryTime)
 
     useEffect(() => {
         fetch(url)

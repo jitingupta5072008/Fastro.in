@@ -6,7 +6,6 @@ import {  useNavigate } from "react-router-dom";
 
 const OrderPage = () => {
   const [orders, setOrders] = useState([]);
-  const userId = localStorage.getItem('userId');
   const navigate = useNavigate()
  const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -14,7 +13,7 @@ const OrderPage = () => {
 
     // Fetch Orders
     const fetchOrders = async () => {
-      if(!userId){
+      if(!token){
         toast.error('Please Login First.')
         setTimeout(() => {
           navigate('/login')
@@ -22,7 +21,7 @@ const OrderPage = () => {
       }
 
       try {
-        const response = await fetch(`${USER_API_END_POINT}/orders/${userId}`, {
+        const response = await fetch(`${USER_API_END_POINT}/orders`, {
           headers: {
             Authorization: token,
           },
@@ -47,7 +46,7 @@ const OrderPage = () => {
     };
 
     fetchOrders();
-  }, [userId]);
+  }, [token]);
 
   if (loading) {
     return (
