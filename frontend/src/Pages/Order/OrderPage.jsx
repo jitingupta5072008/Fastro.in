@@ -8,6 +8,9 @@ const OrderPage = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate()
  const [loading, setLoading] = useState(true);
+
+ const token = localStorage.getItem('token');
+
   useEffect(() => {
     const token = localStorage.getItem('token');
 

@@ -125,16 +125,30 @@ const Address = () => {
 
     const handlePlaceOrder = async () => {
         try {
-            if(!DeliveryTime) return toast.error('Please select a delivery time.')
-            await placeOrder(userId, [product], payment, parseInt((product.price - (product.price * product.discountPercentage) / 100) * product.minimumOrderQuantity), product.minimumOrderQuantity, product.seller.phone, user.address,DeliveryTime);
-            // if(response.status === 200){
-            // }
-            // navigate('/orders');
-
+            if (!DeliveryTime) return toast.error('Please select a delivery time.');
+    
+            if (!user || !user.address || !user.address.fulladdress) {
+                return toast.error("Please add address before placing the order.");
+            }
+    
+            await placeOrder(
+                userId,
+                [product],
+                payment,
+                parseInt((product.price - (product.price * product.discountPercentage) / 100) * product.minimumOrderQuantity),
+                product.minimumOrderQuantity,
+                product.seller.phone,
+                user.address,
+                DeliveryTime
+            );
+    
+            // navigate('/orders'); // You can uncomment this if needed
+    
         } catch (error) {
             toast.error("Failed to place order. Try again.");
         }
     };
+    
 
 
     // Conditional rendering based on loading and error states
