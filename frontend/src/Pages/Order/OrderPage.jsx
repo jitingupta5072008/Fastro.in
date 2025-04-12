@@ -55,25 +55,39 @@ const OrderPage = () => {
     fetchOrders();
   }, [token]);
 
-  const handleCancelOrder = async (e,orderId) => {
-    e.preventDefault()
-    const token = localStorage.getItem('token');
-    // setLoading(true);
 
+  const handleCancelOrder = async (e, orderId) => {
+    e.preventDefault();
+  
+    const token = localStorage.getItem("token");
+  
     try {
-      const res = await axios.post(`${USER_API_END_POINT}/cancel-order`, {orderId}, {
-        headers: {
-          Authorization: token
+      const res = await axios.post(
+        `${USER_API_END_POINT}/cancel-order`,
+        { orderId },
+        {
+          headers: {
+            Authorization: token,
+          },
         }
-      });
-      setOrders((prevOrder) => [res.data, ...prevOrder]);
-      console.log(res);
+      );
+  
+      const updatedOrder = res.data;
+  
+      // Update status of the specific order in local state
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === updatedOrder._id
+            ? { ...order, status: updatedOrder.status }
+            : order
+        )
+      );
+  
       toast.success("Order cancelled successfully");
     } catch (error) {
-      toast.error("Failed to cancel order");
-    } 
-    finally {
-      setLoading(false);
+      toast.error(
+        error.response?.data?.message || "Failed to cancel the order"
+      );
     }
   };
   
@@ -145,7 +159,21 @@ const OrderPage = () => {
 
             <div className="flex justify-between items-center px-4 py-2 bg-white border-t border-gray-200">
                 <div className="text-sm text-gray-600">Deliverd at: {order.DeliveryTime} </div>
-                <div className="text-sm text-red-600" onClick={(e) => handleCancelOrder(e,order._id)}  disabled={loading} >{loading ? 'loading..' : 'Cancel'}</div>
+
+
+                <div
+  className={`text-sm cursor-pointer ${
+    order.status === "Cancelled"
+      ? "text-gray-400 pointer-events-none"
+      : "text-red-600"
+  }`}
+  onClick={(e) => order.status !== "Cancelled" && handleCancelOrder(e, order._id)}
+>
+  {order.status === "Cancelled" ? "Cancelled" : "Cancel"}
+</div>
+
+
+
             </div>
 
           </div>))}

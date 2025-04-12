@@ -221,17 +221,29 @@ export const getUserOrders = async (req, res) => {
         res.status(500).json({ message: "Error fetching orders" });
     }
 }
-export const cancelOrder = async(req,res)=>{
+export const cancelOrder = async (req, res) => {
     try {
-        const {orderId} = req.body;
-        const order = await Order.findById(orderId).select("status");
-        order.status = 'Cancel';
-        await order.save()
-        return res.status(201).json(order);
+      const { orderId } = req.body;
+  
+      const order = await Order.findById(orderId);
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+  
+      if (order.status === "Cancelled") {
+        return res.status(400).json({ message: "Order already cancelled" });
+      }
+  
+      order.status = "Cancelled";
+      await order.save();
+  
+      res.status(200).json(order);
     } catch (error) {
-        res.status(500).json({ message: "Error cancel orders" });
+      console.error("Cancel order error:", error);
+      res.status(500).json({ message: "Error cancelling order" });
     }
-}
+  };
+  
 export const searchProduct = async (req, res) => {
     try {
         const query = req.query.q;
