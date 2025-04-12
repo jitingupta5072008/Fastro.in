@@ -50,8 +50,8 @@
   }
   
   .active {
-    background-color: #db2777;
-    color: white;
+    background-color: #db2777 !important;
+    color: white !important;
   }
   
   

@@ -3,6 +3,7 @@ import { USER_API_END_POINT } from "../../utils/api";
 import toast from "react-hot-toast";
 import { LucideLoader } from "lucide-react";
 import {  useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const OrderPage = () => {
   const [orders, setOrders] = useState([]);
@@ -16,6 +17,7 @@ const OrderPage = () => {
 
     // Fetch Orders
     const fetchOrders = async () => {
+      loading(true)
       if(!token){
         toast.error('Please Login First.')
         setTimeout(() => {
@@ -45,25 +47,68 @@ const OrderPage = () => {
       } catch (error) {
 
         setOrders([]);
+      }finally{
+        loading(false)
       }
     };
 
     fetchOrders();
   }, [token]);
 
-  if (loading) {
-    return (
-        <div className='flex items-center justify-center mt-4'>
-            <LucideLoader /> Loading...
-        </div>
-    );
-}
+  const handleCancelOrder = async (orderId) => {
+    
+    const token = localStorage.getItem('token');
+    setLoading(true);
+    try {
+      const res = await axios.post(`${USER_API_END_POINT}/cancel-order`, {orderId}, {
+        headers: {
+          Authorization: token
+        }
+      });
+      console.log(res);
+      toast.success("Order cancelled successfully");
+
+    } catch (error) {
+      toast.error("Failed to cancel order");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   return (
     <div className="max-w-4xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">My Orders</h2>
 
-      {orders.length === 0 ? (
+      {loading ? 
+       <div class="animate-pulse rounded-lg  h-90 w-90 mx-auto">
+       <div class="border border-gray-300 mb-3">
+     
+         <div class="w-full max-w-4xl bg-white p-4 pb-0 flex items-center gap-4">
+           <div class="flex items-center justify-center w-12 h-12 bg-gray-200 rounded">
+             <div class="w-full h-full bg-gray-300"></div>
+           </div>
+           <div class="flex-1">
+             <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+             <div class="h-4 bg-gray-200 rounded w-1/2 mt-2"></div>
+           </div>
+           <div class="text-sm text-gray-600">
+             <div class="h-4 bg-gray-200 rounded w-1/3"></div>
+             <div class="h-4 bg-gray-200 rounded w-1/4 mt-2"></div>
+           </div>
+         </div>
+     
+         <div class="mt-2 flex justify-between items-center px-4 py-2 bg-white border-t border-gray-200">
+           <div class="text-sm text-gray-200 bg-gray-200 rounded w-2/5"></div>
+           <div class="text-sm h-4 bg-red-200 rounded w-1/5"></div>
+         </div>
+     
+       </div>
+     </div>
+       
+       :
+
+      orders.length === 0 ? (
         <>
         <img src="./src/assets/empty.gif" className="h-90 w-90 mx-auto" alt="" />
         </>
@@ -98,13 +143,14 @@ const OrderPage = () => {
 
             <div className="flex justify-between items-center px-4 py-2 bg-white border-t border-gray-200">
                 <div className="text-sm text-gray-600">Deliverd at: {order.DeliveryTime} </div>
-                <div className="text-sm text-red-600">Cancel</div>
+                <div className="text-sm text-red-600" onClick={() => handleCancelOrder(order._id)}  disabled={loading} >{loading ? 'loading..' : 'Cancel'}</div>
             </div>
 
           </div>))}
-        </div>
+        </div> 
+      )
+    }
 
-      )}
     </div>
   );
 };

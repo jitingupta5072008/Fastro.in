@@ -11,8 +11,13 @@ const TopNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [menuHeight, setMenuHeight] = useState("0px");
+  const location = useLocation();
 
-  // console.log('cart totalProduct me kya hai topnav:',totalProduct);
+  useEffect(() => {
+    // Close the mobile menu when route changes
+    setIsMenuOpen(false);
+    setIsProfileOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -60,7 +65,6 @@ const TopNav = () => {
     console.log('logging out');
   };
 
-  const location = useLocation()
   if (location.pathname === '/cart' || location.pathname.startsWith('/address/') || location.pathname === '/seller/add-product') {
     return null
   }
@@ -173,17 +177,17 @@ const TopNav = () => {
             </Link>
             <div className="mt-3 px-2 space-y-1">
 
-            
-                {category.map((cat, i) => (
-                  <Link
-                    key={i}
-                    to={`/products/category/${cat.slug}`}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-pink-500 hover:bg-gray-100"
-                  >
-                    {cat.name}
-                  </Link>
-                ))}
-              
+
+              {category.map((cat, i) => (
+                <Link
+                  key={i}
+                  to={`/products/category/${cat.slug}`}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-pink-500 hover:bg-gray-100"
+                >
+                  {cat.name}
+                </Link>
+              ))}
+
 
               <Link
                 to="/wishlist"

@@ -61,6 +61,7 @@ const Address = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true)
         const token = localStorage.getItem("token")
         if(!formData) return toast.error('Add Address before place order')
         try {
@@ -78,6 +79,8 @@ const Address = () => {
             toast.success(res.data.message);
         } catch (error) {
             toast.error(error.response.data.message);
+        }finally{
+            setLoading(false)
         }
     };
 
@@ -124,6 +127,7 @@ const Address = () => {
     }, [id]);
 
     const handlePlaceOrder = async () => {
+        setLoading(true)
         try {
             if (!DeliveryTime) return toast.error('Please select a delivery time.');
     
@@ -146,6 +150,8 @@ const Address = () => {
     
         } catch (error) {
             toast.error("Failed to place order. Try again.");
+        }finally{
+            setLoading(false)
         }
     };
     
@@ -332,8 +338,8 @@ const Address = () => {
 
                             {/* Submit Button */}
                             <div className="mt-6">
-                                <button type="submit" className="w-full py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50">
-                                    Add Address
+                                <button type="submit"  disabled={loading} className="w-full py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50">
+                                     {loading ? 'Adding..' : 'Add Address'}
                                 </button>
                             </div>
 
@@ -442,7 +448,7 @@ const Address = () => {
                     <button className="text-pink-500 text-sm font-medium">VIEW PRICE DETAILS</button>
                 </div>
 
-                <button onClick={handlePlaceOrder} className="bg-pink-500 text-white font-medium py-3 px-8 rounded-md">Place Order</button>
+                <button onClick={handlePlaceOrder}  disabled={loading} className="bg-pink-500 text-white font-medium py-3 px-8 rounded-md">{loading ? 'ordering..' : 'Place Order '} </button>
 
             </div>
         </>

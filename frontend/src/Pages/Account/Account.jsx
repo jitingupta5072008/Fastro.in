@@ -12,10 +12,8 @@ const Account = () => {
   // Logout function
   const handleLogout = () => {
     localStorage.clear()
-    console.log('token remove from localStorage');
     setUser(null);
     navigate('/login');
-    console.log('logging out');
   };
 
   useEffect(() => {

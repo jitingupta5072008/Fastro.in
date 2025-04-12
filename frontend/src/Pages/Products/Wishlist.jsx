@@ -120,7 +120,7 @@ const Wishlist = () => {
             <div className="mt-6 grid w-full grid-cols-2 flex-col items-center gap-6 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {Array.isArray(allproducts) && allproducts.length > 0 ? (
                     allproducts.map((product) => (
-                        <div key={product._id} className="flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
+                        <div key={product._id} className="flex w-full max-w-[200px] [z-index:1] cursor-pointer flex-col items-start gap-0.5">
 
                             <div className="group relative flex h-52 w-full items-center justify-center rounded-lg bg-gray-500/10 overflow-hidden">
 

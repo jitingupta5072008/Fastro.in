@@ -16,6 +16,7 @@ const AuthForm = () => {
     const [isOtpSent, setIsOtpSent] = useState(false);
     const [username, setUsername] = useState('');
     const [isOtpVerified, setIsOtpVerified] = useState(false);
+    const [loading, setloading] = useState(false);
 
 
     const toggleForm = () => {
@@ -39,14 +40,14 @@ const AuthForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
+        setloading(true)
         if (isEmail) {
             // Handle email login
             try {
                 const response = await axios.post(`${USER_API_END_POINT}/login/email`, { email: inputValue, password });
+
                 toast.success(response.data.message)
-                console.log(response)
-                // Store JWT token in localStorage
+
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('userId', response.data.userId);
 
@@ -56,6 +57,9 @@ const AuthForm = () => {
 
             } catch (error) {
                 toast.error(error.response.data.message);
+            }
+            finally{
+                setloading(false)
             }
         } else {
            
@@ -80,6 +84,9 @@ const AuthForm = () => {
                 } catch (error) {
                     toast.error(error.response ? error.response.data.message : 'Something went wrong!');
                 }
+                finally{
+                    setloading(false)
+                }
             } else {
                 try {
                     const response = await axios.post(`${USER_API_END_POINT}/login/send-otp`, { phone: inputValue });
@@ -88,13 +95,16 @@ const AuthForm = () => {
                 } catch (error) {
                     toast.error(error.response.data.message);
                 }
+                finally{
+                    setloading(false)
+                }
             }
         }
     }
 
     const handleRegisterSubmit = async (e) => {
         e.preventDefault()
-
+        setloading(true)
         try {
             const response = await axios.post(`${USER_API_END_POINT}/register`, { username, email: inputValue, password });
             toast.success(response.data.message);
@@ -103,6 +113,9 @@ const AuthForm = () => {
             }, 2000);
         } catch (error) {
             toast.error(error.response.data.message);
+        }
+        finally{
+            setloading(false)
         }
 
     }
@@ -171,7 +184,21 @@ const AuthForm = () => {
 
                         <div>
                             {/* <button type="submit">{isEmail ? 'Login' : (isOtpSent ? 'Verify OTP' : 'Send OTP')}</button> */}
-                            <button type="submit" className="w-full py-2 mt-4 bg-pink-500 text-white font-semibold rounded-md hover:bg-pink-600 transition duration-200">{isEmail ? 'Login' : (isOtpSent ? 'Verify OTP' : 'Send OTP')}</button>
+                            <button
+  type="submit"  disabled={loading}
+  className="w-full py-2 mt-4 bg-pink-500 text-white font-semibold rounded-md hover:bg-pink-600 transition duration-200"
+>
+  {isEmail
+    ? loading
+      ? 'Logging in...'
+      : 'Login'
+    : isOtpSent
+    ? loading
+      ? 'Verifying...'
+      : 'Verify OTP'
+    : 'Send OTP'}
+</button>
+
                         </div>
                     </form>
 
@@ -218,7 +245,7 @@ const AuthForm = () => {
                         </div>
 
                         <div>
-                            <button type="submit" className="w-full py-2 mt-4 bg-pink-500 text-white font-semibold rounded-md hover:bg-pink-600 transition duration-200">Sign up</button>
+                            <button type="submit"  disabled={loading} className="w-full py-2 mt-4 bg-pink-500 text-white font-semibold rounded-md hover:bg-pink-600 transition duration-200">{loading ? 'Signing in..' : 'Sign up'}</button>
                         </div>
                     </form>
 

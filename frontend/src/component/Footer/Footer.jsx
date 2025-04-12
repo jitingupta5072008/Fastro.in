@@ -4,18 +4,18 @@ import { Link } from 'react-router-dom'
 const Footer = () => {
   return (
     <>
-    <footer class="w-full py-14">
+    <footer class="w-full py-8 mb-8">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl mx-auto">
                 
-                    <ul class="text-lg flex items-center justify-center flex-col gap-7 md:flex-row md:gap-12 transition-all duration-500 py-16 mb-10 border-b border-gray-200">
+                    <ul class="text-lg flex items-center [flex-direction: row] justify-center  gap-7 md:flex-row md:gap-12 transition-all duration-500 py-4 mb-10 border-b border-gray-200">
                         <li><Link to="/" class="text-gray-800 hover:text-gray-900">Home</Link></li>
                         <li><Link to="/categories" class=" text-gray-800 hover:text-gray-900">Products</Link></li>
                         <li><Link to="/" class=" text-gray-800 hover:text-gray-900">Resources</Link></li>
                         <li><Link to="https://writerclub.onrender.com/" class=" text-gray-800 hover:text-gray-900">Blogs</Link></li>
                         <li><Link to="https://wa.me/+918881603066" class=" text-gray-800 hover:text-gray-900">Support</Link></li>
                     </ul>
-                    <div class="flex space-x-10 justify-center items-center mb-14">
+                    <div class="flex space-x-10 justify-center items-center mb-6">
                         <a href="#" class="block  text-gray-900 transition-all duration-500 hover:text-indigo-600 ">
                           <svg class="w-[1.688rem] h-[1.688rem]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
                             <path d="M11.3214 8.93666L16.4919 3.05566H15.2667L10.7772 8.16205L7.1914 3.05566H3.05566L8.47803 10.7774L3.05566 16.9446H4.28097L9.022 11.552L12.8088 16.9446H16.9446L11.3211 8.93666H11.3214ZM9.64322 10.8455L9.09382 10.0765L4.72246 3.95821H6.60445L10.1322 8.8959L10.6816 9.66481L15.2672 16.083H13.3852L9.64322 10.8458V10.8455Z" fill="currentColor"/>

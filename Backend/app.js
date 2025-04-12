@@ -8,7 +8,7 @@ import userRoutes from './routes/user.route.js'
 
 const app = express();
 
-const allowedOrigins = ['https://fastro.in', 'https://www.fastro.in'];
+const allowedOrigins = ['http://localhost:5173','https://fastro.in', 'https://www.fastro.in'];
 
 app.use(cors({
   origin: function (origin, callback) {
