@@ -7,7 +7,9 @@ const OrderSchema = new mongoose.Schema({
   totalAmount: Number,
   paymentMethod: String,
   DeliveryTime: String,
+
   status: { type: String, default: "Pending" },
+  
   shippingAddress: {
     fullname: { type: String, required: true },
     email: { type: String },

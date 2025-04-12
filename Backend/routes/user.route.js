@@ -1,5 +1,5 @@
 import express from "express";
-import {address, addReview,  getRelatedProducts,  addWishlist,   categoryWiseProduct,   deleteReview,   getCategories,   getReview,   getUserOrders,  loginwithemail, placeOrder, profile, register,   searchProduct,   sendOtp,  verifyOtp, getSlider, getProductBySingleCategory, getWishlistProduct, products, singleProducts} from '../controllers/user.controller.js'
+import {address, addReview,  getRelatedProducts,  addWishlist,   categoryWiseProduct,   deleteReview,   getCategories,   getReview,   getUserOrders,  loginwithemail, placeOrder, profile, register,   searchProduct,   sendOtp,  verifyOtp, getSlider, getProductBySingleCategory, getWishlistProduct, products, singleProducts, cancelOrder} from '../controllers/user.controller.js'
 import isAuthenticate from "../middlewares/isAuthenticated.js";
 
 const router = express.Router()
@@ -40,5 +40,8 @@ router.route('/wishlist/products').get(isAuthenticate,getWishlistProduct)
 
 router.route('/allproducts').get(products)
 router.route('/product/:id').get(singleProducts)
+
+
+router.route('/cancel-order').post(cancelOrder)
 
 export default router;

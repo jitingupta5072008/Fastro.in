@@ -17,7 +17,7 @@ const OrderPage = () => {
 
     // Fetch Orders
     const fetchOrders = async () => {
-      loading(true)
+      setLoading(true)
       if(!token){
         toast.error('Please Login First.')
         setTimeout(() => {
@@ -48,29 +48,31 @@ const OrderPage = () => {
 
         setOrders([]);
       }finally{
-        loading(false)
+        setLoading(false)
       }
     };
 
     fetchOrders();
   }, [token]);
 
-  const handleCancelOrder = async (orderId) => {
-    
+  const handleCancelOrder = async (e,orderId) => {
+    e.preventDefault()
     const token = localStorage.getItem('token');
-    setLoading(true);
+    // setLoading(true);
+
     try {
       const res = await axios.post(`${USER_API_END_POINT}/cancel-order`, {orderId}, {
         headers: {
           Authorization: token
         }
       });
+      setOrders((prevOrder) => [res.data, ...prevOrder]);
       console.log(res);
       toast.success("Order cancelled successfully");
-
     } catch (error) {
       toast.error("Failed to cancel order");
-    } finally {
+    } 
+    finally {
       setLoading(false);
     }
   };
@@ -143,7 +145,7 @@ const OrderPage = () => {
 
             <div className="flex justify-between items-center px-4 py-2 bg-white border-t border-gray-200">
                 <div className="text-sm text-gray-600">Deliverd at: {order.DeliveryTime} </div>
-                <div className="text-sm text-red-600" onClick={() => handleCancelOrder(order._id)}  disabled={loading} >{loading ? 'loading..' : 'Cancel'}</div>
+                <div className="text-sm text-red-600" onClick={(e) => handleCancelOrder(e,order._id)}  disabled={loading} >{loading ? 'loading..' : 'Cancel'}</div>
             </div>
 
           </div>))}

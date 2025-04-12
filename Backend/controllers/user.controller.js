@@ -221,7 +221,17 @@ export const getUserOrders = async (req, res) => {
         res.status(500).json({ message: "Error fetching orders" });
     }
 }
-
+export const cancelOrder = async(req,res)=>{
+    try {
+        const {orderId} = req.body;
+        const order = await Order.findById(orderId).select("status");
+        order.status = 'Cancel';
+        await order.save()
+        return res.status(201).json(order);
+    } catch (error) {
+        res.status(500).json({ message: "Error cancel orders" });
+    }
+}
 export const searchProduct = async (req, res) => {
     try {
         const query = req.query.q;
@@ -340,7 +350,6 @@ export const addReview = async (req, res) => {
     return res.status(201).json(newReview);
 
   } catch (error) {
-    console.error('Error saving review:', error);
     return res.status(500).json({ message: 'Error saving review' });
   }
 };

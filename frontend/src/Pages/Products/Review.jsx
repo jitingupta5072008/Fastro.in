@@ -36,9 +36,7 @@ const Review = ({ productId, userId }) => {
             setReviews((prevReview) => [response.data, ...prevReview]);
             setComment(""); // Clear input field
             setRating('')
-            toast.success("Comment added successfully!", {
-                autoClose: 1000
-            });
+            toast.success("Review added successfully!");
         } catch (error) {
             toast.error("Error adding comment:", error);
         }
