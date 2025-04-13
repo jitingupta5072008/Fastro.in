@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { USER_API_END_POINT } from "../../utils/api";
 import toast from "react-hot-toast";
 import { LucideLoader } from "lucide-react";
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const OrderPage = () => {
@@ -164,12 +164,12 @@ const OrderPage = () => {
                 <div
   className={`text-sm cursor-pointer ${
     order.status === "Cancelled"
-      ? "text-gray-400 pointer-events-none"
+      ? "text-gray-600 "
       : "text-red-600"
   }`}
   onClick={(e) => order.status !== "Cancelled" && handleCancelOrder(e, order._id)}
 >
-  {order.status === "Cancelled" ? "Cancelled" : "Cancel"}
+  {order.status === "Cancelled" ? (<Link to={`/product/${order.items[0]._id}`}>Buy it again</Link>) : "Cancel"}
 </div>
 
 

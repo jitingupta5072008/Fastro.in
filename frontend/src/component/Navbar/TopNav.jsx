@@ -59,10 +59,8 @@ const TopNav = () => {
 
   const logout = () => {
     localStorage.clear()
-    console.log('token remove from localStorage');
     setUser(null);
     navigate('/login');
-    console.log('logging out');
   };
 
   if (location.pathname === '/cart' || location.pathname.startsWith('/address/') || location.pathname === '/seller/add-product') {
@@ -138,7 +136,7 @@ const TopNav = () => {
                   {/* {totalProduct} */}
                 </span>
                 <ShoppingCart className="w-6 h-6" />
-                <span className="text-xs">Bag</span>
+                <span className="text-xs">Order</span>
 
               </Link>
 
@@ -170,8 +168,8 @@ const TopNav = () => {
                   <User className="h-10 w-10 rounded-full" />
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">{user.name}</div>
-                  <div className="text-sm font-medium text-gray-500">{user.email}</div>
+                  <div className="text-base font-medium text-gray-800">{user.name || 'username'}</div>
+                  <div className="text-sm font-medium text-gray-500">{user.email || 'user@gmail.com'}</div>
                 </div>
               </div>
             </Link>

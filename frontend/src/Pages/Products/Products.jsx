@@ -90,7 +90,7 @@ const Products = () => {
                           </Link>
                       
                           {product.discountPercentage > 0 && (
-                            <span className="absolute rounded-br-2xl rounded-tr-2xl top-2 left-0 px-2 py-1 text-xs font-semibold text-white bg-red-500">
+                            <span className="absolute rounded-br-2xl z-[999] rounded-tr-2xl top-2 left-0 px-2 py-1 text-xs font-semibold text-white bg-red-500">
                               {product.discountPercentage}% Off
                             </span>
                           )}
@@ -133,12 +133,14 @@ const Products = () => {
                         <div className="mt-1 w-full items-end justify-between">
                           <div className="flex items-center gap-2">
                             <p className="text-lg font-medium text-black-500">
-                              ₹{parseInt(product.price)}
+                              ₹ {product.price - (product.price * product.discountPercentage / 100)}
+
                             </p>
                       
                             {product.discountPercentage > 0 && (
                               <p className="text-xs line-through text-gray-500">₹{product.price}</p>
                             )}
+
                           </div>
                       
                           <button className="rounded-full mt-2 w-full border border-gray-500/20 px-4 py-1.5 text-xs text-gray-500 transition hover:bg-slate-50 max-sm:hidden">

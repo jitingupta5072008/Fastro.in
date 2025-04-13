@@ -1,10 +1,12 @@
 import { Home, Search, User, Heart,Box, SlidersHorizontal } from "lucide-react"
 import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
+import { useOrder } from "../../context/OrderContext"
 
 
 function BottomNav() {
   // const {totalProduct} = useCart();
+  const {orders} = useOrder();
   const token = localStorage.getItem("token")
   const location = useLocation()
   if (location.pathname === '/cart' || location.pathname.startsWith('/address/') || location.pathname.startsWith('/seller') ) {
@@ -44,10 +46,10 @@ function BottomNav() {
         <Link to={'/orders'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
           {/* Badge */}
           <span style={{ marginRight: '-10px', marginTop: '-6px' }} className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full">
-            {/* {totalProduct} */}
+            {orders.length}
           </span>
           <Box className="w-6 h-6" />
-          <span className="text-xs">Cart</span>
+          <span className="text-xs">Orders</span>
 
         </Link>
       </div>
