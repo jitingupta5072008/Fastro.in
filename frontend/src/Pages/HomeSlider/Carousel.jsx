@@ -21,6 +21,7 @@ const Carousel = ({ children: slides, autoSlide = false, autoSlideInterval = 300
   }, [slides.length, autoSlide, autoSlideInterval]);
 
   return (
+    
     <div className="overflow-hidden relative">
       {/* Slide Container */}
       <div

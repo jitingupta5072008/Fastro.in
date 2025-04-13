@@ -9,13 +9,13 @@ function BottomNav() {
   const {orders} = useOrder();
   const token = localStorage.getItem("token")
   const location = useLocation()
-  if (location.pathname === '/cart' || location.pathname.startsWith('/address/') || location.pathname.startsWith('/seller') ) {
+  if (location.pathname === '/cart' || location.pathname.startsWith('/address/') ) {
     return null
   }
 
   return (<>
 
-    <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg  md:hidden z-[99]">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg  md:hidden z-[9999]">
       <div className="flex justify-around items-center h-16">
         <Link to="/" className="flex flex-col items-center text-gray-600 hover:text-pink-500">
           <Home className="w-6 h-6" />

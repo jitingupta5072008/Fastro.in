@@ -232,9 +232,9 @@ const ProductDetail = () => {
             <Review productId={product._id} userId={userId} />
 
             {/* {related.map((item) => ( */}
-            <div className="px-6 md:px-16 lg:px-32 mb-8 flex flex-col items-center mt-4">
+            <div className="px-4 md:px-16 lg:px-32 mb-8 flex flex-col items-center mt-4">
                             <h2 className="hd text-2xl w-full text-center">Related Products</h2>
-                            <div className="mt-6 grid w-full grid-cols-2 flex-col items-center gap-6 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                            <div className="mt-4 grid w-full grid-cols-2 flex-col items-center gap-4 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                                 {Array.isArray(related) && related.length > 0 ? (
                                     related.map((product) => (
                                         <Link to={`/product/${product._id}`} key={product._id}>

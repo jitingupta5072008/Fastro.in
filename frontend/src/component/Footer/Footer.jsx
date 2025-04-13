@@ -1,7 +1,12 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const Footer = () => {
+    const location = useLocation()
+    if (location.pathname === '/search' || location.pathname.startsWith('/address/') ) {
+      return null
+    }
+  
   return (
     <>
     <footer class="w-full py-8 mb-8">
@@ -9,9 +14,7 @@ const Footer = () => {
             <div class="max-w-3xl mx-auto">
                 
                     <ul class="text-lg flex items-center [flex-direction: row] justify-center  gap-7 md:flex-row md:gap-12 transition-all duration-500 py-4 mb-10 border-b border-gray-200">
-                        <li><Link to="/" class="text-gray-800 hover:text-gray-900">Home</Link></li>
                         <li><Link to="/categories" class=" text-gray-800 hover:text-gray-900">Products</Link></li>
-                        <li><Link to="/" class=" text-gray-800 hover:text-gray-900">Resources</Link></li>
                         <li><Link to="https://writerclub.onrender.com/" class=" text-gray-800 hover:text-gray-900">Blogs</Link></li>
                         <li><Link to="https://wa.me/+918881603066" class=" text-gray-800 hover:text-gray-900">Support</Link></li>
                     </ul>

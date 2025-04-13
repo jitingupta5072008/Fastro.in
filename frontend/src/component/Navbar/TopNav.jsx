@@ -63,7 +63,7 @@ const TopNav = () => {
     navigate('/login');
   };
 
-  if (location.pathname === '/cart' || location.pathname.startsWith('/address/') || location.pathname === '/seller/add-product') {
+  if (location.pathname === '/cart' || location.pathname.startsWith('/address/')) {
     return null
   }
 

@@ -9,6 +9,7 @@ const FilterProduct = () => {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(""); // Track selected category
   const [recivedCat,setRecivedCat ] = useState(id); // Track selected category
+  const [loading,setLoading] = useState(true)
 
   // Fetch all categories
   useEffect(() => {
@@ -21,14 +22,23 @@ const FilterProduct = () => {
   const fetchProducts = (category = "") => {
     setSelectedCategory(category); // Update selected category
     axios.get(`${USER_API_END_POINT}/products`, { params: { category } })
-      .then(res => setProducts(res.data))
-      .catch(err => console.error("Error fetching products:", err));
+      .then(res => {
+        setProducts(res.data)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error("Error fetching products:", err) 
+        setLoading(false)
+      });
   };
 
   const fetchRecivedCatProducts = (recivedCat) => {
     // setSelectedCategory(id); // Update selected category
     axios.get(`${USER_API_END_POINT}/products`, { params: { category:recivedCat } })
-      .then(res => setProducts(res.data))
+      .then(res => {
+        setProducts(res.data)
+        setLoading(false)
+      })
       .catch(err => console.error("Error fetching products:", err));
   };
 
@@ -37,7 +47,47 @@ const FilterProduct = () => {
     fetchRecivedCatProducts(recivedCat);
     fetchProducts();
   }, []);
+  if(loading){
+    return <>
+        <div class="px-6 md:px-16 lg:px-32 mb-8 bg-white flex flex-col items-center mt-4">
 
+<div class="mt-6 grid w-full grid-cols-2 flex-col items-center gap-6 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+
+  <div class="flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
+    <div class="group relative flex h-52 w-full items-center justify-center rounded-lg bg-gray-300 animate-pulse overflow-hidden">
+      <a class="w-full h-full absolute z-10" href="#" aria-label="Loading product link"></a>
+      <div class="h-full w-full bg-gray-200 animate-pulse"></div>
+      <button class="absolute top-2 right-2 z-20 rounded-full bg-white p-2">
+        <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+      </button>
+    </div>
+    <a class="w-full" href="#" aria-label="Loading product link">
+      <p class="w-full h-4 bg-gray-300 animate-pulse pt-2"></p>
+      <p class="w-full h-3 bg-gray-200 animate-pulse text-xs"></p>
+    </a>
+    <div class="flex items-center gap-2">
+      <p class="text-xs h-3 bg-gray-200 animate-pulse"></p>
+      <div class="flex items-center gap-0.5">
+        <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+        <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+        <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+        <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+        <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+      </div>
+    </div>
+    <div class="mt-1 w-full items-end justify-between">
+      <div class="flex items-center gap-2">
+        <p class="text-lg font-medium h-4 bg-gray-300 animate-pulse"></p>
+      </div>
+      <button class="rounded-full mt-2 w-full border border-gray-500/20 px-4 py-1.5 text-xs text-gray-500 transition hover:bg-slate-50">
+        <div class="h-4 bg-gray-300 animate-pulse"></div>
+      </button>
+    </div>
+  </div>
+  </div>
+  </div>
+    </>
+  }
   return (
     <div className="p-4 mb-8">
 
