@@ -79,7 +79,7 @@ const TopNav = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <img style={{ height: '30px' }} src="./src/assets/logo.png" alt="Fastro.in " />
+              <img style={{ height: '30px' }} src="https://res.cloudinary.com/dfdenma4g/image/upload/v1744713614/SliderImages/dw8zzti5akoqjallvmft.png" alt="Fastro.in " />
               {/* <h1 className='font-bold text-pink-600  cursor-pointer' style={{ fontSize: '25px' }}>Fastro</h1> */}
 
             </div>
