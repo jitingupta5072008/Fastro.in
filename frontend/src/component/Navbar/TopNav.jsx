@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Search, User, Heart, Menu, X, ShoppingCart } from "lucide-react";
+import { Search, User, Heart, Menu, X,  Package } from "lucide-react";
 import BottomNav from './BottomNav';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -130,12 +130,13 @@ const TopNav = () => {
                 <Heart className="w-6 h-6" />
                 <span className="text-xs">Wishlist</span>
               </Link>
-              <Link to={'/cart'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
+              <Link to={'/orders'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
                 {/* Badge */}
                 <span style={{ marginRight: '-10px', marginTop: '-6px' }} className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full">
                   {/* {totalProduct} */}
                 </span>
-                <ShoppingCart className="w-6 h-6" />
+                <Package className="w-6 h-6" />
+               
                 <span className="text-xs">Order</span>
 
               </Link>
@@ -158,7 +159,7 @@ const TopNav = () => {
         {/* Mobile menu */}
         <div
           id="mobile-menu"
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out absolute bg-white w-full z-10`}
+          className={`md:hidden z-[99] overflow-hidden transition-all duration-300 ease-in-out absolute bg-white w-full z-10`}
           style={{ maxHeight: menuHeight }}
         >
           <div className="pt-4 pb-3 border-t border-gray-200">

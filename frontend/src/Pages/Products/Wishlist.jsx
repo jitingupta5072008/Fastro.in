@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LucideLoader, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { useOrder } from '../../context/OrderContext';
 
 const Wishlist = () => {
     const [allproducts, setAllproducts] = useState([]);
@@ -11,11 +12,11 @@ const Wishlist = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    const { handleWishlist, wishlistLoading } = useOrder();
 
     const handleLogout = () => {
-        console.log('logout');
-        // localStorage.clear()        
-        // navigate('/login');       
+        localStorage.clear()
+        navigate('/login');
     };
 
     useEffect(() => {
@@ -50,60 +51,8 @@ const Wishlist = () => {
         fetchUserData();
     }, []);
 
-    // const handleWishlist = async (productId) => {
-    //     const token = localStorage.getItem("token");
-    //     if (!token) {
-    //         toast.error("Please login first.");
-    //         return;
-    //     }
-    
-    //     try {
-    //         const res = await axios.post(
-    //             `${USER_API_END_POINT}/product/wishlist`,
-    //             { productId },
-    //             {
-    //                 headers: {
-    //                     Authorization: token,
-    //                 }
-    //             }
-    //         );
-    //         toast.success(res?.data?.message || "Wishlist updated");
-    //     } catch (error) {
-    //         console.error("Wishlist error:", error);
-    //         toast.error(error?.response?.data?.message || "Something went wrong");
-    //     }
-    // };
 
-    const handleWishlist = async (productId) => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            toast.error("Please login first.");
-            return;
-        }
-    
-        try {
-            const res = await axios.post(
-                `${USER_API_END_POINT}/product/wishlist`,
-                { productId },
-                {
-                    headers: {
-                        Authorization: token,
-                    }
-                }
-            );
-    
-            toast.success(res?.data?.message || "Wishlist updated");
-    
-            // ✅ Real-time UI update
-            setAllproducts((prev) =>
-                prev.filter((product) => product._id !== productId)
-            );
-        } catch (error) {
-            console.error("Wishlist error:", error);
-            toast.error(error?.response?.data?.message || "Something went wrong");
-        }
-    };
-    
+
 
     if (loading) {
         return (
@@ -112,9 +61,11 @@ const Wishlist = () => {
             </div>
         );
     }
+
+
     return (
         <div className='px-6 md:px-16 lg:px-32'>
-            <h1 className='text-3xl font-bold'>My Wishlist Product</h1>
+            <h1 className='text-3xl font-bold mt-4'>My Wishlist Product</h1>
 
 
             <div className="mt-6 grid w-full grid-cols-2 flex-col items-center gap-6 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -124,7 +75,7 @@ const Wishlist = () => {
 
                             <div className="group relative flex h-52 w-full items-center justify-center rounded-lg bg-gray-500/10 overflow-hidden">
 
-                                <Link to={`/product/${product._id}`} className="w-full h-full absolute z-10">
+                                <Link to={`/product/${product._id}`} className="w-full h-auto absolute z-10">
                                     <img
                                         alt={product.title}
                                         className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
@@ -135,24 +86,27 @@ const Wishlist = () => {
                                 </Link>
 
                                 {product.discountPercentage > 0 && (
-                                    <span className="absolute rounded-br-2xl rounded-tr-2xl top-2 left-0 px-2 py-1 text-xs font-semibold text-white bg-red-500">
+                                    <span className="z-[99] absolute rounded-br-2xl rounded-tr-2xl top-2 left-0 px-2 py-1 text-xs font-semibold text-white bg-red-500">
                                         {product.discountPercentage}% Off
                                     </span>
                                 )}
 
-                                <button
-                                    onClick={() => handleWishlist(product._id)}
-                                    className="absolute top-2 right-2 z-20 rounded-full bg-white p-2 shadow-md"
+                                {/* <button
+                                    onClick={() => handleWishlist(product._id, setAllproducts)}
+                                    disabled={wishlistLoading[product._id]}
+                                    className={`${wishlistLoading[product._id] ? 'opacity-50 cursor-not-allowed' : ''} absolute top-2 right-2 z-20 rounded-full bg-white p-2 shadow-md`}
                                 >
-                                    {/* <img
-                                        alt="heart_icon"
-                                        width="10"
-                                        height="10"
-                                        className="h-3 w-3"
-                                        src="https://quickcart-gs.vercel.app/_next/static/media/heart_icon.392ca0e2.svg"
-                                    /> */}
+                                    <X className='h-4 w-4 text-red-600' />
+                                </button> */}
+
+                                <button
+                                    onClick={() => handleWishlist(product._id, setAllproducts)} // ✅ Already context se linked
+                                    disabled={wishlistLoading[product._id]}
+                                    className={`${wishlistLoading[product._id] ? 'opacity-50 cursor-not-allowed' : ''} absolute top-2 right-2 z-20 rounded-full bg-white p-2 shadow-md`}
+                                >
                                     <X className='h-4 w-4 text-red-600' />
                                 </button>
+
                             </div>
 
                             <Link to={`/product/${product._id}`} className="w-full">
@@ -179,7 +133,7 @@ const Wishlist = () => {
                             <div className="mt-1 w-full items-end justify-between">
                                 <div className="flex items-center gap-2">
                                     <p className="text-lg font-medium text-black-500">
-                                        ₹{parseInt(product.price)}
+                                        ₹ {product.price - (product.price * product.discountPercentage / 100)}
                                     </p>
 
                                     {product.discountPercentage > 0 && (
