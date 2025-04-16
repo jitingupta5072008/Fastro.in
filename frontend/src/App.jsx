@@ -14,6 +14,7 @@ import Search from './Pages/Search/Search';
 import FilterProduct from './Pages/category/FilterProduct';
 import CategoryProducts from './Pages/category/CategoryProducts';
 import ScrollToTop from './component/ScrollToTop/ScrollToTop';
+import CartPage from './Pages/Cart/CartPage';
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
             <Route path='/address/:id' element={<Address />} />
             <Route path='/orders' element={<OrderPage />} />
             <Route path='/search' element={<Search />} />
+            <Route path='/cart' element={<CartPage />} />
 
             <Route path='/categories' element={<FilterProduct />} />
             <Route path="/products/category/:slug" element={<CategoryProducts />} />

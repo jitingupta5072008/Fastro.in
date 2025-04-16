@@ -46,7 +46,17 @@ const ProductDetail = () => {
         fetchProduct();
     }, [id]);
 
-    // Conditional rendering based on loading and error states
+    const addToCart = async (productId, quantity = 1) => {
+        try {
+          const res = await axios.post(`${USER_API_END_POINT}/add-to-cart`, { productId, quantity });
+          console.log('Cart updated:', res.data.cart);
+          toast.success("Added to cart!");
+        } catch (error) {
+          console.error(error);
+          toast.error(error.response?.data?.message || "Something went wrong");
+        }
+      };
+
     if (loading) {
         return <div className='flex items-center justify-center mt-12'> <LucideLoader /> Loading...</div>;
     }
@@ -55,7 +65,6 @@ const ProductDetail = () => {
         return <div>Error: {error}</div>;
     }
 
-    // Add a check to ensure product is defined before rendering its properties
     if (!product) {
         return <div>No product data available.</div>;
     }
@@ -128,8 +137,11 @@ const ProductDetail = () => {
                     </div>
 
                     <div className="mt-10 flex items-center gap-4">
+        
+                    <button onClick={() => addToCart(product._id, 1)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Add to Cart</button>
 
-                        <button onClick={() => navigate(`/address/${product._id}`)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button></div>
+                    <button onClick={() => navigate(`/address/${product._id}`)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button>
+                    </div>
 
                     <hr className="my-6" style={{ color: "lightgray" }} />
 

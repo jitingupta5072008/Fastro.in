@@ -23,7 +23,13 @@ const userSchema = new mongoose.Schema({
         addressType: { type: String },
         defaultAddress: { type: Boolean, default: false }, // To mark if it's the primary address
     },
-
+    cart: [
+        {
+            product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+            quantity: { type: Number, default: 1 },
+        }
+    ],
+    
     createdAt: { type: Date, default: Date.now }
 });
 

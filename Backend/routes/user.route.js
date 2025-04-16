@@ -1,5 +1,5 @@
 import express from "express";
-import {address, addReview,  getRelatedProducts,  addWishlist,   categoryWiseProduct,   deleteReview,   getCategories,   getReview,   getUserOrders,  loginwithemail, placeOrder, profile, register,   searchProduct,   sendOtp,  verifyOtp, getSlider, getProductBySingleCategory, getWishlistProduct, products, singleProducts, cancelOrder} from '../controllers/user.controller.js'
+import {address, addReview,  getRelatedProducts,  addWishlist,   categoryWiseProduct,   deleteReview,   getCategories,   getReview,   getUserOrders,  loginwithemail, placeOrder, profile, register,   searchProduct,   sendOtp,  verifyOtp, getSlider, getProductBySingleCategory, getWishlistProduct, products, singleProducts, cancelOrder, addToCart, getCart, updateCartItem, removeFromCart} from '../controllers/user.controller.js'
 import isAuthenticate from "../middlewares/isAuthenticated.js";
 
 const router = express.Router()
@@ -43,5 +43,17 @@ router.route('/product/:id').get(singleProducts)
 
 
 router.route('/cancel-order').post(cancelOrder)
+
+
+router.route('/add-to-cart').post(isAuthenticate,addToCart)
+router.route('/cart').get(isAuthenticate,getCart)
+router.route('/update').put(isAuthenticate,updateCartItem)
+router.route('/remove/:productId').delete(isAuthenticate,removeFromCart)
+
+
+// router.post('/add', isAuthenticated, addToCart);
+// router.get('/', isAuthenticated, getCart);
+// router.put('/update', isAuthenticated, updateCartItem);
+// router.delete('/remove/:productId', isAuthenticated, removeFromCart);
 
 export default router;

@@ -503,3 +503,68 @@ export const singleProducts = async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 }
+
+
+
+export const addToCart = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const { productId, quantity } = req.body;
+
+        const user = await User.findById(userId);
+        const product = await Product.findById(productId);
+        if (!product) return res.status(404).json({ message: "Product not found" });
+
+        const existingItem = user.cart.find(item => item.product.toString() === productId);
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            user.cart.push({ product: productId, quantity });
+        }
+
+        await user.save();
+        res.status(200).json({ cart: user.cart });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const getCart = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).populate('cart.product');
+        res.status(200).json({ cart: user.cart });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const updateCartItem = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        const { productId, quantity } = req.body;
+
+        const item = user.cart.find(item => item.product.toString() === productId);
+        if (!item) return res.status(404).json({ message: "Cart item not found" });
+
+        item.quantity = quantity;
+        await user.save();
+
+        res.status(200).json({ cart: user.cart });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const removeFromCart = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        const { productId } = req.params;
+
+        user.cart = user.cart.filter(item => item.product.toString() !== productId);
+        await user.save();
+
+        res.status(200).json({ cart: user.cart });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
