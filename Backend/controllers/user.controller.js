@@ -442,7 +442,7 @@ export const addWishlist = async (req, res) => {
     }
   };
   
-  export const getWishlistProduct = async (req, res) => {
+export const getWishlistProduct = async (req, res) => {
     try {
       const user = await User.findById(req.user).populate("wishlist");
   
@@ -508,7 +508,7 @@ export const singleProducts = async (req, res) => {
 
 export const addToCart = async (req, res) => {
     try {
-        const userId = req.user._id;
+        const userId = req.user;
         const { productId, quantity } = req.body;
 
         const user = await User.findById(userId);
@@ -531,7 +531,7 @@ export const addToCart = async (req, res) => {
 
 export const getCart = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id).populate('cart.product');
+        const user = await User.findById(req.user).populate('cart.product');
         res.status(200).json({ cart: user.cart });
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -540,7 +540,7 @@ export const getCart = async (req, res) => {
 
 export const updateCartItem = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.user);
         const { productId, quantity } = req.body;
 
         const item = user.cart.find(item => item.product.toString() === productId);
@@ -557,7 +557,7 @@ export const updateCartItem = async (req, res) => {
 
 export const removeFromCart = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.user);
         const { productId } = req.params;
 
         user.cart = user.cart.filter(item => item.product.toString() !== productId);

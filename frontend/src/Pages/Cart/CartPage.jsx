@@ -7,10 +7,12 @@ import toast from 'react-hot-toast';
 const CartPage = () => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const token = localStorage.getItem('token');
   const fetchCart = async () => {
     try {
-      const res = await axios.get(`${USER_API_END_POINT}/cart`);
+      const res = await axios.get(`${USER_API_END_POINT}/cart`,{
+        headers: { Authorization: token }
+      });
       setCart(res.data.cart);
     } catch (error) {
       console.error(error);

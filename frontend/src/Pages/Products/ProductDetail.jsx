@@ -48,7 +48,9 @@ const ProductDetail = () => {
 
     const addToCart = async (productId, quantity = 1) => {
         try {
-          const res = await axios.post(`${USER_API_END_POINT}/add-to-cart`, { productId, quantity });
+          const res = await axios.post(`${USER_API_END_POINT}/add-to-cart`, { productId, quantity },{
+            headers: { Authorization: token }
+          });
           console.log('Cart updated:', res.data.cart);
           toast.success("Added to cart!");
         } catch (error) {
