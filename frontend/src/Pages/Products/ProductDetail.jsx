@@ -1,4 +1,4 @@
-import { CheckCircle, Heart, Loader, Loader2, LoaderPinwheel, LucideLoader, MapPin, Star, Store } from 'lucide-react';
+import { CheckCircle, Heart, Loader, Loader2, LoaderPinwheel, LucideLoader, MapPin, Send, Star, Store } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios'
@@ -48,16 +48,41 @@ const ProductDetail = () => {
 
     const addToCart = async (productId, quantity = 1) => {
         try {
-          const res = await axios.post(`${USER_API_END_POINT}/add-to-cart`, { productId, quantity },{
-            headers: { Authorization: token }
-          });
-          console.log('Cart updated:', res.data.cart);
-          toast.success("Added to cart!");
+            const res = await axios.post(`${USER_API_END_POINT}/add-to-cart`, { productId, quantity }, {
+                headers: { Authorization: token }
+            });
+            console.log('Cart updated:', res.data.cart);
+            toast.success("Added to cart!");
         } catch (error) {
-          console.error(error);
-          toast.error(error.response?.data?.message || "Something went wrong");
+            console.error(error);
+            toast.error(error.response?.data?.message || "Something went wrong");
         }
-      };
+    };
+
+    const handleShare = async (productName, productUrl) => {
+        // const shareMessage = `Checkout this product: ${productName}\n${productUrl}`;
+        const shareMessage = `Hey dear! 💬\n\nYeh product kisi khas ne aapke liye bheja hai — unhe laga yeh aapko zaroor pasand aayega 😊\nZaroor check karo, aur agar pasand aaye to bas ek button dabao — shaam tak yeh aapke ghar hoga! 🚚💨\n\n🛍️ *${productName}*\n🔗 ${productUrl}`;
+
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: productName,
+                    text: shareMessage,
+                    // ❌ don't add url separately — kuch apps sirf url hi le lete hain, text ignore kar dete hain
+                });
+                console.log("Shared successfully!");
+            } else {
+                // Fallback: Copy to clipboard
+                await navigator.clipboard.writeText(shareMessage);
+                alert("Share not supported, copied to clipboard instead!");
+            }
+        } catch (error) {
+            console.error("Share failed:", error);
+            alert("Failed to share. Try manually.");
+        }
+    };
+
+
 
     if (loading) {
         return <div className='flex items-center justify-center mt-12'> <LucideLoader /> Loading...</div>;
@@ -76,7 +101,14 @@ const ProductDetail = () => {
             <div className="grid grid-cols-1 gap-16 md:grid-cols-2 pt-4 mb-4">
                 <div className="px-5 lg:px-16 xl:px-20">
 
-                    <div className="mb-4 overflow-hidden rounded-lg bg-gray-500/10">
+                    <div className="mb-4 relative overflow-hidden rounded-lg bg-gray-500/10">
+                        <button
+                            onClick={() => handleShare(product.name, window.location.href)}
+                            className="absolute top-2 right-2 z-20 rounded-full bg-white p-2 shadow-md"
+                        >
+                            <Send className="w-6 h-6" />
+                        </button>
+
                         <img width="1280" height="720" decoding="async" data-nimg="1" className="h-auto w-full object-cover mix-blend-multiply" srcSet=""
                             src={productImages[selectedImage] || "/placeholder.svg"}
                             alt={`Product Image ${selectedImage + 1}`}
@@ -129,7 +161,6 @@ const ProductDetail = () => {
                         <div className="text-3xl font-bold text-gray-900">
                             ₹{product.price - (product.price * product.discountPercentage) / 100}
 
-
                             {product.discountPercentage > 0 && (
                                 <span className="ml-2 text-base font-normal text-gray-800/60 line-through">₹{product.price}</span>
                             )}
@@ -139,10 +170,10 @@ const ProductDetail = () => {
                     </div>
 
                     <div className="mt-10 flex items-center gap-4">
-        
-                    <button onClick={() => addToCart(product._id, 1)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Add to Cart</button>
 
-                    <button onClick={() => navigate(`/address/${product._id}`)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button>
+                        <button onClick={() => addToCart(product._id, 1)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Add to Cart</button>
+
+                        <button onClick={() => navigate(`/address/${product._id}`)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button>
                     </div>
 
                     <hr className="my-6" style={{ color: "lightgray" }} />
@@ -252,82 +283,82 @@ const ProductDetail = () => {
                 <div className="mt-4 grid w-full grid-cols-2 flex-col items-center gap-4 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                     {Array.isArray(related) && related.length > 0 ? (
                         related.map((product) => (
-                           
-                                <div key={product._id} className="px-2 flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
 
-                                    <div className="group relative flex h-52 w-full cursor-pointer items-center justify-center rounded-lg bg-gray-500/10 overflow-hidden">
+                            <div key={product._id} className="px-2 flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
 
-
-                                        <Link to={`/product/${product._id}`} className="w-full h-auto absolute z-10">
-                                            <img
-                                                alt={product.title}
-                                                className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                                                width="800"
-                                                height="800"
-                                                src={product.images[0]}
-                                            />
-                                        </Link>
-
-                                        {product.discountPercentage > 0 && (
-                                            <span
-                                                className="absolute z-[99] rounded-br-2xl rounded-tr-2xl top-2 left-0 px-2 py-1 text-xs font-semibold text-white bg-red-500"
-                                            >
-                                                {product.discountPercentage}% Off
-                                            </span>
-                                        )}
-
-                                        <button
-                                            onClick={() => handleWishlist(product._id)}
-                                            disabled={wishlistLoading[product._id]}
-                                            className={`${wishlistLoading[product._id] ? 'opacity-50 cursor-not-allowed' : ''} absolute top-2 right-2 z-20 rounded-full bg-white p-2 shadow-md`}
-                                        >
-                                            <Heart className={`h-4 w-4 ${wishlist.includes(product._id) ? "text-red-600 fill-red-600" : "text-gray-400"} `} />
-
-                                        </button>
+                                <div className="group relative flex h-52 w-full cursor-pointer items-center justify-center rounded-lg bg-gray-500/10 overflow-hidden">
 
 
-                                    </div>
-
-                                    <Link to={`/product/${product._id}`} className="w-full">
-                                        <p className="w-full truncate pt-2 font-medium md:text-base">{product.name}</p>
-                                        <p className="w-full truncate text-xs text-gray-500/70 max-sm:hidden">{product.description}</p>
+                                    <Link to={`/product/${product._id}`} className="w-full h-auto absolute z-10">
+                                        <img
+                                            alt={product.title}
+                                            className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                                            width="800"
+                                            height="800"
+                                            src={product.images[0]}
+                                        />
                                     </Link>
 
+                                    {product.discountPercentage > 0 && (
+                                        <span
+                                            className="absolute z-[99] rounded-br-2xl rounded-tr-2xl top-2 left-0 px-2 py-1 text-xs font-semibold text-white bg-red-500"
+                                        >
+                                            {product.discountPercentage}% Off
+                                        </span>
+                                    )}
 
-                                    <div className="flex items-center gap-2">
-                                        <p className="text-xs">{product.rating}</p>
-                                        <div className="flex items-center gap-0.5">
-                                            {[...Array(5)].map((_, index) => (
-                                                <img
-                                                    key={index}
-                                                    alt="star_icon"
-                                                    width="18"
-                                                    height="17"
-                                                    className="h-3 w-3"
-                                                    src={`https://quickcart-gs.vercel.app/_next/static/media/star_icon.f42949da.svg`}
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="mt-1 w-full items-end justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <p className="text-lg font-medium text-black-500">
-                                            ₹ {product.price - (product.price * product.discountPercentage / 100)}
-                                            </p>
+                                    <button
+                                        onClick={() => handleWishlist(product._id)}
+                                        disabled={wishlistLoading[product._id]}
+                                        className={`${wishlistLoading[product._id] ? 'opacity-50 cursor-not-allowed' : ''} absolute top-2 right-2 z-20 rounded-full bg-white p-2 shadow-md`}
+                                    >
+                                        <Heart className={`h-4 w-4 ${wishlist.includes(product._id) ? "text-red-600 fill-red-600" : "text-gray-400"} `} />
 
-                                            {product.discountPercentage > 0 && (
-                                                <p className="text-xs line-through text-gray-500">₹{product.price}</p>
-                                            )}
+                                    </button>
 
-                                        </div>
-
-                                        <button className="rounded-full mt-2 w-full border border-gray-500/20 px-4 py-1.5 text-xs text-gray-500 transition hover:bg-slate-50 max-sm:hidden">
-                                            Buy now
-                                        </button>
-                                    </div>
 
                                 </div>
-                           
+
+                                <Link to={`/product/${product._id}`} className="w-full">
+                                    <p className="w-full truncate pt-2 font-medium md:text-base">{product.name}</p>
+                                    <p className="w-full truncate text-xs text-gray-500/70 max-sm:hidden">{product.description}</p>
+                                </Link>
+
+
+                                <div className="flex items-center gap-2">
+                                    <p className="text-xs">{product.rating}</p>
+                                    <div className="flex items-center gap-0.5">
+                                        {[...Array(5)].map((_, index) => (
+                                            <img
+                                                key={index}
+                                                alt="star_icon"
+                                                width="18"
+                                                height="17"
+                                                className="h-3 w-3"
+                                                src={`https://quickcart-gs.vercel.app/_next/static/media/star_icon.f42949da.svg`}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="mt-1 w-full items-end justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-lg font-medium text-black-500">
+                                            ₹ {product.price - (product.price * product.discountPercentage / 100)}
+                                        </p>
+
+                                        {product.discountPercentage > 0 && (
+                                            <p className="text-xs line-through text-gray-500">₹{product.price}</p>
+                                        )}
+
+                                    </div>
+
+                                    <button className="rounded-full mt-2 w-full border border-gray-500/20 px-4 py-1.5 text-xs text-gray-500 transition hover:bg-slate-50 max-sm:hidden">
+                                        Buy now
+                                    </button>
+                                </div>
+
+                            </div>
+
                         ))
                     ) : (
                         <div>No products found.</div>

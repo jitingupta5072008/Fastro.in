@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Search, User, Heart, Menu, X,  Package } from "lucide-react";
+import { Search, User, Heart, Menu, X,  Package, ShoppingCart } from "lucide-react";
 import BottomNav from './BottomNav';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -131,14 +131,14 @@ const TopNav = () => {
                 <Heart className="w-6 h-6" />
                 <span className="text-xs">Wishlist</span>
               </Link>
-              <Link to={'/orders'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
+              <Link to={'/cart'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
                 {/* Badge */}
                 <span style={{ marginRight: '-10px', marginTop: '-6px' }} className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full">
                   {/* {totalProduct} */}
                 </span>
-                <Package className="w-6 h-6" />
+                <ShoppingCart className="w-6 h-6" />
                
-                <span className="text-xs">Order</span>
+                <span className="text-xs">Cart</span>
 
               </Link>
 

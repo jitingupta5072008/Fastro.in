@@ -11,7 +11,9 @@ import Category from '../models/category.model.js';
 import Review from '../models/review.model.js';
 import mongoose from 'mongoose';
 import Slider from '../models/slider.model.js';
-const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+import client from '../middlewares/whatsappClient.js';
+
+// const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 export const sendOtp = async (req, res) => {
     try {
@@ -195,17 +197,23 @@ export const placeOrder = async (req, res) => {
         const productId = cartItems.map(item => item._id).join(',');
 
         // Twilio message send karne ka wait karein
-        try {
-            await client.messages.create({
-                body: `\n Dear ${seller.name},\n New Order Received!. Product: ${productName}: \n click on it ${frontendBaseUrl}${productId}, \n Qty: ${qty} \n Delivery Time: ${DeliveryTime}`,
-                from: process.env.TWILIO_PHONE_NUMBER,
-                to: `+91${sellerPhone}`
-            });
+        // try {
+        //     await client.messages.create({
+        //         body: `\n Dear ${seller.name},\n New Order Received!. Product: ${productName}: \n click on it ${frontendBaseUrl}${productId}, \n Qty: ${qty} \n Delivery Time: ${DeliveryTime}`,
+        //         from: process.env.TWILIO_PHONE_NUMBER,
+        //         to: `+91${sellerPhone}`
+        //     });
 
-            res.json({ message: "Order placed successfully!", order: newOrder });
-        } catch (twilioError) {
-            res.status(500).json({ message: "Order placed, but OTP failed", error: twilioError.toString() });
-        }
+        //     res.json({ message: "Order placed successfully!", order: newOrder });
+        // } catch (twilioError) {
+        //     res.status(500).json({ message: "Order placed, but OTP failed", error: twilioError.toString() });
+        // }
+
+        const phone = `91${sellerPhone}@c.us`
+        const message = `Dear ${seller.name},\n New Order Received!. Product: ${productName}: \n click on it ${frontendBaseUrl}${productId}, \n Qty: ${qty} \n Delivery Time: ${DeliveryTime}`;
+
+        await Client.sendMessage(phone,message);
+
     } catch (error) {
         console.error("Error placing order:", error);
         res.status(500).json({ message: "Error placing order", error: error.message });
@@ -478,7 +486,6 @@ export const getProductBySingleCategory = async(req,res)=>{
     }
 }
 
-
 export const products = async (req, res) => {
     try {
         const products = await Product.find();
@@ -503,7 +510,6 @@ export const singleProducts = async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 }
-
 
 
 export const addToCart = async (req, res) => {

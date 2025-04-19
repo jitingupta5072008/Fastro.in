@@ -1,1 +1,1 @@
-export  const FRONTEND_URL = "http://localhost:5173/product/"
+export  const FRONTEND_URL = "https://www.fastro.in/product/"
