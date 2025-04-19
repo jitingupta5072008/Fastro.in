@@ -1,5 +1,5 @@
 .env
 node_modules
 
-backend/.wwebjs_auth
-backend/.wwebjs_cache
+Backend/.wwebjs_auth
+Backend/.wwebjs_cache
