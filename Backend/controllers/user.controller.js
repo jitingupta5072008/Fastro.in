@@ -213,7 +213,7 @@ export const placeOrder = async (req, res) => {
         const message = `Dear ${seller.name},\n New Order Received!. Product: ${productName}: \n click on it ${frontendBaseUrl}${productId}, \n Qty: ${qty} \n Delivery Time: ${DeliveryTime}`;
 
         await client.sendMessage(phone,message);
-
+        res.json({ message: "Order placed successfully!", order: newOrder });
     } catch (error) {
         console.error("Error placing order:", error);
         res.status(500).json({ message: "Error placing order", error: error.message });
