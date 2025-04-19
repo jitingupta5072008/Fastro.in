@@ -158,6 +158,18 @@ export const address = async (req, res) => {
     }
 }
 
+
+export const sendWhatsAppMessage = async (phone, message) => {
+    const state = await client.getState();
+    if (state === 'CONNECTED') {
+        await client.sendMessage(phone, message);
+        console.log('✅ WhatsApp message sent!');
+    } else {
+        console.warn('❌ WhatsApp client not connected. Message not sent.');
+        throw new Error('WhatsApp client not ready');
+    }
+};
+
 export const placeOrder = async (req, res) => {
     const { userId, cartItems, payment, amount,qty, sellerPhone, address,DeliveryTime } = req.body;
     try {
@@ -212,7 +224,8 @@ export const placeOrder = async (req, res) => {
         const phone = `91${sellerPhone}@c.us`
         const message = `Dear ${seller.name},\n New Order Received!. Product: ${productName}: \n click on it ${frontendBaseUrl}${productId}, \n Qty: ${qty} \n Delivery Time: ${DeliveryTime}`;
 
-        await client.sendMessage(phone,message);
+        await sendWhatsAppMessage(phone, message);
+        
         res.json({ message: "Order placed successfully!", order: newOrder });
     } catch (error) {
         console.error("Error placing order:", error);
