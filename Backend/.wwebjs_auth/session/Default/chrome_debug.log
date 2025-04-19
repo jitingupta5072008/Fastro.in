@@ -1,15 +1,25 @@
-[0419/094000.206:INFO:CONSOLE(152)] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yz/r/zNhh_Nw_x5q.js (152)
-[0419/094002.527:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Feature xr-spatial-tracking's parameters are ignored.", source:  (0)
-[0419/094002.528:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Origin trial controlled feature not enabled: 'attribution-reporting'.", source:  (0)
-[0419/094002.528:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'compute-pressure'.", source:  (0)
-[0419/094002.627:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Origin trial controlled feature not enabled: 'interest-cohort'.", source:  (0)
-[0419/094002.627:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'private-state-token-issuance'.", source:  (0)
-[0419/094002.627:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Origin trial controlled feature not enabled: 'shared-storage'.", source:  (0)
-[0419/094002.627:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'shared-storage-select-url'.", source:  (0)
-[0419/094002.627:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'private-state-token-redemption'.", source:  (0)
-[0419/094002.627:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'unload'.", source:  (0)
-[0419/094002.627:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'window-management'.", source:  (0)
-[0419/094100.082:INFO:CONSOLE(152)] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yz/r/zNhh_Nw_x5q.js (152)
-[0419/094605.396:INFO:CONSOLE(1729)] "Failed to parse video contentType: video/mp4; codecs=avc1.42000a", source: https://static.whatsapp.net/rsrc.php/v4iR5P4/yY/l/rt/qJYTA423gjV.js (1729)
-[0419/094605.396:INFO:CONSOLE(1729)] "Failed to parse video contentType: video/mp4; codecs=hev1.1.6.L93.B0", source: https://static.whatsapp.net/rsrc.php/v4iR5P4/yY/l/rt/qJYTA423gjV.js (1729)
-[0419/094612.822:INFO:CONSOLE(152)] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yz/r/zNhh_Nw_x5q.js (152)
+[0419/100459.935:INFO:CONSOLE(152)] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yz/r/zNhh_Nw_x5q.js (152)
+[0419/100502.836:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Feature xr-spatial-tracking's parameters are ignored.", source:  (0)
+[0419/100502.836:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Origin trial controlled feature not enabled: 'attribution-reporting'.", source:  (0)
+[0419/100502.841:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'compute-pressure'.", source:  (0)
+[0419/100502.841:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Origin trial controlled feature not enabled: 'interest-cohort'.", source:  (0)
+[0419/100502.841:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'private-state-token-issuance'.", source:  (0)
+[0419/100502.841:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Origin trial controlled feature not enabled: 'shared-storage'.", source:  (0)
+[0419/100502.841:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'shared-storage-select-url'.", source:  (0)
+[0419/100502.841:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'private-state-token-redemption'.", source:  (0)
+[0419/100502.841:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'unload'.", source:  (0)
+[0419/100502.841:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'window-management'.", source:  (0)
+[0419/100502.863:ERROR:entry_impl.cc(1072)] No file for 80000001
+[0419/100502.864:ERROR:entry_impl.cc(1072)] No file for 80000005
+[0419/100502.872:ERROR:entry_impl.cc(1072)] No file for 80000004
+[0419/100502.875:ERROR:entry_impl.cc(1072)] No file for 80000009
+[0419/100502.875:ERROR:entry_impl.cc(1072)] No file for 80000006
+[0419/100502.875:ERROR:entry_impl.cc(1072)] No file for 80000007
+[0419/100502.875:ERROR:entry_impl.cc(1072)] No file for 80000008
+[0419/100504.860:ERROR:entry_impl.cc(1072)] No file for 80000016
+[0419/100504.862:INFO:CONSOLE(8)] "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at 'https://static.whatsapp.net/rsrc.php/v4/yz/r/zNhh_Nw_x5q.js' failed to load.", source: https://web.whatsapp.com/sw.js (8)
+[0419/100504.866:INFO:CONSOLE(0)] "An unknown error occurred when fetching the script.", source:  (0)
+[0419/100506.033:INFO:CONSOLE(0)] "The resource https://static.whatsapp.net/rsrc-translations.php/v8i-Cg4/yW/l/en_GB/WogXzZn0JhA.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://web.whatsapp.com/ (0)
+[0419/100506.034:INFO:CONSOLE(0)] "The resource https://static.whatsapp.net/rsrc.php/v5/yV/l/0,cross/eMlBg_7jqOX.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://web.whatsapp.com/ (0)
+[0419/100506.034:INFO:CONSOLE(0)] "The resource https://static.whatsapp.net/rsrc-translations.php/v8iR5P4/yy/l/en_GB/qJYTA423gjV.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://web.whatsapp.com/ (0)
+[0419/100506.034:INFO:CONSOLE(0)] "The resource https://static.whatsapp.net/rsrc-translations.php/v8iOtb4/y-/l/en_GB/EoG19Yo1YmtfwA_k4oHAeOBI1ByVSzg1UwdwDvXx_J0svsWqehdEtWw.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://web.whatsapp.com/ (0)
