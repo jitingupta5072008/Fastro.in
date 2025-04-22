@@ -97,12 +97,12 @@ const CartPage = () => {
     if (loading) return <p>Loading cart...</p>;
 
     return (
-        <div className="max-w-4xl mx-auto mt-2 p-4">
+        <div className="max-w-4xl mx-auto">
                 <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-3 flex items-center">
-                    <Link onClick={() => navigate(-1)} className="mr-4">
+                    <Link onClick={() => navigate(-1)} className="mr-2">
                         <ArrowLeft className="w-6 h-6 text-gray-700" />
                     </Link>
-                    <h1 className="text-lg font-semibold text-gray-800">Your Cart </h1>
+                    <h1 className="text-lg font-semibold text-gray-800">Cart </h1>
                 </header>
                {/* Checkout Steps */}
                <div className="flex py-4 px-32 items-center justify-center space-x-6 text-gray-500">

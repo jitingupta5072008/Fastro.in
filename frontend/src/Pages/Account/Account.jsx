@@ -36,7 +36,7 @@ const Account = () => {
           });
           handleLogout();
         } else {
-          setUser(res.data.user);
+          setUser(res.data);
         }
       } catch (err) {
         toast.error(err.response?.data?.message || 'An error occurred');
