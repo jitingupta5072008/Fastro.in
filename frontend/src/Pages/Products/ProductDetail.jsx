@@ -51,7 +51,6 @@ const ProductDetail = () => {
             const res = await axios.post(`${USER_API_END_POINT}/add-to-cart`, { productId, quantity }, {
                 headers: { Authorization: token }
             });
-            console.log('Cart updated:', res.data.cart);
             toast.success("Added to cart!");
         } catch (error) {
             console.error(error);
@@ -70,7 +69,7 @@ const ProductDetail = () => {
                     text: shareMessage,
                     // ❌ don't add url separately — kuch apps sirf url hi le lete hain, text ignore kar dete hain
                 });
-                console.log("Shared successfully!");
+             
             } else {
                 // Fallback: Copy to clipboard
                 await navigator.clipboard.writeText(shareMessage);

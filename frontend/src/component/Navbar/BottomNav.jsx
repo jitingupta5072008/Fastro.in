@@ -8,7 +8,7 @@ function BottomNav() {
   // const {totalProduct} = useCart();
   const token = localStorage.getItem("token")
   const location = useLocation()
-  if (location.pathname === '/cart' || location.pathname.startsWith('/address/') ) {
+  if (location.pathname === '/cart' || location.pathname.startsWith('/address') ) {
     return null
   }
 
@@ -43,13 +43,8 @@ function BottomNav() {
         </Link>
   
         <Link to={'/orders'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
-          {/* Badge */}
-          <span style={{ marginRight: '-10px', marginTop: '-6px' }} className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full">
-            {/* {orders.length} */}
-          </span>
           <Package className="w-6 h-6" />
           <span className="text-xs">Orders</span>
-
         </Link>
       </div>
     </nav>

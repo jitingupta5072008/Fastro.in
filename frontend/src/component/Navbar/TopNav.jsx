@@ -42,7 +42,7 @@ const TopNav = () => {
             Authorization: token,
           }
         });
-        setUser(res.data.user);
+        setUser(res.data);
 
         const resposne = await axios.get(`${USER_API_END_POINT}/categories`, {
           headers: {
@@ -63,7 +63,7 @@ const TopNav = () => {
     navigate('/login');
   };
 
-  if (location.pathname === '/cart' || location.pathname.startsWith('/address/')) {
+  if (location.pathname === '/cart' || location.pathname.startsWith('/address')) {
     return null
   }
 
@@ -146,7 +146,14 @@ const TopNav = () => {
 
 
             {/* Mobile menu button */}
-            <div className="md:hidden flex items-center">
+            <div className="md:hidden flex gap-[10px] items-center">
+            <Link to={'/cart'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
+                {/* Badge */}
+                <span style={{ marginRight: '-10px', marginTop: '-6px' }} className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full">
+                  {user.cartLength}
+                </span>
+                <ShoppingCart className="w-6 h-6" />
+              </Link>
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-pink-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500"

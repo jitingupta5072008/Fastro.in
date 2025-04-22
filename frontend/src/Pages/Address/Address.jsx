@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ChevronRight, Dot, LucideLoader, ShoppingCart, Trash } from 'lucide-react';
 import axios from 'axios';
 import { SELLER_API_END_POINT, USER_API_END_POINT } from '../../utils/api';
@@ -63,7 +63,7 @@ const Address = () => {
         e.preventDefault();
         setLoading(true)
         const token = localStorage.getItem("token")
-        if(!formData) return toast.error('Add Address before place order')
+        if (!formData) return toast.error('Add Address before place order')
         try {
             const res = await axios.post(
                 `${USER_API_END_POINT}/add/address`,
@@ -79,7 +79,7 @@ const Address = () => {
             toast.success(res.data.message);
         } catch (error) {
             toast.error(error.response.data.message);
-        }finally{
+        } finally {
             setLoading(false)
         }
     };
@@ -130,11 +130,11 @@ const Address = () => {
         setLoading(true)
         try {
             if (!DeliveryTime) return toast.error('Please select a delivery time.');
-    
+
             if (!user || !user.address || !user.address.fulladdress) {
                 return toast.error("Please add address before placing the order.");
             }
-    
+
             await placeOrder(
                 userId,
                 [product],
@@ -145,17 +145,19 @@ const Address = () => {
                 user.address,
                 DeliveryTime
             );
-    
+
             // navigate('/orders'); // You can uncomment this if needed
-    
+
         } catch (error) {
             toast.error("Failed to place order. Try again.");
-        }finally{
+        } finally {
             setLoading(false)
         }
     };
-    
 
+    const location = useLocation()
+    const order = location.state?.order || [];
+    const finalAmount = location.state?.finalAmount;
 
     // Conditional rendering based on loading and error states
     if (loading) {
@@ -329,7 +331,7 @@ const Address = () => {
                                     </label>
 
                                     <label htmlFor="Office" className="flex items-center gap-2 border rounded-md p-3 cursor-pointer w-full sm:w-auto hover:bg-gray-100">
-                                        <input type="radio" className="w-5 h-5" id="Office" name="addressType" value="Office" checked={formData.addressType === 'Office'}
+                                        <input type="radio" className="w-5 h-5" id="Office" name="addressType" value="Office" checked={formData.addressType === 'Office' }
                                             onChange={handleChange} />
                                         <span className="text-gray-700 font-medium">Office <br /> <span className="text-sm text-gray-500">(9AM-5PM)</span> </span>
                                     </label>
@@ -338,8 +340,8 @@ const Address = () => {
 
                             {/* Submit Button */}
                             <div className="mt-6">
-                                <button type="submit"  disabled={loading} className="w-full py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50">
-                                     {loading ? 'Adding..' : 'Add Address'}
+                                <button type="submit" disabled={loading} className="w-full py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50">
+                                    {loading ? 'Adding..' : 'Add Address'}
                                 </button>
                             </div>
 
@@ -350,73 +352,97 @@ const Address = () => {
                 {/* Cart Items */}
 
 
-                <div className=" grid w-full grid-cols-1 gap-6 pb-14 sm:grid-cols-2  lg:grid-cols-4
-">
-                    <div key={product._id} className='m-2 md:m-4 cursor-pointer '>
 
-                        <div className="flex justify-between items-center px-4 py-3 bg-white border-b border-gray-200">
-                            <div className="text-sm text-gray-600">Sold by: {product.seller.shopName} </div>
-                            <div className="text-sm text-green-600">Free Delivery</div>
-                        </div>
+                {order.length === 0 ? (
+                    <p>No items in order.</p>
+                ) : (
+                    <div className=" grid w-full grid-cols-1 gap-6 pb-4 sm:grid-cols-2  lg:grid-cols-4">
 
-                        <div className="bg-white p-2 border-b border-gray-200">
-                            <div className="flex">
-                                <div className="mr-4 relative">
-                                    <img
-                                        src={product.images[0] || "/placeholder.svg"}
+                        {order.map((product, index) => (
+                            <div key={index} className='m-2 md:m-4 cursor-pointer '>
 
-                                        alt={product}
-                                        width={100}
-                                        height={100}
-                                        className="rounded-md object-cover"
-                                    />
-                                </div>
-                                <div className="flex-1">
-                                    <div className="flex justify-between" onClick={() => navigate(`/product/${product._id}`)} >
-                                        <h3 className="font-medium text-gray-800">{product.name}</h3>
-                                        <ChevronRight className="w-5 h-5 text-gray-500" />
+                                <div className="bg-white p-2 border-b border-gray-200">
+                                    <div className="flex">
+                                        <div className="mr-4 relative">
+                                            <img
+                                                src={product.product.images[0] || "/placeholder.svg"}
+
+                                                alt={product}
+                                                width={100}
+                                                height={100}
+                                                className="rounded-md object-cover"
+                                            />
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between" onClick={() => navigate(`/product/${product._id}`)} >
+                                                <h3 className="font-medium text-gray-800">{product.product.name}</h3>
+                                                <ChevronRight className="w-5 h-5 text-gray-500" />
+                                            </div>
+                                            <div className="text-xl font-semibold mt-1">
+                                            ₹ {product.product.price - (product.product.price * product.product.discountPercentage / 100)}
+                                              
+
+                                              {product.product.discountPercentage > 0 && (
+                                                  <p className="text-sm line-through text-gray-500">₹{product.product.price}</p>
+                                              )}
+                                            </div>
+                                            <div className="text-sm text-gray-500 mt-1">All issue easy returns</div>
+                                            <div className="text-sm text-gray-500 mt-1">min Order Qty  {product.product.minimumOrderQuantity}</div>
+
+                                        </div>
                                     </div>
-                                    <div className="text-xl font-semibold mt-1">
-                                        ₹{parseInt(product.price)}
-                                    </div>
-                                    <div className="text-sm text-gray-500 mt-1">All issue easy returns</div>
-                                    <div className="text-sm text-gray-500 mt-1">min Order Qty  {product.minimumOrderQuantity}</div>
+                                    <div className='ml-4 flex items-center justify-between'>
+                                        <div className="flex items-center mt-2 p-2 text-sm text-gray-700">
+                                            <span>Size: L</span>
+                                            <span className="mx-2 text-gray-300"> <Dot /> </span>
+                                            <div className="flex items-center">
+                                                <span className="ml-4 text-lg font-semibold text-gray-800">
+                                                    {product.product.discountPercentage > 0 ? <>
 
+                                                        {product.quantity < product.product.minimumOrderQuantity
+                                                            ? product.product.minimumOrderQuantity
+                                                            : product.quantity} x {product.product.price - (product.product.price * product.product.discountPercentage) / 100} = {''}
+
+                                                        {(product.product.price - (product.product.price * product.product.discountPercentage) / 100) * (product.quantity < product.product.minimumOrderQuantity ? product.product.minimumOrderQuantity : product.quantity)}
+                                                    </>
+                                                        :
+                                                        <>
+                                                            {product.quantity < product.product.minimumOrderQuantity
+                                                                ? product.product.minimumOrderQuantity
+                                                                : product.quantity} x {product.product.price} = {''} ₹{parseInt(product.product.price * product.quantity)}
+                                                        </>
+                                                    }
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <button onClick={() => removeFromCart(product.product._id)} className="flex items-center mt-3 text-gray-600">
+                                            <Trash className="w-5 h-5 mr-1 text-red-600" />
+                                            {/* <span>Remove</span> */}
+                                        </button>
+                                    </div>
                                 </div>
+
                             </div>
-                            <div className='ml-4 flex items-center justify-between'>
-                                <div className="flex items-center mt-2 p-2 text-sm text-gray-700">
-                                    <span>Size: L</span>
-                                    <span className="mx-2 text-gray-300"> <Dot /> </span>
-                                    <div className="flex items-center">
-                                        <span className="ml-4 text-lg font-semibold text-gray-800">
-                                            {product.minimumOrderQuantity} x {parseInt(product.price)} = {''}
-                                            {/* ₹{parseInt(product.price - (product.price * product.discountPercentage) / 100) * product.minimumOrderQuantity} */}
-                                            ₹{parseInt(product.price * product.minimumOrderQuantity)}
-                                        </span>
-                                    </div>
-                                </div>
 
-                                <button onClick={() => removeFromCart(product._id)} className="flex items-center mt-3 text-gray-600">
-                                    <Trash className="w-5 h-5 mr-1 text-red-600" />
-                                    {/* <span>Remove</span> */}
-                                </button>
-                            </div>
-                        </div>
-
+                        ))}
                     </div>
-                </div>
+                )}
 
-                <select
-                    name="category"
-                    className="border p-2 rounded mx-auto "
-                    value={payment}
-                    onChange={(e) => setpayment(e.target.value)}
-                >
-                    <option value="">Select Payment Methode</option>
-                    <option value="Cash on Delivery">Cash on Delivery</option>
+<div className="flex justify-center mt-2">
+  <select
+    name="category"
+    value={payment}
+    onChange={(e) => setpayment(e.target.value)}
+    className="w-72 px-4 py-3 rounded-lg shadow-sm border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400"
+  >
+    <option value="" disabled>💳 Select Payment Method</option>
+    <option value="Cash on Delivery">🚚 Cash on Delivery</option>
+    <option value="" disabled>📱 UPI</option>
+    <option value="" disabled>💳 Credit/Debit Card</option>
+  </select>
+</div>
 
-                </select>
 
                 {/* Address Type */}
                 <div className="p-4 bg-white shadow-md rounded-md">
@@ -424,14 +450,14 @@ const Address = () => {
                     <div className="flex sm:flex-row gap-2">
 
                         <label htmlFor="Home" className="flex items-center gap-2 border rounded-md p-3 cursor-pointer w-full sm:w-auto hover:bg-gray-100">
-                            <input type="radio" className="w-5 h-5" id="Home" name="addressType" value={'Morning (8AM-11AM)'} 
-                                onChange={(e)=> setDeliveryTime(e.target.value)} />
+                            <input type="radio" className="w-5 h-5" id="Home" name="addressType" value={'Morning (8AM-11AM)'}
+                                onChange={(e) => setDeliveryTime(e.target.value)} />
                             <span className="text-gray-700 font-medium">Morning <br /> <span className="text-sm text-gray-500">(8AM-11AM)</span> </span>
                         </label>
 
                         <label htmlFor="Office" className="flex items-center gap-2 border rounded-md p-3 cursor-pointer w-full sm:w-auto hover:bg-gray-100">
-                            <input type="radio" className="w-5 h-5" id="Office" name="addressType" value={'Evening (4PM-8PM)'} 
-                                onChange={(e)=> setDeliveryTime(e.target.value)} />
+                            <input type="radio" className="w-5 h-5" id="Office" name="addressType" value={'Evening (4PM-8PM)'}
+                                onChange={(e) => setDeliveryTime(e.target.value)} />
                             <span className="text-gray-700 font-medium">Evening <br /> <span className="text-sm text-gray-500">(4PM-8PM) </span> </span>
                         </label>
 
@@ -442,13 +468,12 @@ const Address = () => {
             <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 flex justify-between items-center">
                 <div>
                     <div className="text-2xl font-bold">
-                        {/* ₹{parseInt(product.price - (product.price * product.discountPercentage) / 100) * product.minimumOrderQuantity} */}
-                        ₹{parseInt(product.price * product.minimumOrderQuantity)}
+                        ₹{finalAmount}
                     </div>
                     <button className="text-pink-500 text-sm font-medium">VIEW PRICE DETAILS</button>
                 </div>
 
-                <button onClick={handlePlaceOrder}  disabled={loading} className="bg-pink-500 text-white font-medium py-3 px-8 rounded-md">{loading ? 'ordering..' : 'Place Order '} </button>
+                <button onClick={handlePlaceOrder} disabled={loading} className="bg-pink-500 text-white font-medium py-3 px-8 rounded-md">{loading ? 'ordering..' : 'Place Order '} </button>
 
             </div>
         </>

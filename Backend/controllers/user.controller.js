@@ -18,7 +18,7 @@ import client from '../middlewares/whatsappClient.js';
 export const sendOtp = async (req, res) => {
     try {
         const { phone } = req.body
-        // console.log(phone)
+   
         if (!phone) {
             return res.status(400).json({
                 message: "All fields reuired",
@@ -36,7 +36,7 @@ export const sendOtp = async (req, res) => {
         } else {
             user = new User({ phone, otp, otpExpire });
         }
-        // console.log(otp, otpExpire);
+      
         await user.save();
 
         // Send OTP via Twilio
@@ -49,7 +49,8 @@ export const sendOtp = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
+        return res.status(500).json({ message: error });
+
     }
 }
 
@@ -133,8 +134,17 @@ export const loginwithemail = async (req, res) => {
 
 export const profile = async (req, res) => {
     try {
-        const user = await User.findById(req.user);
-        res.json({ user });
+        const user = await User.findById(req.user).select('name email cart');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      name: user.name,
+      email: user.email,
+      cartLength: user.cart.length
+    });
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -163,9 +173,9 @@ export const sendWhatsAppMessage = async (phone, message) => {
     const state = await client.getState();
     if (state === 'CONNECTED') {
         await client.sendMessage(phone, message);
-        console.log('✅ WhatsApp message sent!');
+        // console.log('✅ WhatsApp message sent!');
     } else {
-        console.warn('❌ WhatsApp client not connected. Message not sent.');
+        // console.warn('❌ WhatsApp client not connected. Message not sent.');
         throw new Error('WhatsApp client not ready');
     }
 };
@@ -473,7 +483,7 @@ export const getWishlistProduct = async (req, res) => {
   
       res.json({ wishlist: user.wishlist });
     } catch (error) {
-      console.log(error);
+    //   console.log(error);
       res.status(400).json({ message: error.message });
     }
   };
@@ -504,7 +514,7 @@ export const products = async (req, res) => {
         const products = await Product.find();
         res.json({ products });
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({ message: error.message });
     }
 }
@@ -519,7 +529,7 @@ export const singleProducts = async (req, res) => {
 
         res.json({ products});
     } catch (err) {
-        console.log(err);
+        // console.log(err);
         res.status(400).json({ message: err.message });
     }
 }
