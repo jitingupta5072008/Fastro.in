@@ -113,9 +113,29 @@ const CartPage = () => {
         };
     }, [cart]);
 
+    // const handleCheckout = async () => {
+    //     navigate('/address', { state: { order: cart, finalAmount: finalAmount } })
+    // }
+
+    const [payment, setpayment] = useState('');
+    const [DeliveryTime, setDeliveryTime] = useState('');
+    
     const handleCheckout = async () => {
-        navigate('/address', { state: { order: cart, finalAmount: finalAmount } })
-    }
+        if(!payment || !DeliveryTime) return toast.error('Please Choose Payment Method or Delivery Time')
+        try {
+          const response = await axios.post(`${USER_API_END_POINT}/cart/checkout`, {paymentMethod: payment,DeliveryTime: DeliveryTime},{
+            headers: { Authorization: token }
+          });
+          console.log(response);
+          if (response.status === 200) {
+            navigate("/order-success");
+          }
+        } catch (err) {
+          console.error(err);
+          toast.error("Failed to place order");
+        }
+      };
+      
 
     // if (loading) return <p>Loading cart...</p>;
 
@@ -283,18 +303,28 @@ const CartPage = () => {
 
 
                         <p className="mt-6 text-base font-medium uppercase">Payment Method</p>
-                        {/* <select className="mt-2 w-full border border-gray-300 bg-white px-3 py-2 outline-none">
-                            <option value="COD">Cash On Delivery</option>
-                            <option value="Online">Online Payment</option>
-                        </select> */}
                         <select
                             name="category"
+                            value={payment}
+                            onChange={(e) => setpayment(e.target.value)}
                             className="mt-2 w-full px-4 py-3 shadow-sm border border-gray-300 bg-white outline-none text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400"
                         >
-                            <option value="" disabled>💳 Select Payment Method</option>
+                            <option value="">💳 Select Payment Method</option>
                             <option value="Cash on Delivery">🚚 Cash on Delivery</option>
                             <option value="" disabled>📱 UPI</option>
                             <option value="" disabled>💳 Credit/Debit Card</option>
+                        </select>
+                        <p className="mt-6 text-base font-medium uppercase">Delivery Time</p>
+                        <select
+                            name="category"
+                            value={DeliveryTime}
+                            onChange={(e) => setDeliveryTime(e.target.value)}
+                            className="mt-2 w-full px-4 py-3 shadow-sm border border-gray-300 bg-white outline-none text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400"
+                        >
+                            <option value="" disabled>Select Delivery Time</option>
+                            <option value={'Morning (8AM-11AM)'}>Morning <br /> <span className="text-sm text-gray-500">(8AM-11AM)</span></option>
+                            <option value={'Evening (4PM-8PM)'}>Evening <br /> <span className="text-sm text-gray-500">(4PM-8PM) </span></option>
+
                         </select>
                     </div>
 
@@ -319,7 +349,7 @@ const CartPage = () => {
                         </p>
                     </div>
 
-                    <button className="bg-pink-500 hover:bg-pink-600 mt-6 w-full cursor-pointer py-3 font-medium text-white transition">
+                    <button onClick={handleCheckout} className="bg-pink-500 hover:bg-pink-600 mt-6 w-full cursor-pointer py-3 font-medium text-white transition">
                         Proceed to Checkout
                     </button>
                 </div>
