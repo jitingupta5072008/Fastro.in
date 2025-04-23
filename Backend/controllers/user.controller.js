@@ -640,8 +640,8 @@ export const cartCheckout = async (req, res) => {
   
         await newOrder.save();
         orders.push(newOrder);
-  
         if (product.seller && product.seller.phone) {
+        const frontendBaseUrl = FRONTEND_URL;
           const phone = `91${product.seller.phone}@c.us`;
           const message = `Dear ${product.seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${frontendBaseUrl}/product/${product._id}\nQty: ${quantity}\nDelivery Time: ${req.body.DeliveryTime}`;
   
