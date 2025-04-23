@@ -12,7 +12,7 @@ const CartPage = () => {
     const [updatingQty, setUpdatingQty] = useState(null); // holds productId being updated
     const token = localStorage.getItem('token');
     const navigate = useNavigate()
-    const [addresses, setAddresses] = useState([]);
+    const [addresses, setAddresses] = useState(null);
 
 
     const fetchCart = async () => {
@@ -87,7 +87,6 @@ const CartPage = () => {
 
 
 
-    console.log(addresses)
 
     const { total, totalDiscount, finalAmount } = useMemo(() => {
         let total = 0;
@@ -117,196 +116,9 @@ const CartPage = () => {
         navigate('/address', { state: { order: cart, finalAmount: finalAmount } })
     }
 
-    if (loading) return <p>Loading cart...</p>;
+    // if (loading) return <p>Loading cart...</p>;
 
     return (
-        // <div className="max-w-4xl mx-auto">
-        //         <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-3 flex items-center">
-        //             <Link onClick={() => navigate(-1)} className="mr-2">
-        //                 <ArrowLeft className="w-6 h-6 text-gray-700" />
-        //             </Link>
-        //             <h1 className="text-lg font-semibold text-gray-800">Cart </h1>
-        //         </header>
-        //        {/* Checkout Steps */}
-        //        <div className="flex py-4 px-32 items-center justify-center space-x-6 text-gray-500">
-        //             {/* <!-- Cart --> */}
-        //             <div className="flex items-center space-x-2">
-        //                 <span className="font-bold text-black">
-        //                     Cart
-        //                 </span>
-
-        //                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"><g clipPath="url(#clip0_109_982)"><path opacity="0.2" d="M8.5 14.875C12.0208 14.875 14.875 12.0208 14.875 8.5C14.875 4.97918 12.0208 2.125 8.5 2.125C4.97918 2.125 2.125 4.97918 2.125 8.5C2.125 12.0208 4.97918 14.875 8.5 14.875Z" fill="#FFDD00"></path><path d="M5.84375 9.03125L7.4375 10.625L11.1562 6.90625" stroke="#212121" strokeLinecap="round" strokeLinejoin="round"></path><path d="M8.5 14.875C12.0208 14.875 14.875 12.0208 14.875 8.5C14.875 4.97918 12.0208 2.125 8.5 2.125C4.97918 2.125 2.125 4.97918 2.125 8.5C2.125 12.0208 4.97918 14.875 8.5 14.875Z" stroke="#212121" strokeLinecap="round" strokeLinejoin="round"></path></g><defs><clipPath id="clip0_109_982"><rect width="17" height="17" fill="white"></rect></clipPath></defs></svg>
-
-        //             </div>
-
-        //             <div className="flex-1 border-t border-dashed border-gray-400"></div>
-
-        //             <div className="flex items-center space-x-2">
-        //                 <span className="font-bold text-black">
-        //                     Address
-        //                 </span>
-
-
-
-        //             </div>
-
-        //             <div className="flex-1 border-t border-dashed border-gray-400"></div>
-
-        //             <div className="font-semibold text-gray-600">payment</div>
-
-        //         </div>
-        //     {cart.length === 0 ? (
-        //         <p>Your cart is empty.</p>
-        //     ) : (
-        //         <div className="space-y-6">
-        //             <div className="grid w-full grid-cols-1 gap-6 pb-14 sm:grid-cols-2  lg:grid-cols-2">
-        //                 {cart.map((item) => (
-        //                     <div key={item.product._id} className='m-2 md:m-4 cursor-pointer '>
-
-
-
-        //                         <div className="bg-white p-2 border-b border-gray-200">
-        //                             <div className="flex">
-        //                                 <div className="mr-4 relative">
-        //                                     <img
-        //                                         src={item.product.images[0] || "/placeholder.svg"}
-
-        //                                         alt={item.product.name}
-        //                                         width={100}
-        //                                         height={100}
-        //                                         className="rounded-md object-cover"
-        //                                     />
-        //                                 </div>
-        //                                 <div className="flex-1">
-        //                                     <div className="flex justify-between" onClick={() => navigate(`/product/${item.product._id}`)} >
-        //                                         <h3 className="font-medium text-gray-800">{item.product.name.split(" ").slice(0, 9).join(" ") + "..."}</h3>
-        //                                         <ChevronRight className="w-5 h-5 text-gray-500" />
-        //                                     </div>
-        //                                     <div className="text-2xl flex items-center gap-2 font-semibold mt-1">
-
-        //                                         ₹ {item.product.price - (item.product.price * item.product.discountPercentage / 100)}
-
-
-        //                                         {item.product.discountPercentage > 0 && (
-        //                                             <p className="text-sm line-through text-gray-500">₹{item.product.price}</p>
-        //                                         )}
-
-        //                                     </div>
-        //                                     <div className="text-sm text-gray-500 mt-1">All issue easy returns</div>
-        //                                     <div className="text-sm text-gray-500 mt-1">min Order Qty  {item.product.minimumOrderQuantity}</div>
-
-        //                                     <select
-        //                                         value={item.quantity < item.product.minimumOrderQuantity
-        //                                             ? item.product.minimumOrderQuantity
-        //                                             : item.quantity}
-        //                                         onChange={(e) =>
-        //                                             updateQuantity(item.product._id, parseInt(e.target.value))
-        //                                         }
-        //                                         className="w-20 border rounded px-2 mt-2"
-        //                                         disabled={updatingQty === item.product._id}
-        //                                     >
-        //                                         {[...Array(10).keys()]
-        //                                             .map((num) => num + 1)
-        //                                             .filter(num => num >= item.product.minimumOrderQuantity)
-        //                                             .map((num) => (
-        //                                                 <option key={num} value={num}>
-        //                                                     {num}
-        //                                                 </option>
-        //                                             ))}
-        //                                     </select>
-
-        //                                 </div>
-        //                             </div>
-        //                             <div className='ml-4 flex items-center justify-between'>
-
-        //                                 <div className="flex items-center mt-2 p-2 text-sm text-gray-700">
-        //                                     <span>Size: L</span>
-        //                                     <span className="mx-2 text-gray-300"> <Dot /> </span>
-        //                                     <div className="flex items-center">
-        //                                         <span className="ml-4 text-lg font-semibold text-gray-800">
-        //                                             {item.product.discountPercentage > 0 ? <>
-
-        //                                                 {item.quantity < item.product.minimumOrderQuantity
-        //                                                     ? item.product.minimumOrderQuantity
-        //                                                     : item.quantity} x {item.product.price - (item.product.price * item.product.discountPercentage) / 100} = {''}
-
-        //                                                 {(item.product.price - (item.product.price * item.product.discountPercentage) / 100) * (item.quantity < item.product.minimumOrderQuantity ? item.product.minimumOrderQuantity : item.quantity)}
-        //                                             </>
-        //                                                 :
-        //                                                 <>
-        //                                                     {item.quantity < item.product.minimumOrderQuantity
-        //                                                         ? item.product.minimumOrderQuantity
-        //                                                         : item.quantity} x {item.product.price} = {''} ₹{parseInt(item.product.price * item.quantity)}
-        //                                                 </>
-        //                                             }
-
-        //                                             {/* {item.quantity} x {parseInt(item.product.price)} = {''}
-
-        //                                             ₹{parseInt(item.product.price - (item.product.price * item.product.discountPercentage) / 100) * item.product.minimumOrderQuantity}
-
-        //                                          */}
-
-        //                                             {/* ₹{parseInt(item.product.price * item.quantity)} */}
-        //                                         </span>
-        //                                     </div>
-        //                                 </div>
-
-        //                                 <button
-        //                                     onClick={() => removeItem(item.product._id)}
-        //                                     className={`text-red-500 hover:underline flex items-center gap-1 disabled:opacity-50`}
-        //                                     disabled={removing === item.product._id}
-        //                                 >
-        //                                     <Trash size={18} className='w-5 h-5 mr-1 text-red-600' />
-        //                                     {removing === item.product._id ? 'Removing...' : 'Remove'}
-        //                                 </button>
-
-        //                             </div>
-        //                         </div>
-
-        //                     </div>
-        //                 ))}
-        //             </div>
-
-        //             <div className="text-right text-lg font-bold mt-6">
-        //                 Total: ₹{total.toFixed(2)}
-        //             </div>
-
-        //             <div className="bg-white p-4 rounded shadow mt-4">
-        //                 <h2 className="text-xl font-bold mb-2">Cart Summary ({cart.length}) </h2>
-
-        //                 <div className="flex justify-between">
-        //                     <span>Total Price:</span>
-        //                     <span>₹{total.toFixed(2)}</span>
-        //                 </div>
-        //                 {
-        //                     totalDiscount > 0 && (
-        //                         <div className="flex justify-between text-green-600">
-        //                             <span>Discount:</span>
-        //                             <span>- ₹{totalDiscount.toFixed(2)}</span>
-        //                         </div>
-        //                     )
-        //                 }
-
-        //                 <div className="flex justify-between font-semibold mt-2 border-t pt-2">
-        //                     <span>Final Amount:</span>
-        //                     <span>₹{finalAmount.toFixed(2)}</span>
-        //                 </div>
-        //             </div>
-
-        //             <div className="flex items-center justify-between mt-4">
-        //                 {totalDiscount > 0 && (
-        //                     <p className="text-lg text-green-600">
-        //                         You save ₹{totalDiscount.toFixed(2)}
-        //                     </p>
-        //                 )}
-        //                 <button onClick={handleCheckout} className="w-32 rounded-xl bg-pink-500 py-3 cursor-pointer text-white transition hover:bg-pink-600">
-        //                     CheckOut
-        //                 </button>
-        //             </div>
-        //         </div>
-        //     )}
-        // </div>
-
         <div className="px-6 md:px-16 lg:px-24 xl:px-32">
             <div className="mt-16 flex flex-col md:flex-row">
                 <div className="max-w-4xl flex-1">
@@ -318,8 +130,34 @@ const CartPage = () => {
                         <p className="text-center">Subtotal</p>
                         <p className="text-center">Action</p>
                     </div>
-
-                    {cart.length === 0 ? (
+                    {loading ?
+                    <div className="grid grid-cols-[2fr_1fr_1fr] items-center pt-3 text-sm font-medium text-gray-500 md:text-base animate-pulse">
+                    {/* Left section - Image and info */}
+                    <div className="flex items-center gap-3 md:gap-6">
+                      <div className="h-24 w-24 rounded border border-gray-300 bg-gray-200"></div>
+                      <div className="space-y-2">
+                        <div className="h-4 w-40 bg-gray-300 rounded"></div>
+                        <div className="h-4 w-24 bg-gray-200 rounded"></div>
+                        <div className="flex gap-2">
+                          <div className="h-4 w-10 bg-gray-200 rounded"></div>
+                          <div className="h-8 w-20 bg-gray-300 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    {/* Price */}
+                    <div className="text-center">
+                      <div className="h-4 w-12 bg-gray-300 rounded mx-auto"></div>
+                    </div>
+                  
+                    {/* Remove Button */}
+                    <div className="flex justify-center">
+                      <div className="h-6 w-6 bg-gray-300 rounded-full"></div>
+                    </div>
+                  </div>
+                  
+                        :
+                    cart.length === 0 ? (
                         <p>Your cart is empty.</p>
                     ) : (
                         cart.map((item) => (
@@ -340,13 +178,6 @@ const CartPage = () => {
                                             </p>
                                             <div className="flex items-center">
                                                 <p>Qty:</p>
-                                                {/* <select className="outline-none">
-                        {[...Array(12)].map((_, i) => (
-                          <option key={i + 1} value={i + 1}>
-                            {i + 1}
-                          </option>
-                        ))}
-                      </select> */}
                                                 <select
                                                     value={item.quantity < item.product.minimumOrderQuantity
                                                         ? item.product.minimumOrderQuantity
@@ -385,7 +216,9 @@ const CartPage = () => {
                                 </button>
                             </div>
                         ))
-                    )}
+                    )
+                    
+                }
 
                     <button className="group text-primary mt-8 flex cursor-pointer items-center gap-2 font-medium">
                         <img
@@ -395,6 +228,7 @@ const CartPage = () => {
                         />
                         Continue Shopping
                     </button>
+
                 </div>
 
                 <div className="w-full my-8 mx-auto max-w-90 bg-gray-100 p-5 max-md:mt-16">
@@ -404,24 +238,46 @@ const CartPage = () => {
                     <div className="mb-6">
                         <p className="text-base font-medium uppercase">Delivery Address</p>
                         <div className="relative mt-2 flex items-start justify-between">
-                            <p className="text-gray-500">No address found</p>
-                            {addresses ?
-                                <button onClick={() => navigate('/add-address', { state: { address: addresses } })} className="text-primary cursor-pointer hover:underline">Change</button>
-                                :
-                                <button className="text-primary cursor-pointer hover:underline">Add</button>
+                            {loading ? 
+                            <li className=" w-full relative p-4 border rounded-xl shadow-sm bg-white animate-pulse">
+                            <div className="absolute top-2 right-2 w-14 h-6 bg-blue-100 rounded-full"></div>
+                          
+                            <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+                            <div className="h-4 bg-gray-200 rounded w-2/3 mb-1"></div>
+                            <div className="h-4 bg-gray-200 rounded w-1/2 mb-1"></div>
+                            <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+                          </li>
+                          : 
+                            addresses ?
+                                <ul className="space-y-3">
+                                    {addresses && (
+                                        <li  className="relative p-4 border rounded-xl shadow-sm bg-white">
+                                            {/* Edit Button Badge */}
+                                            <button
+                                                onClick={() => navigate('/add-address', { state: { address:addresses } })}
+                                                className="absolute top-2 right-2 text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition"
+                                            >
+                                                Edit
+                                            </button>
 
-                            }
+                                            {/* Address Info */}
+                                            <p><strong>{addresses.fullname}</strong></p>
+                                            <p>{addresses.fulladdress}, {addresses.city}</p>
+                                            <p>{addresses.state} - {addresses.pincode}</p>
+                                            <p>{addresses.phone}</p>
+                                        </li>
+                                    )}
+                                </ul>
+
+                                : <>
+
+                                    <p className="text-gray-500">No address found</p>
+                                    <button className="text-primary cursor-pointer hover:underline">Add</button>
+                                </>
+
+                                }
                         </div>
 
-                        <ul className="mt-6 space-y-3">
-                            {addresses && addresses.map((addr, i) => (
-                                <li key={i} className="p-4 border rounded-xl shadow-sm">
-                                    <p><strong>{addr.fullname}</strong></p>
-                                    <p>{addr.fulladdress}, {addr.city}</p>
-                                    <p>{addr.state} - {addr.pincode}</p>
-                                </li>
-                            ))}
-                        </ul>
 
 
 
