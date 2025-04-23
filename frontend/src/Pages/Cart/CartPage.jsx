@@ -20,6 +20,7 @@ const CartPage = () => {
             const res = await axios.get(`${USER_API_END_POINT}/cart`, {
                 headers: { Authorization: token },
             });
+            console.log('cart ka res :',res)
             setCart(res.data.cart);
         } catch (error) {
             if (error.status == 403) navigate('/login')

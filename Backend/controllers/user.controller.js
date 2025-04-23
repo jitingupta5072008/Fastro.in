@@ -561,14 +561,21 @@ export const addToCart = async (req, res) => {
 
 export const getCart = async (req, res) => {
     try {
-        // const user = await User.findById(req.user).populate('cart.product');
-        const user = await User.findById(req.user).populate('cart.product').populate('cart.product.seller');
+        const user = await User.findById(req.user).populate({
+            path: 'cart.product',
+            populate: {
+                path: 'seller',
+                model: 'Seller'
+            }
+        });
 
         res.status(200).json({ cart: user.cart });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
+
+
 
 export const updateCartItem = async (req, res) => {
     try {
