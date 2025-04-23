@@ -15,6 +15,7 @@ import FilterProduct from './Pages/category/FilterProduct';
 import CategoryProducts from './Pages/category/CategoryProducts';
 import ScrollToTop from './component/ScrollToTop/ScrollToTop';
 import CartPage from './Pages/Cart/CartPage';
+import ShipAddress from './Pages/ShippingAddress/ShipAddress';
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
             <Route path='/orders' element={<OrderPage />} />
             <Route path='/search' element={<Search />} />
             <Route path='/cart' element={<CartPage />} />
+            <Route path='/add-address' element={<ShipAddress />} />
 
             <Route path='/categories' element={<FilterProduct />} />
             <Route path="/products/category/:slug" element={<CategoryProducts />} />

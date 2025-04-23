@@ -134,7 +134,7 @@ export const loginwithemail = async (req, res) => {
 
 export const profile = async (req, res) => {
     try {
-        const user = await User.findById(req.user).select('name email cart');
+        const user = await User.findById(req.user).select('name email cart address');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
