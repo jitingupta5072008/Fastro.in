@@ -143,6 +143,7 @@ export const profile = async (req, res) => {
     res.json({
       name: user.name,
       email: user.email,
+      address: user.address,
       cartLength: user.cart.length
     });
     } catch (err) {
