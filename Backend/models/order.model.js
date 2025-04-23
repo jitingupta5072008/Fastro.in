@@ -18,7 +18,7 @@ const OrderSchema = new mongoose.Schema({
     state: { type: String, required: true },
     city: { type: String, required: true },
     fulladdress: { type: String, required: true },
-    addressType: { type: String, enum: ["Home", "Office"], default:"Home" },
+    addressType: { type: String },
     defaultAddress: { type: Boolean, default: false },
   },
 
