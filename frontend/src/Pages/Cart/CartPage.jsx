@@ -304,7 +304,7 @@ const CartPage = () => {
                                     : <>
 
                                         <p className="text-gray-500">No address found</p>
-                                        <button className="text-primary cursor-pointer hover:underline">Add</button>
+                                        <button onClick={() => navigate('/add-address')} className="text-primary cursor-pointer hover:underline">Add</button>
                                     </>
 
                             }
