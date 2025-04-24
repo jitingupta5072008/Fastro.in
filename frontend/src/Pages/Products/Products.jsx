@@ -1,4 +1,4 @@
-import { Heart, LucideLoader, Star } from 'lucide-react';
+import { Heart, LucideLoader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { USER_API_END_POINT } from '../../utils/api';
@@ -133,15 +133,14 @@ const Products = () => {
                 <p className="text-xs">{product.rating}</p>
                 <div className="flex items-center gap-0.5">
                   {[...Array(5)].map((_, index) => (
-                    // <img
-                    //   key={index}
-                    //   alt="star_icon"
-                    //   width="18"
-                    //   height="17"
-                    //   className="h-3 w-3"
-                    //   src="https://quickcart-gs.vercel.app/_next/static/media/star_icon.f42949da.svg"
-                    // />
-                    <Star />
+                    <img
+                      key={index}
+                      alt="star_icon"
+                      width="18"
+                      height="17"
+                      className="h-3 w-3"
+                      src="https://quickcart-gs.vercel.app/_next/static/media/star_icon.f42949da.svg"
+                    />
                   ))}
                 </div>
               </div>
