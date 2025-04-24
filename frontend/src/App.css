@@ -64,3 +64,21 @@
   .swiper-pagination-bullet-active {
     background-color: #db2777 !important;
   }
+
+  @keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  .blink-dot {
+    width: 12px;
+    height: 12px;
+    background-color: #ec4899; /* pink-500 */
+    border-radius: 9999px;
+    animation: blink 1s infinite;
+    position: absolute;
+    bottom: -6px; /* place at bottom of the vertical line */
+    z-index: 20;
+  }
+  

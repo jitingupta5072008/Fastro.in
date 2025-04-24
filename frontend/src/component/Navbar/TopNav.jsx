@@ -63,7 +63,7 @@ const TopNav = () => {
     navigate('/login');
   };
 
-  if (location.pathname === '/cart' || location.pathname.startsWith('/address')) {
+  if (location.pathname === '/cart' || location.pathname.startsWith('/address') || location.pathname === '/order-success' ) {
     return null
   }
 
@@ -134,7 +134,7 @@ const TopNav = () => {
               <Link to={'/cart'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
                 {/* Badge */}
                 <span style={{ marginRight: '-10px', marginTop: '-6px' }} className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full">
-                  {/* {totalProduct} */}
+                {user.cartLength}
                 </span>
                 <ShoppingCart className="w-6 h-6" />
                

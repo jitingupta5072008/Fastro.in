@@ -27,22 +27,12 @@ const HomeCategoryIcon = () => {
 
   if (loading) {
     return <div className='flex [gap:15px]'>
+       {[1,2,3,4,5].map((_,index)=>(
       <div className="flex flex-col items-center animate-pulse space-y-2">
         <div className="w-16 h-16 bg-gray-300 rounded-full" />
         <div className="w-20 h-4 bg-gray-300 rounded" />
       </div>
-      <div className="flex flex-col items-center animate-pulse space-y-2">
-        <div className="w-16 h-16 bg-gray-300 rounded-full" />
-        <div className="w-20 h-4 bg-gray-300 rounded" />
-      </div>
-      <div className="flex flex-col items-center animate-pulse space-y-2">
-        <div className="w-16 h-16 bg-gray-300 rounded-full" />
-        <div className="w-20 h-4 bg-gray-300 rounded" />
-      </div>
-      <div className="flex flex-col items-center animate-pulse space-y-2">
-        <div className="w-16 h-16 bg-gray-300 rounded-full" />
-        <div className="w-20 h-4 bg-gray-300 rounded" />
-      </div>
+       ))}
     </div>;
   }
 

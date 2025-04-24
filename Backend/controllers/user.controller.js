@@ -623,15 +623,18 @@ export const cartCheckout = async (req, res) => {
   
       for (let cartItem of user.cart) {
         const { product, quantity } = cartItem;
-        const total =
-          (product.price -
-            (product.price * (product.discountPercentage || 0)) / 100) *
-          quantity;
+  
+        // ✅ Correct discounted price calculation
+        const discount = product.discountPercentage || 0;
+        const discountedPrice = product.price - (product.price * discount) / 100;
+  
+        // ✅ Total based on quantity
+        const total = discountedPrice * quantity;
   
         const newOrder = new Order({
           userId: req.user,
           items: [product._id],
-          qty: quantity,
+          qty: quantity.toString(), // you can keep it string if your model needs it that way
           totalAmount: total,
           paymentMethod: req.body.paymentMethod,
           DeliveryTime: req.body.DeliveryTime,
@@ -640,11 +643,10 @@ export const cartCheckout = async (req, res) => {
   
         await newOrder.save();
         orders.push(newOrder);
-        if (product.seller && product.seller.phone) {
-        const frontendBaseUrl = FRONTEND_URL;
-          const phone = `91${product.seller.phone}@c.us`;
-          const message = `Dear ${product.seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${frontendBaseUrl}/product/${product._id}\nQty: ${quantity}\nDelivery Time: ${req.body.DeliveryTime}`;
   
+        if (product.seller && product.seller.phone) {
+          const phone = `91${product.seller.phone}@c.us`;
+          const message = `Dear ${product.seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}/product/${product._id}\nQty: ${quantity}\nDelivery Time: ${req.body.DeliveryTime}`;
           await sendWhatsAppMessage(phone, message);
         }
       }
@@ -657,4 +659,5 @@ export const cartCheckout = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
+  
   

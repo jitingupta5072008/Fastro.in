@@ -8,7 +8,7 @@ function BottomNav() {
   // const {totalProduct} = useCart();
   const token = localStorage.getItem("token")
   const location = useLocation()
-  if (location.pathname === '/cart' || location.pathname.startsWith('/address') ) {
+  if (location.pathname === '/cart' || location.pathname.startsWith('/address') || location.pathname === '/order-success' ) {
     return null
   }
 

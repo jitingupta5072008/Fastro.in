@@ -1,4 +1,4 @@
-import { Heart, LucideLoader } from 'lucide-react';
+import { Heart, LucideLoader, Star } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { USER_API_END_POINT } from '../../utils/api';
@@ -41,7 +41,8 @@ const Products = () => {
 
         <div class="mt-6 grid w-full grid-cols-2 flex-col items-center gap-6 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 
-          <div class="flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
+        {[...Array(8)].map((_,index)=>(
+          <div key={index} class="flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
             <div class="group relative flex h-52 w-full items-center justify-center rounded-lg bg-gray-300 animate-pulse overflow-hidden">
               <a class="w-full h-full absolute z-10" href="#" aria-label="Loading product link"></a>
               <div class="h-full w-full bg-gray-200 animate-pulse"></div>
@@ -72,38 +73,10 @@ const Products = () => {
               </button>
             </div>
           </div>
+        ))}
 
-          <div class="flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
-            <div class="group relative flex h-52 w-full items-center justify-center rounded-lg bg-gray-300 animate-pulse overflow-hidden">
-              <a class="w-full h-full absolute z-10" href="#" aria-label="Loading product link"></a>
-              <div class="h-full w-full bg-gray-200 animate-pulse"></div>
-              <button class="absolute top-2 right-2 z-20 rounded-full bg-white p-2">
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-              </button>
-            </div>
-            <a class="w-full" href="#" aria-label="Loading product link">
-              <p class="w-full h-4 bg-gray-300 animate-pulse pt-2"></p>
-              <p class="w-full h-3 bg-gray-200 animate-pulse text-xs"></p>
-            </a>
-            <div class="flex items-center gap-2">
-              <p class="text-xs h-3 bg-gray-200 animate-pulse"></p>
-              <div class="flex items-center gap-0.5">
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-              </div>
-            </div>
-            <div class="mt-1 w-full items-end justify-between">
-              <div class="flex items-center gap-2">
-                <p class="text-lg font-medium h-4 bg-gray-300 animate-pulse"></p>
-              </div>
-              <button class="rounded-full mt-2 w-full border border-gray-500/20 px-4 py-1.5 text-xs text-gray-500 transition hover:bg-slate-50">
-                <div class="h-4 bg-gray-300 animate-pulse"></div>
-              </button>
-            </div>
-          </div>
+          
+
         </div>
       </div>
 
@@ -160,14 +133,15 @@ const Products = () => {
                 <p className="text-xs">{product.rating}</p>
                 <div className="flex items-center gap-0.5">
                   {[...Array(5)].map((_, index) => (
-                    <img
-                      key={index}
-                      alt="star_icon"
-                      width="18"
-                      height="17"
-                      className="h-3 w-3"
-                      src="https://quickcart-gs.vercel.app/_next/static/media/star_icon.f42949da.svg"
-                    />
+                    // <img
+                    //   key={index}
+                    //   alt="star_icon"
+                    //   width="18"
+                    //   height="17"
+                    //   className="h-3 w-3"
+                    //   src="https://quickcart-gs.vercel.app/_next/static/media/star_icon.f42949da.svg"
+                    // />
+                    <Star />
                   ))}
                 </div>
               </div>

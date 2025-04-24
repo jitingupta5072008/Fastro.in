@@ -9,6 +9,7 @@ const ShipAddress = () => {
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+    
     const address = location.state?.address;
 
     const [formData, setFormData] = useState({
