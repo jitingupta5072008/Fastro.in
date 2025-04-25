@@ -608,56 +608,59 @@ export const removeFromCart = async (req, res) => {
     }
 };
 
+
 export const cartCheckout = async (req, res) => {
     try {
-        const user = await User.findById(req.user).populate({
-            path: "cart.product",
-            populate: { path: "seller" }
+      const user = await User.findById(req.user).populate({
+        path: "cart.product",
+        populate: { path: "seller" },
+      });
+  
+      if (!user.cart.length) {
+        return res.status(400).json({ message: "Cart is empty." });
+      }
+  
+      const orders = [];
+  
+      for (let cartItem of user.cart) {
+        const { product, quantity } = cartItem;
+  
+        // ✅ Calculate discount properly
+        const price = product.price;
+        const discount = product.discountPercentage || 0;
+        const discountedPrice = price - (price * discount) / 100;
+  
+        // ✅ Final total amount for this item
+        const total = parseFloat((discountedPrice * quantity).toFixed(2)); // Round to 2 decimal places
+  
+        const newOrder = new Order({
+          userId: req.user,
+          items: [product._id],
+          qty: quantity.toString(),
+          totalAmount: total,
+          paymentMethod: req.body.paymentMethod,
+          DeliveryTime: req.body.DeliveryTime,
+          shippingAddress: user.address,
         });
-
-        if (!user.cart.length) {
-            return res.status(400).json({ message: "Cart is empty." });
+  
+        await newOrder.save();
+        orders.push(newOrder);
+  
+        // ✅ Notify Seller via WhatsApp
+        if (product.seller && product.seller.phone) {
+          const phone = `91${product.seller.phone}@c.us`;
+          const message = `Dear ${product.seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}${product._id}\nQty: ${quantity}\nDelivery Time: ${req.body.DeliveryTime}`;
+          await sendWhatsAppMessage(phone, message);
         }
-
-        const orders = [];
-
-        for (let cartItem of user.cart) {
-            const { product, quantity } = cartItem;
-            console.log("Product Info:", product); 
-
-            const price = product.price || 0;
-  const discount = product.discountPercentage || 0;
-
-  const discountedPrice = price - (price * discount) / 100;
-  const total = discountedPrice * quantity;
-
-
-            const newOrder = new Order({
-                userId: req.user,
-                items: [product._id],
-                qty: quantity.toString(), // you can keep it string if your model needs it that way
-                totalAmount: total,
-                paymentMethod: req.body.paymentMethod,
-                DeliveryTime: req.body.DeliveryTime,
-                shippingAddress: user.address
-            });
-            console.log('newOrder: ',newOrder)
-            // await newOrder.save();
-            // orders.push(newOrder);
-
-            // if (product.seller && product.seller.phone) {
-            //     const phone = `91${product.seller.phone}@c.us`;
-            //     const message = `Dear ${product.seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}${product._id}\nQty: ${quantity}\nDelivery Time: ${req.body.DeliveryTime}`;
-            //     await sendWhatsAppMessage(phone, message);
-            // }
-        }
-
-        // user.cart = [];
-        // await user.save();
-
-        res.status(200).json({ message: "Order placed successfully", orders });
+      }
+  
+      // ✅ Clear cart after order
+      user.cart = [];
+      await user.save();
+  
+      res.status(200).json({ message: "Order placed successfully", orders });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
-};
-
+  };
+  
