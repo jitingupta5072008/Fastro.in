@@ -623,9 +623,13 @@ export const cartCheckout = async (req, res) => {
 
         for (let cartItem of user.cart) {
             const { product, quantity } = cartItem;
+            console.log("Product Info:", product); 
 
-            const discountedPrice = product.price - (product.price * (product.discountPercentage || 0)) / 100;
-            const total = discountedPrice * quantity;
+            const price = product.price || 0;
+  const discount = product.discountPercentage || 0;
+
+  const discountedPrice = price - (price * discount) / 100;
+  const total = discountedPrice * quantity;
 
 
             const newOrder = new Order({
@@ -637,19 +641,19 @@ export const cartCheckout = async (req, res) => {
                 DeliveryTime: req.body.DeliveryTime,
                 shippingAddress: user.address
             });
+            console.log('newOrder: ',newOrder)
+            // await newOrder.save();
+            // orders.push(newOrder);
 
-            await newOrder.save();
-            orders.push(newOrder);
-
-            if (product.seller && product.seller.phone) {
-                const phone = `91${product.seller.phone}@c.us`;
-                const message = `Dear ${product.seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}${product._id}\nQty: ${quantity}\nDelivery Time: ${req.body.DeliveryTime}`;
-                await sendWhatsAppMessage(phone, message);
-            }
+            // if (product.seller && product.seller.phone) {
+            //     const phone = `91${product.seller.phone}@c.us`;
+            //     const message = `Dear ${product.seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}${product._id}\nQty: ${quantity}\nDelivery Time: ${req.body.DeliveryTime}`;
+            //     await sendWhatsAppMessage(phone, message);
+            // }
         }
 
-        user.cart = [];
-        await user.save();
+        // user.cart = [];
+        // await user.save();
 
         res.status(200).json({ message: "Order placed successfully", orders });
     } catch (error) {
