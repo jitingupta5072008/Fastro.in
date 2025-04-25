@@ -625,14 +625,11 @@ export const cartCheckout = async (req, res) => {
       for (let cartItem of user.cart) {
         const { product, quantity } = cartItem;
   
-        // ✅ Calculate discount properly
-        const price = product.price;
-        const discount = product.discountPercentage || 0;
-        const discountedPrice = price - (price * discount) / 100;
-  
-        // ✅ Final total amount for this item
-        const total = parseFloat((discountedPrice * quantity).toFixed(2)); // Round to 2 decimal places
-  
+        const discount = typeof product.discountPercentage === "number" ? product.discountPercentage : 0;
+        const discountedPrice = product.price - (product.price * discount) / 100;
+        const total = discountedPrice * quantity;
+        
+
         const newOrder = new Order({
           userId: req.user,
           items: [product._id],
