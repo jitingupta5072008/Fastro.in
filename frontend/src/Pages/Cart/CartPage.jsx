@@ -150,7 +150,7 @@ const CartPage = () => {
 
     return (
         <div className="px-6 md:px-16 lg:px-24 xl:px-32">
-            <div className="mt-16 flex flex-col md:flex-row">
+            <div className="mt-8 flex flex-col md:flex-row">
                 <div className="max-w-4xl flex-1">
                     <h1 className="mb-6 text-3xl font-medium">
                         Shopping Cart <span className="text-pink-700 text-sm">{cart.length} Items</span>
@@ -177,7 +177,7 @@ const CartPage = () => {
                             </div>
 
                             {/* Price */}
-                            <div className="text-center">
+                            <div className="hidden md:block lg:block text-center">
                                 <div className="h-4 w-12 bg-gray-300 rounded mx-auto"></div>
                             </div>
 
@@ -309,9 +309,6 @@ const CartPage = () => {
 
                             }
                         </div>
-
-
-
 
                         <p className="mt-6 text-base font-medium uppercase">Payment Method</p>
                         <select

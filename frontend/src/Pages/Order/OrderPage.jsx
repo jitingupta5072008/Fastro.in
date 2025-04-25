@@ -147,7 +147,11 @@ const OrderPage = () => {
                   <p className="text-gray-700 text-sm">
                     <strong>{order.items[0].name}</strong>
                   </p>
-                  <p className="text-gray-900 font-semibold mt-1">₹{order.totalAmount}</p>
+                  <p className="text-gray-900 font-semibold mt-1">
+                    {/* ₹{order.totalAmount} */}
+                   
+                    ₹{order.items[0].price - (order.items[0].price * order.items[0].discountPercentage) / 100}
+                  </p>
                 </div>
 
                 {/* <!-- Items & Status --> */}

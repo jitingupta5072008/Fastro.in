@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Search, User, Heart, Menu, X,  Package, ShoppingCart } from "lucide-react";
+import { Search, User, Heart, Menu, X, Package, ShoppingCart, UserPlus, LogIn, BadgePercent } from "lucide-react";
 import BottomNav from './BottomNav';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -63,17 +63,43 @@ const TopNav = () => {
     navigate('/login');
   };
 
-  if (location.pathname === '/cart' || location.pathname.startsWith('/address') || location.pathname === '/order-success' ) {
+  if (location.pathname === '/cart' || location.pathname.startsWith('/address') || location.pathname === '/order-success') {
     return null
   }
 
   return (
     <>
-      <section class="header-top bg-black p-[12px] hidden sm:block ">
-        <div class="flex items-center justify-around">
-          <div class="left">
-            <span style={{ color: '#fff', fontSize: '14px', textTransform: 'capitalize' }}>
-              Free Shipping Sitewide on Every Order, Don't Miss Out!!</span></div><div class="right"><span style={{ color: '#fff', fontSize: '14px', fontWeight: '500', textTransform: 'uppercase', cursor: 'pointer', borderRight: '0', marginRight: '5px', paddingRight: '0' }} id="loginBtn" class="btn login">Log In</span>/<span style={{ color: '#fff', fontSize: '14px', fontWeight: '500', textTransform: 'uppercase', cursor: 'pointer', borderRight: '0', marginRight: '5px' }} id="registerBtn" class="btn signup">Signup</span></div></div></section>
+      <section className="bg-black sm:bg-gradient-to-r sm:from-gray-900 sm:to-black py-3 px-6 hidden sm:block shadow-sm">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Left Promo */}
+        <div className="flex items-center gap-3 text-white text-sm">
+          <BadgePercent className="w-5 h-5 text-yellow-400" />
+          <p className="font-medium">
+            Enjoy <span className="text-pink-400 font-bold">Free Delivery</span> +{' '}
+            <span className="text-pink-400 font-bold">New Deals</span> Daily!
+          </p>
+        </div>
+
+        {/* Right Auth Links */}
+        <div className="flex items-center gap-5 text-white text-sm font-semibold">
+          <button
+            onClick={() => navigate('/login')}
+            className="flex items-center gap-1 hover:text-yellow-300 transition"
+          >
+            <LogIn className="w-4 h-4" />
+            Login
+          </button>
+          <button
+            onClick={() => navigate('/signup')}
+            className="flex items-center gap-1 hover:text-yellow-300 transition"
+          >
+            <UserPlus className="w-4 h-4" />
+            Signup
+          </button>
+        </div>
+      </div>
+    </section>
+
       <nav className='bg-white shadow-md'>
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
@@ -134,10 +160,10 @@ const TopNav = () => {
               <Link to={'/cart'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
                 {/* Badge */}
                 <span style={{ marginRight: '-10px', marginTop: '-6px' }} className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full">
-                {user.cartLength}
+                  {user.cartLength}
                 </span>
                 <ShoppingCart className="w-6 h-6" />
-               
+
                 <span className="text-xs">Cart</span>
 
               </Link>
@@ -147,7 +173,7 @@ const TopNav = () => {
 
             {/* Mobile menu button */}
             <div className="md:hidden flex gap-[10px] items-center">
-            <Link to={'/cart'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
+              <Link to={'/cart'} className="flex flex-col items-center text-gray-700 hover:text-pink-500 relative">
                 {/* Badge */}
                 <span style={{ marginRight: '-10px', marginTop: '-6px' }} className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full">
                   {user.cartLength}
