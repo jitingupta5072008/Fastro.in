@@ -642,6 +642,18 @@ export const cartCheckout = async (req, res) => {
   
         await newOrder.save();
         orders.push(newOrder);
+
+        // ✅ Push to seller's orders
+    //   if (product.seller && product.seller._id) {
+    //     const seller = await Seller.findById(product.seller._id);
+    //     if (seller) {
+    //       seller.orders.push(newOrder._id);
+    //       await seller.save();
+    //     }
+    //   }
+        const seller = await Seller.findById(product.seller._id);
+        seller.orders.push(newOrder._id);
+        await seller.save()
   
         // ✅ Notify Seller via WhatsApp
         if (product.seller && product.seller.phone) {
