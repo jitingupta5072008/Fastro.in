@@ -642,7 +642,8 @@ export const cartCheckout = async (req, res) => {
   
         await newOrder.save();
         orders.push(newOrder);
-
+        user.orders.push(newOrder._id);
+        await user.save()
         // ✅ Push to seller's orders
     //   if (product.seller && product.seller._id) {
     //     const seller = await Seller.findById(product.seller._id);

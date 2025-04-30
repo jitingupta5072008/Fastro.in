@@ -145,7 +145,7 @@ const OrderPage = () => {
                 {/* <!-- Order Details --> */}
                 <div className="flex-1" onClick={() => handleNavigate(order)}>
                   <p className="text-gray-700 text-sm">
-                    <strong>{order.items[0].name}</strong>
+                    <strong>{order?.items[0]?.name.length > 35 ?order?.items[0]?.name.substring(0, 35) + "..." : order?.items[0]?.name}</strong>
                   </p>
                   <p className="text-gray-900 font-semibold mt-1">
                     {/* ₹{order.totalAmount} */}
