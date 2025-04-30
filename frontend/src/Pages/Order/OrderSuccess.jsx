@@ -1,7 +1,11 @@
 import { CircleCheck } from 'lucide-react'
 import React from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const OrderSuccess = () => {
+    const location = useLocation();
+    const order = location.state?.order;
+    const navigate = useNavigate()
   return (
     <>
           <div class="max-w-md mx-auto p-4 space-y-4 text-gray-700">
@@ -11,7 +15,7 @@ const OrderSuccess = () => {
                     <CircleCheck class="w-5 h-5" />
                     <div>
                         <p>Thank you for shopping with us</p>
-                        <p class="text-sm text-gray-500">ID: #935225058</p>
+                        <p class="text-sm text-gray-500">ID: #{order._id}</p>
                     </div>
                 </div>
 
@@ -19,28 +23,39 @@ const OrderSuccess = () => {
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 9h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <p>Estimated delivery by <strong>29 Apr 2021</strong></p>
+                    <p>Estimated delivery by <strong>
+                    {order.createdAt && new Date(order.createdAt).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    })}
+                        </strong></p>
                 </div>
 
                 <div class="flex gap-4 border rounded-xl p-3">
                     <img src="https://images.meesho.com/images/products/17255130/pgzwt_512.jpg" alt="Product" class="w-16 h-16 rounded-lg object-cover"/>
                         <div>
-                            <p class="font-semibold">Trendy Stylish Mysore Silk...</p>
-                            <p class="text-sm text-gray-500">Size: Freesize &nbsp; | &nbsp; Qty: 1 &nbsp; | &nbsp; Basic Return</p>
-                            <p class="font-semibold mt-1">₹420</p>
-                            <p class="text-sm text-gray-400">Supplier: Fab Ethnic Sarees</p>
+                            <p class="font-semibold">{order?.items?.length > 0 ? order.items[0].name : "N/A"}</p>
+                            <p class="text-sm text-gray-500">Size: Freesize &nbsp; | &nbsp; Qty: {order?.qty} &nbsp; | &nbsp; Basic Return</p>
+                            <p class="font-semibold mt-1">₹{order?.items?.length > 0
+                        ? (
+                          (order.items[0].price -
+                            (order.items[0].price * order.items[0].discountPercentage) / 100) *
+                          (order.qty || 1)
+                        )
+                        : "N/A"}</p>
                         </div>
                 </div>
 
                 <div>
                     <p class="font-semibold mb-1">Delivery Address</p>
-                    <p>Pravahika - <span class="text-gray-500">+919876543210</span></p>
-                    <p class="text-gray-600 text-sm">B404, SJR Complex, Bazaar Samiti Rd, Bangalore, Karnataka - 560108</p>
+                    <p>{order?.shippingAddress?.fullname} - <span class="text-gray-500">+91{order?.shippingAddress?.phone}</span></p>
+                    <p class="text-gray-600 text-sm">{order?.shippingAddress?.fulladdress}, {order?.shippingAddress?.city}, {order?.shippingAddress?.state} - {order?.shippingAddress?.pincode}</p>
                 </div>
 
                 <div>
                     <p class="font-semibold mb-1">Payment Method</p>
-                    <p class="text-gray-600">Online</p>
+                    <p class="text-gray-600">{order?.shippingAddress?.paymentMethod}</p>
                 </div>
 
                 <div>
@@ -54,7 +69,7 @@ const OrderSuccess = () => {
                     </div>
                 </div>
 
-                <button class="w-full bg-pink-500 text-white py-2 rounded-full text-center font-semibold mt-4 hover:bg-pink-600 transition">
+                <button onClick={()=> navigate('/')} class="w-full bg-pink-500 text-white py-2 rounded-full text-center font-semibold mt-4 hover:bg-pink-600 transition">
                     Continue Shopping
                 </button>
             </div>

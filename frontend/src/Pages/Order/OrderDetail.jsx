@@ -53,8 +53,7 @@ const OrderDetail = () => {
           <p className="font-semibold">{productItem.name}</p>
           <p className="text-sm text-gray-500 mt-1">Qty: {product.qty} | Basic Return</p>
           <p className="font-semibold text-pink-600 mt-1">
-            ₹{product.totalAmount}
-            {/* ₹{order.items[0].price - (order.items[0].price * order.items[0].discountPercentage) / 100} */}
+            ₹{(product.items[0].price - (product.items[0].price * product.items[0].discountPercentage) / 100)*product.qty}
             </p>
           <p className="text-xs text-gray-400 mt-1">Sold by: Fab Ethnic Sarees</p>
         </div>

@@ -17,6 +17,7 @@ import ScrollToTop from './component/ScrollToTop/ScrollToTop';
 import CartPage from './Pages/Cart/CartPage';
 import ShipAddress from './Pages/ShippingAddress/ShipAddress';
 import OrderDetail from './Pages/Order/OrderDetail';
+import OrderSuccess from './Pages/Order/OrderSuccess';
 
 function App() {
 
@@ -54,7 +55,7 @@ function App() {
             <Route path='/categories' element={<FilterProduct />} />
             <Route path="/products/category/:slug" element={<CategoryProducts />} />
             <Route path="/order-details" element={<OrderDetail />} />
-            <Route path="/order-success" element={<OrderDetail />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
 
             {/* <Route path='/admin/dashboard' element={<ProtectedRoute><Dashboard /></ProtectedRoute>} /> */}
 
