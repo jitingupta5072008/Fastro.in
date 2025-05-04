@@ -69,7 +69,7 @@ const ProductDetail = () => {
                     text: shareMessage,
                     // ❌ don't add url separately — kuch apps sirf url hi le lete hain, text ignore kar dete hain
                 });
-             
+
             } else {
                 // Fallback: Copy to clipboard
                 await navigator.clipboard.writeText(shareMessage);
@@ -94,7 +94,7 @@ const ProductDetail = () => {
     if (!product) {
         return <div>No product data available.</div>;
     }
-
+    const isInStock = product.availabilityStatus !== "Out of Stock";
     return (
         <div className='mb-8'>
             <div className="grid grid-cols-1 gap-16 md:grid-cols-2 pt-4 mb-4">
@@ -110,8 +110,14 @@ const ProductDetail = () => {
 
                         <img width="1280" height="720" decoding="async" data-nimg="1" className="h-auto w-full object-cover mix-blend-multiply" srcSet=""
                             src={productImages[selectedImage] || "/placeholder.svg"}
-                            alt={`Product Image ${selectedImage + 1}`}
+                            alt={product.name}
+                                title={product.name}
+                                loading="lazy"
                             style={{ color: "transparent" }} />
+
+
+                     
+
                     </div>
 
                     <div className="flex gap-4 overflow-scroll p-1 [scrollbar-width:none]">
@@ -158,7 +164,7 @@ const ProductDetail = () => {
 
                     <div className="py-4 pb-0">
                         <div className="text-3xl font-bold text-gray-900">
-                            ₹{product.price - (product.price * product.discountPercentage) / 100}
+                            ₹{Math.floor(product.price - (product.price * product.discountPercentage) / 100)}
 
                             {product.discountPercentage > 0 && (
                                 <span className="ml-2 text-base font-normal text-gray-800/60 line-through">₹{product.price}</span>
@@ -169,11 +175,35 @@ const ProductDetail = () => {
                     </div>
 
                     <div className="mt-10 flex items-center gap-4">
+                        {!isInStock ? (
+                        <button onClick={() => addToCart(product._id, 1)}
+                            className={`w-full rounded-xl py-3.5 cursor-pointer  transition  ${isInStock
+                                ? ' text-gray-600 bg-pink-500 hover:bg-pink-600'
+                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                }`}
+                            disabled={!isInStock}
+                        >
+                            {isInStock ? 'Add to Cart' : 'Out of Stock'}
+                        </button>
+                        ):(
+                            <>
+                        <button onClick={() => navigate(`/mcheckout/${product._id}`)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button>
 
-                        <button onClick={() => addToCart(product._id, 1)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Add to Cart</button>
+                        <button onClick={() => addToCart(product._id, 1)}
+                            className={`w-full rounded-xl py-3.5 cursor-pointer text-white transition  ${isInStock
+                                ? ' text-white bg-pink-500 hover:bg-pink-600'
+                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                }`}
+                            disabled={!isInStock}
+                        >
+                            {isInStock ? 'Add to Cart' : 'Out of Stock'}
+                        </button>
+</>
 
-                        <button onClick={() => navigate(`/address/${product._id}`)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button>
+                        )}
+
                     </div>
+
 
                     <hr className="my-6" style={{ color: "lightgray" }} />
 

@@ -51,7 +51,7 @@ const TopNav = () => {
         });
         setCategory(resposne.data.categories);
       } catch (err) {
-        console.error("Error fetching slider data", err);
+       return 
       }
     };
     fetchSliderData();

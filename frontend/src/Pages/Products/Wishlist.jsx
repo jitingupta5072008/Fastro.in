@@ -116,15 +116,28 @@ const Wishlist = () => {
 
                             <div className="group relative flex h-52 w-full items-center justify-center rounded-lg bg-gray-500/10 overflow-hidden">
 
-                                <Link to={`/product/${product._id}`} className="w-full h-auto absolute z-10">
-                                    <img
-                                        alt={product.title}
-                                        className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                                        width="800"
-                                        height="800"
-                                        src={product.images[0]}
-                                    />
-                                </Link>
+                                <Link to={`/product/${product._id}`} className="w-full h-full absolute z-10">
+                               
+                                                 <img
+                                                   src={product.images[0].replace("/upload/", "/upload/w_400,f_auto,q_auto/")}
+                                                   srcSet={`
+                                   ${product.images[0].replace("/upload/", "/upload/w_300,f_auto,q_auto/")} 300w,
+                                   ${product.images[0].replace("/upload/", "/upload/w_600,f_auto,q_auto/")} 600w,
+                                   ${product.images[0].replace("/upload/", "/upload/w_1000,f_auto,q_auto/")} 1000w
+                                 `}
+                                                   sizes="(max-width: 640px) 300px,
+                                        (max-width: 1024px) 600px,
+                                        1000px"
+                                                   alt={product.name}
+                                                   title={product.name}
+                                                   loading="lazy"
+                                                   width="400"
+                                                   height="400"
+                                                   className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                                                   onError={(e) => { e.target.src = '/fallback.png' }}
+                                                 />
+                                               </Link>
+                               
 
                                 {product.discountPercentage > 0 && (
                                     <span className="z-[99] absolute rounded-br-2xl rounded-tr-2xl top-2 left-0 px-2 py-1 text-xs font-semibold text-white bg-red-500">
@@ -132,13 +145,6 @@ const Wishlist = () => {
                                     </span>
                                 )}
 
-                                {/* <button
-                                    onClick={() => handleWishlist(product._id, setAllproducts)}
-                                    disabled={wishlistLoading[product._id]}
-                                    className={`${wishlistLoading[product._id] ? 'opacity-50 cursor-not-allowed' : ''} absolute top-2 right-2 z-20 rounded-full bg-white p-2 shadow-md`}
-                                >
-                                    <X className='h-4 w-4 text-red-600' />
-                                </button> */}
 
                                 <button
                                     onClick={() => handleWishlist(product._id, setAllproducts)} // ✅ Already context se linked
@@ -174,7 +180,7 @@ const Wishlist = () => {
                             <div className="mt-1 w-full items-end justify-between">
                                 <div className="flex items-center gap-2">
                                     <p className="text-lg font-medium text-black-500">
-                                        ₹ {product.price - (product.price * product.discountPercentage / 100)}
+                                        ₹ {Math.floor(product.price - (product.price * product.discountPercentage / 100))}
                                     </p>
 
                                     {product.discountPercentage > 0 && (

@@ -674,3 +674,56 @@ export const cartCheckout = async (req, res) => {
     }
   };
   
+export const buyCheckout = async (req, res) => {
+  try {
+    const { productId, paymentMethod, DeliveryTime, amount, quantity } = req.body;
+    const user = await User.findById(req.user);
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found." });
+    }
+
+    // ✅ Fetch the product to access seller and name
+    const product = await Product.findById(productId).populate("seller"); // assuming "seller" is a ref
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    // ✅ Create the order
+    const newOrder = new Order({
+      userId: req.user,
+      items: [product._id],
+      qty: quantity.toString(),
+      totalAmount: amount,
+      paymentMethod,
+      DeliveryTime,
+      shippingAddress: user.address,
+    });
+
+    await newOrder.save();
+
+    // ✅ Link order to user
+    user.orders.push(newOrder._id);
+    user.cart = []; // Clear cart if needed
+    await user.save();
+
+    // ✅ Link order to seller
+    const seller = product.seller;
+    if (seller) {
+      seller.orders.push(newOrder._id);
+      await seller.save();
+
+      // ✅ Notify Seller via WhatsApp
+      const phone = `91${seller.phone}@c.us`;
+      const message = `Dear ${seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}/product/${product._id}\nQty: ${quantity}\nDelivery Time: ${DeliveryTime}`;
+      await sendWhatsAppMessage(phone, message);
+    }
+
+    return res.status(200).json({ message: "Order placed successfully", order: newOrder });
+
+  } catch (error) {
+    console.error("Checkout error:", error);
+    return res.status(500).json({ message: error.message });
+  }
+};

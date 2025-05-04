@@ -23,6 +23,29 @@ export const OrderProvider = ({ children }) => {
     }
   };
 
+
+  const [address, setAddress] = useState(null);
+  const [loadingAddress, setLoadingAddress] = useState(true);
+
+  const fetchUserAddress = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${USER_API_END_POINT}/profile`, {
+        headers: { Authorization: token },
+      });
+      setAddress(res.data.address);
+    } catch (err) {
+      console.error("Error fetching address:", err);
+      setAddress(null);
+    } finally {
+      setLoadingAddress(false);
+    }
+  };
+  useEffect(() => {
+    fetchUserAddress()
+  }, [])
+  
+
   // Place Order
   const placeOrder = async (userId, cartItems, payment, amount, qty, sellerPhone, address, DeliveryTime) => {
     if (payment.trim() === '') return toast.error('Choose payment method');
@@ -96,7 +119,7 @@ export const OrderProvider = ({ children }) => {
 
 
   return (
-    <OrderContext.Provider value={{ orders, fetchOrders, placeOrder, handleWishlist, wishlistLoading, wishlist }}>
+    <OrderContext.Provider value={{ orders, fetchOrders, placeOrder, handleWishlist, wishlistLoading, wishlist,address, loadingAddress,fetchUserAddress }}>
       {children}
     </OrderContext.Provider>
   );

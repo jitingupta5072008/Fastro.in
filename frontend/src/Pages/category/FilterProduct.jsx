@@ -80,38 +80,39 @@ const FilterProduct = () => {
       <div class="px-6 md:px-16 lg:px-32 mb-8 bg-white flex flex-col items-center mt-4">
 
         <div class="mt-6 grid w-full grid-cols-2 flex-col items-center gap-6 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-
-          <div class="flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
-            <div class="group relative flex h-52 w-full items-center justify-center rounded-lg bg-gray-300 animate-pulse overflow-hidden">
-              <a class="w-full h-full absolute z-10" href="#" aria-label="Loading product link"></a>
-              <div class="h-full w-full bg-gray-200 animate-pulse"></div>
-              <button class="absolute top-2 right-2 z-20 rounded-full bg-white p-2">
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-              </button>
-            </div>
-            <a class="w-full" href="#" aria-label="Loading product link">
-              <p class="w-full h-4 bg-gray-300 animate-pulse pt-2"></p>
-              <p class="w-full h-3 bg-gray-200 animate-pulse text-xs"></p>
-            </a>
-            <div class="flex items-center gap-2">
-              <p class="text-xs h-3 bg-gray-200 animate-pulse"></p>
-              <div class="flex items-center gap-0.5">
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
-                <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+          {[...Array(6)].map((_, idx) => (
+            <div key={idx} class="flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
+              <div class="group relative flex h-52 w-full items-center justify-center rounded-lg bg-gray-300 animate-pulse overflow-hidden">
+                <a class="w-full h-full absolute z-10" href="#" aria-label="Loading product link"></a>
+                <div class="h-full w-full bg-gray-200 animate-pulse"></div>
+                <button class="absolute top-2 right-2 z-20 rounded-full bg-white p-2">
+                  <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+                </button>
               </div>
-            </div>
-            <div class="mt-1 w-full items-end justify-between">
+              <a class="w-full" href="#" aria-label="Loading product link">
+                <p class="w-full h-4 bg-gray-300 animate-pulse pt-2"></p>
+                <p class="w-full h-3 bg-gray-200 animate-pulse text-xs"></p>
+              </a>
               <div class="flex items-center gap-2">
-                <p class="text-lg font-medium h-4 bg-gray-300 animate-pulse"></p>
+                <p class="text-xs h-3 bg-gray-200 animate-pulse"></p>
+                <div class="flex items-center gap-0.5">
+                  <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+                  <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+                  <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+                  <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+                  <div class="h-3 w-3 bg-gray-300 animate-pulse"></div>
+                </div>
               </div>
-              <button class="rounded-full mt-2 w-full border border-gray-500/20 px-4 py-1.5 text-xs text-gray-500 transition hover:bg-slate-50">
-                <div class="h-4 bg-gray-300 animate-pulse"></div>
-              </button>
+              <div class="mt-1 w-full items-end justify-between">
+                <div class="flex items-center gap-2">
+                  <p class="text-lg font-medium h-4 bg-gray-300 animate-pulse"></p>
+                </div>
+                <button class="rounded-full mt-2 w-full border border-gray-500/20 px-4 py-1.5 text-xs text-gray-500 transition hover:bg-slate-50">
+                  <div class="h-4 bg-gray-300 animate-pulse"></div>
+                </button>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </>
@@ -148,6 +149,7 @@ const FilterProduct = () => {
       {/* Product List */}
       <div className="w-full p-6 flex-grow">
         <h2 className="text-2xl font-bold mb-4">Products</h2>
+
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
 
           {products.length === 0 ? (
@@ -161,14 +163,28 @@ const FilterProduct = () => {
 
 
                   <Link to={`/product/${product._id}`} className="w-full h-full absolute z-10">
+
                     <img
-                      alt={product.title}
+                      src={product.images[0].replace("/upload/", "/upload/w_400,f_auto,q_auto/")}
+                      srcSet={`
+                      ${product.images[0].replace("/upload/", "/upload/w_300,f_auto,q_auto/")} 300w,
+                      ${product.images[0].replace("/upload/", "/upload/w_600,f_auto,q_auto/")} 600w,
+                      ${product.images[0].replace("/upload/", "/upload/w_1000,f_auto,q_auto/")} 1000w
+                    `}
+                      sizes="(max-width: 640px) 300px,
+                           (max-width: 1024px) 600px,
+                           1000px"
+                      alt={product.name}
+                      title={product.name}
+                      loading="lazy"
+                      width="400"
+                      height="400"
                       className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                      width="800"
-                      height="800"
-                      src={product.images[0]}
+                      onError={(e) => { e.target.src = '/fallback.png' }}
                     />
                   </Link>
+
+
 
                   {product.discountPercentage > 0 && (
                     <span
@@ -214,7 +230,7 @@ const FilterProduct = () => {
                 <div className="mt-1 w-full items-end justify-between">
                   <div className="flex items-center gap-2">
                     <p className="text-lg font-medium text-black-500">
-                      ₹ {product.price - (product.price * product.discountPercentage / 100)}
+                      ₹ {Math.floor(product.price - (product.price * product.discountPercentage / 100))}
                     </p>
 
                     {product.discountPercentage > 0 && (

@@ -8,7 +8,7 @@ import Wishlist from './Pages/Products/Wishlist';
 
 import {Toaster} from 'react-hot-toast'
 import Account from './Pages/Account/Account';
-import Address from './Pages/Address/Address';
+import Address from './Pages/Checkout/SingleProductCheckout';
 import OrderPage from './Pages/Order/OrderPage';
 import Search from './Pages/Search/Search';
 import FilterProduct from './Pages/category/FilterProduct';
@@ -18,6 +18,7 @@ import CartPage from './Pages/Cart/CartPage';
 import ShipAddress from './Pages/ShippingAddress/ShipAddress';
 import OrderDetail from './Pages/Order/OrderDetail';
 import OrderSuccess from './Pages/Order/OrderSuccess';
+import SingleProductCheckout from './Pages/Checkout/SingleProductCheckout';
 
 function App() {
 
@@ -46,7 +47,7 @@ function App() {
             <Route path='/wishlist' element={<Wishlist />} />
 
             <Route path='/account' element={<Account />} />
-            <Route path='/address' element={<Address />} />
+            <Route path='/mcheckout/:id' element={<SingleProductCheckout />} />
             <Route path='/orders' element={<OrderPage />} />
             <Route path='/search' element={<Search />} />
             <Route path='/cart' element={<CartPage />} />

@@ -30,7 +30,7 @@ const Slider = () => {
     if (loading) {
         return (
             <div class="bg-white flex transition-transform ease-out duration-500 my-4">
-  <div class="w-full h-64 bg-gray-300 animate-pulse"></div>
+  <div class="w-full h-98 bg-gray-300 animate-pulse"></div>
 </div>
         );
     }

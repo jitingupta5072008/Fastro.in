@@ -10,8 +10,8 @@ const CartPage = () => {
     const [loading, setLoading] = useState(true);
     const [removing, setRemoving] = useState(null); // holds productId being removed
     const [updatingQty, setUpdatingQty] = useState(null); // holds productId being updated
-    const token = localStorage.getItem('token');
     const navigate = useNavigate()
+    const token = localStorage.getItem('token');
     const [addresses, setAddresses] = useState(null);
 
 
@@ -20,12 +20,12 @@ const CartPage = () => {
             const res = await axios.get(`${USER_API_END_POINT}/cart`, {
                 headers: { Authorization: token },
             });
-            console.log('cart ka res :', res)
+           
             setCart(res.data.cart.filter(item => item.product !== null));
 
         } catch (error) {
             if (error.status == 403) navigate('/login')
-            console.error(error);
+           
             toast.error(error.response.data.message);
         } finally {
             setLoading(false);
@@ -43,7 +43,6 @@ const CartPage = () => {
             toast.success('Cart Updated');
             fetchCart();
         } catch (err) {
-            console.error(err);
             toast.error('Failed to update quantity');
         } finally {
             setUpdatingQty(null);
@@ -59,7 +58,7 @@ const CartPage = () => {
             toast.success('Product removed from your cart');
             fetchCart();
         } catch (err) {
-            console.error(err);
+           
             toast.error('Failed to remove product');
         } finally {
             setRemoving(null);
@@ -87,14 +86,6 @@ const CartPage = () => {
         fetchUserAddress();
     }, []);
     
-    useEffect(() => {
-        console.log('Cart:', cart);
-    }, [cart]);
-    
-
-
-
-
     const { total, totalDiscount, finalAmount } = useMemo(() => {
         let total = 0;
         let totalDiscount = 0;

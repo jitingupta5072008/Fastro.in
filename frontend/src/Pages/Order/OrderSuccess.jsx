@@ -4,8 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const OrderSuccess = () => {
     const location = useLocation();
-    const order = location.state?.order;
+    const order = location.state?.order[0];
     const navigate = useNavigate()
+    console.log(order);
   return (
     <>
           <div class="max-w-md mx-auto p-4 space-y-4 text-gray-700">
@@ -57,18 +58,7 @@ const OrderSuccess = () => {
                     <p class="font-semibold mb-1">Payment Method</p>
                     <p class="text-gray-600">{order?.shippingAddress?.paymentMethod}</p>
                 </div>
-
-                <div>
-                    <p class="font-semibold mb-1">How would you rate your shopping experience on Meesho App?</p>
-                    <div class="flex justify-between gap-1">
-                        <button class="bg-gray-100 w-10 h-10 rounded-full text-xs text-gray-700">1<br /><span class="text-[10px] block">Very Poor</span></button>
-                        <button class="bg-gray-100 w-10 h-10 rounded-full text-xs text-gray-700">2<br /><span class="text-[10px] block">Poor</span></button>
-                        <button class="bg-yellow-200 w-10 h-10 rounded-full text-xs text-yellow-800">3<br /><span class="text-[10px] block">Average</span></button>
-                        <button class="bg-green-200 w-10 h-10 rounded-full text-xs text-green-800">4<br /><span class="text-[10px] block">Good</span></button>
-                        <button class="bg-green-300 w-10 h-10 rounded-full text-xs text-green-900">5<br /><span class="text-[10px] block">Great</span></button>
-                    </div>
-                </div>
-
+                
                 <button onClick={()=> navigate('/')} class="w-full bg-pink-500 text-white py-2 rounded-full text-center font-semibold mt-4 hover:bg-pink-600 transition">
                     Continue Shopping
                 </button>
