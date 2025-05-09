@@ -113,9 +113,9 @@ const TopNav = () => {
             {/* Desktop Categories */}
             <div className="hidden md:flex space-x-4">
               <Link to="/" className=" font-semibold text-gray-700 hover:text-pink-500 transition-colors duration-300">Home</Link>
-              <a to="/" className=" font-semibold text-gray-700 hover:text-pink-500 transition-colors duration-300">Shop</a>
-              <a to="/" className=" font-semibold text-gray-700 hover:text-pink-500 transition-colors duration-300">About us</a>
-              <a to="/" className=" font-semibold text-gray-700 hover:text-pink-500 transition-colors duration-300">Contact</a>
+              <Link to="/categories" className=" font-semibold text-gray-700 hover:text-pink-500 transition-colors duration-300">Shop</Link>
+              <Link to="/" className=" font-semibold text-gray-700 hover:text-pink-500 transition-colors duration-300">About us</Link>
+              <Link to="/" className=" font-semibold text-gray-700 hover:text-pink-500 transition-colors duration-300">Contact</Link>
             </div>
 
             {/* User Actions */}

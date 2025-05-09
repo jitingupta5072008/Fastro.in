@@ -5,7 +5,7 @@ import HomeCategoryIcon from '../category/HomeCategoryIcon'
 
 const Home = () => {
   return (
-    <div className='px-6 md:px-16 mb-16 '>
+    <div className='px-4 md:px-16 mb-16 '>
       <Slider />
       <HomeCategoryIcon />
       <Products />

@@ -317,6 +317,15 @@ export const categoryWiseProduct = async (req, res) => {
     }
 };
 
+export const getSubCategory = async(req,res)=>{
+    try {
+        const subCategories = await Category.find({ parentCategory: req.params.parentId });
+        res.json({ subCategories });
+      } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch subcategories' });
+      }
+}
+
 export const getCategories = async (req, res) => {
     try {
         const { parentCategory } = req.query;
@@ -576,7 +585,6 @@ export const getCart = async (req, res) => {
 };
 
 
-
 export const updateCartItem = async (req, res) => {
     try {
         const user = await User.findById(req.user);
@@ -607,7 +615,6 @@ export const removeFromCart = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
-
 
 export const cartCheckout = async (req, res) => {
     try {
@@ -705,7 +712,6 @@ export const buyCheckout = async (req, res) => {
 
     // ✅ Link order to user
     user.orders.push(newOrder._id);
-    user.cart = []; // Clear cart if needed
     await user.save();
 
     // ✅ Link order to seller
@@ -716,7 +722,7 @@ export const buyCheckout = async (req, res) => {
 
       // ✅ Notify Seller via WhatsApp
       const phone = `91${seller.phone}@c.us`;
-      const message = `Dear ${seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}/product/${product._id}\nQty: ${quantity}\nDelivery Time: ${DeliveryTime}`;
+      const message = `Dear ${seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}${product._id}\nQty: ${quantity}\nDelivery Time: ${DeliveryTime}`;
       await sendWhatsAppMessage(phone, message);
     }
 

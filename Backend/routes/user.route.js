@@ -1,5 +1,5 @@
 import express from "express";
-import {address, addReview,  getRelatedProducts,  addWishlist,   categoryWiseProduct,   deleteReview,   getCategories,   getReview,   getUserOrders,  loginwithemail, placeOrder, profile, register,   searchProduct,   sendOtp,  verifyOtp, getSlider, getProductBySingleCategory, getWishlistProduct, products, singleProducts, cancelOrder, addToCart, getCart, updateCartItem, removeFromCart, cartCheckout, buyCheckout} from '../controllers/user.controller.js'
+import {address, addReview,  getRelatedProducts,  addWishlist,   categoryWiseProduct,   deleteReview,   getCategories,   getReview,   getUserOrders,  loginwithemail, placeOrder, profile, register,   searchProduct,   sendOtp,  verifyOtp, getSlider, getProductBySingleCategory, getWishlistProduct, products, singleProducts, cancelOrder, addToCart, getCart, updateCartItem, removeFromCart, cartCheckout, buyCheckout, getSubCategory} from '../controllers/user.controller.js'
 import isAuthenticate from "../middlewares/isAuthenticated.js";
 
 const router = express.Router()
@@ -18,13 +18,13 @@ router.route('/placeorder').post(placeOrder)
 router.route('/orders').get(isAuthenticate,getUserOrders)
 router.route('/searchproducts').get(searchProduct)
 router.route('/products').get(categoryWiseProduct)
-router.route('/categories').get(getCategories)
 
+router.route('/categories').get(getCategories)
 router.route('/products/related/:id').get(getRelatedProducts);
 router.route('/get/sliders').get(getSlider);
 
 router.route('/products/category/:slug').get(getProductBySingleCategory);
-
+router.route('/categories/subcategories/:parentId').get(getSubCategory)
 
 router.route('/reviews/:productId').get(getReview)
 router.route('/add-reviews').post(addReview)
@@ -51,9 +51,5 @@ router.route('/update').put(isAuthenticate,updateCartItem)
 router.route('/remove/:productId').delete(isAuthenticate,removeFromCart)
 
 
-// router.post('/add', isAuthenticated, addToCart);
-// router.get('/', isAuthenticated, getCart);
-// router.put('/update', isAuthenticated, updateCartItem);
-// router.delete('/remove/:productId', isAuthenticated, removeFromCart);
 
 export default router;

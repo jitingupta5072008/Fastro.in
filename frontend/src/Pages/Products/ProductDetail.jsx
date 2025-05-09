@@ -27,7 +27,8 @@ const ProductDetail = () => {
 
     const url = `${SELLER_API_END_POINT}/product/${id}`;
 
-
+    const [selectedSize,setSelectedSize] = useState({})
+    console.log(selectedSize)
     useEffect(() => {
 
         const fetchProduct = async () => {
@@ -111,12 +112,12 @@ const ProductDetail = () => {
                         <img width="1280" height="720" decoding="async" data-nimg="1" className="h-auto w-full object-cover mix-blend-multiply" srcSet=""
                             src={productImages[selectedImage] || "/placeholder.svg"}
                             alt={product.name}
-                                title={product.name}
-                                loading="lazy"
+                            title={product.name}
+                            loading="lazy"
                             style={{ color: "transparent" }} />
 
 
-                     
+
 
                     </div>
 
@@ -174,31 +175,53 @@ const ProductDetail = () => {
                         <div className="text-green-600 font-semibold">inclusive of all taxes</div>
                     </div>
 
+                    <div className="mt-6">
+                        <h2 className="text-md font-semibold text-gray-800 mb-2">Select Size</h2>
+                        <div className="flex flex-wrap gap-4">
+                            {[
+                                { size: 'S', price: 299 },
+                                { size: 'M', price: 349 },
+                                { size: 'L', price: 399 },
+                                { size: 'XL', price: 449 },
+                                { size: 'XXL', price: 499 },
+                                { size: 'Free Size' },
+                            ].map((item, index) => (
+                                <div key={index} onClick={()=> setSelectedSize(item)} className="flex flex-col items-center">
+                                    <button className={`w-14 h-14 ${selectedSize.size == item.size ? 'active' : null} rounded-full border text-pink-600 font-medium hover:bg-pink-200 transition`}>
+                                        {item.size}
+                                    </button>
+                                    <span className="text-xs text-gray-600 mt-1">{item.price && (`₹${item.price}`)}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+
                     <div className="mt-10 flex items-center gap-4">
                         {!isInStock ? (
-                        <button onClick={() => addToCart(product._id, 1)}
-                            className={`w-full rounded-xl py-3.5 cursor-pointer  transition  ${isInStock
-                                ? ' text-gray-600 bg-pink-500 hover:bg-pink-600'
-                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                }`}
-                            disabled={!isInStock}
-                        >
-                            {isInStock ? 'Add to Cart' : 'Out of Stock'}
-                        </button>
-                        ):(
+                            <button onClick={() => addToCart(product._id, 1)}
+                                className={`w-full rounded-xl py-3.5 cursor-pointer  transition  ${isInStock
+                                    ? ' text-gray-600 bg-pink-500 hover:bg-pink-600'
+                                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    }`}
+                                disabled={!isInStock}
+                            >
+                                {isInStock ? 'Add to Cart' : 'Out of Stock'}
+                            </button>
+                        ) : (
                             <>
-                        <button onClick={() => navigate(`/mcheckout/${product._id}`)} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button>
+                                <button onClick={() => navigate(`/mcheckout/${product._id}`,{ state: { size: selectedSize } })} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button>
 
-                        <button onClick={() => addToCart(product._id, 1)}
-                            className={`w-full rounded-xl py-3.5 cursor-pointer text-white transition  ${isInStock
-                                ? ' text-white bg-pink-500 hover:bg-pink-600'
-                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                }`}
-                            disabled={!isInStock}
-                        >
-                            {isInStock ? 'Add to Cart' : 'Out of Stock'}
-                        </button>
-</>
+                                <button onClick={() => addToCart(product._id, 1)}
+                                    className={`w-full rounded-xl py-3.5 cursor-pointer text-white transition  ${isInStock
+                                        ? ' text-white bg-pink-500 hover:bg-pink-600'
+                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        }`}
+                                    disabled={!isInStock}
+                                >
+                                    {isInStock ? 'Add to Cart' : 'Out of Stock'}
+                                </button>
+                            </>
 
                         )}
 

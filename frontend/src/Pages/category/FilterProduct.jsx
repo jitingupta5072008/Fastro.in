@@ -66,7 +66,7 @@ const FilterProduct = () => {
   if (loading) {
     return <>
 
-      <div className="flex items-center justify-center w-full p-2 bg-white mt-4 border overflow-x-auto scrollbar-hide">
+      <div className="flex  w-full p-2 bg-white mt-4 border overflow-x-auto scrollbar-hide">
         <div className="flex space-x-4">
           {[...Array(6)].map((_, idx) => (
             <div
@@ -77,9 +77,9 @@ const FilterProduct = () => {
         </div>
       </div>
 
-      <div class="px-6 md:px-16 lg:px-32 mb-8 bg-white flex flex-col items-center mt-4">
+      <div class="w-full p-6 flex-grow">
 
-        <div class="mt-6 grid w-full grid-cols-2 flex-col items-center gap-6 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div class="mt-6  w-full  flex-col items-center gap-6 pb-14 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
           {[...Array(6)].map((_, idx) => (
             <div key={idx} class="flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
               <div class="group relative flex h-52 w-full items-center justify-center rounded-lg bg-gray-300 animate-pulse overflow-hidden">
@@ -147,7 +147,7 @@ const FilterProduct = () => {
       </div>
 
       {/* Product List */}
-      <div className="w-full p-6 flex-grow">
+      <div className="w-full p-2 flex-grow">
         <h2 className="text-2xl font-bold mb-4">Products</h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">

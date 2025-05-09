@@ -11,7 +11,6 @@ const isAuthenticate = (req, res, next) => {
             return res.status(403).json({message: "please login"});
         }
         req.user = user.userId;
-        console.log(req.user);
         next();
     });
 };

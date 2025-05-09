@@ -121,6 +121,7 @@ const CartPage = () => {
     const [DeliveryTime, setDeliveryTime] = useState('');
 
     const handleCheckout = async () => {
+        setLoading(true)
         if (!payment || !DeliveryTime) return toast.error('Please Choose Payment Method or Delivery Time')
         try {
             const response = await axios.post(`${USER_API_END_POINT}/cart/checkout`, { paymentMethod: payment, DeliveryTime: DeliveryTime }, {
@@ -133,6 +134,8 @@ const CartPage = () => {
         } catch (err) {
             console.error(err);
             toast.error("Failed to place order");
+        } finally{
+            setLoading(false)
         }
     };
 
@@ -349,7 +352,7 @@ const CartPage = () => {
                     </div>
 
                     <button onClick={handleCheckout} className="bg-pink-500 hover:bg-pink-600 mt-6 w-full cursor-pointer py-3 font-medium text-white transition">
-                        Proceed to Checkout
+                     { loading ? 'loading...' : 'Proceed to Checkout'}
                     </button>
                 </div>
             </div>

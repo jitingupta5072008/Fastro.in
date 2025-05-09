@@ -80,7 +80,7 @@ const CategoryProducts = () => {
       <div className="px-6 md:px-16 lg:px-32 mb-8 flex flex-col items-center mt-4">
         <h2 className="hd w-full text-left">Popular products</h2>
 
-        <div className="mt-6 grid w-full grid-cols-2 flex-col items-center gap-6 pb-14 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="mt-6 grid w-full flex-col items-center gap-4 pb-14  grid-cols-2 sm:grid-cols-3 md:grid-cols-5 ">
           {Array.isArray(product) && product.length > 0 ? (
             product.map((product) => (
               <div key={product._id} className="flex w-full max-w-[200px] cursor-pointer flex-col items-start gap-0.5">
@@ -137,8 +137,7 @@ const CategoryProducts = () => {
                 <div className="mt-1 w-full items-end justify-between">
                   <div className="flex items-center gap-2">
                     <p className="text-lg font-medium text-black-500">
-                      ₹ {product.price - (product.price * product.discountPercentage / 100)}
-
+                      ₹ {Math.floor(product.price - (product.price * product.discountPercentage / 100))}
                     </p>
 
                     {product.discountPercentage > 0 && (
