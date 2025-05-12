@@ -423,6 +423,8 @@ export const addReview = async (req, res) => {
             for (const file of req.files) {
                 const result = await cloudinary.uploader.upload(file.path);
                 imageUrls.push(result.secure_url);
+
+                fs.unlinkSync(file.path);
             }
         }
 
