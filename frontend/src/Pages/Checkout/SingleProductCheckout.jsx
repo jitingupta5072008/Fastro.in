@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 const SingleProductCheckout = () => {
     const location = useLocation();
     const size = location.state?.size;
+    const weight = location.state?.weight;
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [productImages, setProductImages] = useState([]);
@@ -36,10 +37,23 @@ const SingleProductCheckout = () => {
         fetchUserAddress();
     }, []);
 
-    const originalPrice = product?.price || 0;
-    const finalPrice = size?.price || Math.floor(originalPrice - (originalPrice * product?.discountPercentage) / 100);
+    // const originalPrice = size?.price || product?.price || 0;
+    // const finalPrice = Math.floor(originalPrice - (originalPrice * product?.discountPercentage) / 100);
+    // const discountValue = originalPrice - finalPrice;
+    // const discountPercentage = Math.floor((discountValue / originalPrice) * 100);
+
+    const getOriginalPrice = () => {
+        if (size?.price) return size.price;
+        if (weight?.price) return weight.price;
+        return product?.price || 0;
+    };
+    
+    const originalPrice = getOriginalPrice();
+    const finalPrice = Math.floor(originalPrice - (originalPrice * product?.discountPercentage) / 100);
     const discountValue = originalPrice - finalPrice;
     const discountPercentage = Math.floor((discountValue / originalPrice) * 100);
+    
+
 
     const handleCheckout = async () => {
         if (!payment || !DeliveryTime) return toast.error('Please Choose Payment Method or Delivery Time');
@@ -49,7 +63,7 @@ const SingleProductCheckout = () => {
 
         try {
             const response = await axios.post(
-                `${USER_API_END_POINT}/buy/checkout/m`,
+                `${USER_API_END_POINT}/buy/checkout/ma`,
                 {
                     paymentMethod: payment,
                     DeliveryTime: DeliveryTime,
@@ -104,9 +118,11 @@ const SingleProductCheckout = () => {
                                 )}
                             </div>
                             <p className="text-xs text-gray-500 mt-1">All issue easy returns</p>
+
                             <p className="text-xs text-gray-600 mt-1">
-                                Size: {size?.size || 'Free Size'} • Qty: {product.minimumOrderQuantity}
+                                {size?.size && `Size: ${size.size} •`} {weight?.weight && `Weight: ${weight.weight}`} • Qty: {product.minimumOrderQuantity}
                             </p>
+
                         </div>
                     </div>
                     <div className="flex justify-between items-center text-sm text-gray-600 px-4 py-2 border-t rounded-b-lg">
@@ -141,7 +157,7 @@ const SingleProductCheckout = () => {
                         onClick={() => setPayment('Cash on Delivery')}
                     >
                         <div className="flex items-center gap-3">
-                            <span className="text-lg font-semibold text-gray-800">₹{finalPrice}</span>
+                            <span className="text-lg font-semibold text-gray-800">₹{finalPrice * product.minimumOrderQuantity}</span>
                             <span className="h-4 border-r border-gray-300" />
                             <span className="font-medium text-gray-800">Cash on Delivery</span>
                             <img src="https://static-assets.meesho.com/videos/cod_icon_v2.gif" alt="cod" className="w-5 h-5 ml-1" />

@@ -42,6 +42,19 @@ const ProductSchema = new mongoose.Schema({
       }],
     returnPolicy: { type: String },
     minimumOrderQuantity: { type: Number, default: 1 },
+
+     sizePrices: [{
+        size: { type: String },
+        price: { type: String },
+        checked: { type: Boolean, default: false }
+    }],
+    weightPrices: [{
+        weight: { type: String },
+        price: { type: String },
+        checked: { type: Boolean, default: false }
+    }],
+
+    
     createdAt: {
         type: Date,
         default: Date.now,

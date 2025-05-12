@@ -2,7 +2,6 @@ import { Product } from '../models/product.model.js';
 import { User } from "../models/user.model.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-
 import twilio from 'twilio'
 import { Order } from "../models/order.model.js";
 import { Seller } from '../models/seller.model.js';
@@ -12,8 +11,11 @@ import Review from '../models/review.model.js';
 import mongoose from 'mongoose';
 import Slider from '../models/slider.model.js';
 import client from '../middlewares/whatsappClient.js';
+import dotenv from 'dotenv';
 
-// const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+
+import cloudinary from '../middlewares/cloudinary.js';
+
 
 export const sendOtp = async (req, res) => {
     try {
@@ -353,56 +355,95 @@ export const getReview = async (req, res) => {
     }
 }
 
+// export const addReview = async (req, res) => {
+//     const { rating, productId, userId, comment } = req.body;
+
+//     try {
+
+//         if (!mongoose.Types.ObjectId.isValid(productId) || !mongoose.Types.ObjectId.isValid(userId)) {
+//             return res.status(400).json({ message: 'Invalid productId or userId format' });
+//         }
+
+//         const currentProduct = await Product.findById(productId);
+//         const currentUser = await User.findById(userId);
+
+//         if (!currentProduct) {
+//             return res.status(404).json({ message: 'Product not found' });
+//         }
+
+//         if (!currentUser) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         const newReview = new Review({
+//             comment,
+//             rating,
+//             userId: currentUser._id,
+//             reviewerName: currentUser.name,
+//             reviewerEmail: currentUser.email, 
+//             productId,
+//         });
+
+//         await newReview.save();
+
+//         currentProduct.reviews.push(newReview);
+//         await currentProduct.save();
+
+//         return res.status(201).json(newReview);
+
+//     } catch (error) {
+//         return res.status(500).json({ message: 'Error saving review' });
+//     }
+// };
+
+
 export const addReview = async (req, res) => {
     const { rating, productId, userId, comment } = req.body;
-
+    // const files = req.files;
+    if (!mongoose.Types.ObjectId.isValid(productId) || !mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid productId or userId format' });
+    }
     try {
 
-
-        // Validate if the productId and userId are valid ObjectIds
-        if (!mongoose.Types.ObjectId.isValid(productId) || !mongoose.Types.ObjectId.isValid(userId)) {
-            return res.status(400).json({ message: 'Invalid productId or userId format' });
-        }
-
-        // Fetch Product and User from DB
         const currentProduct = await Product.findById(productId);
         const currentUser = await User.findById(userId);
 
-
-        // Check if Product exists
         if (!currentProduct) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Check if User exists
         if (!currentUser) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Create new review object
+        // 🖼️ Upload images to Cloudinary (if any)
+        const imageUrls = [];
+
+        if (req.files && req.files.length > 0) {
+            for (const file of req.files) {
+                const result = await cloudinary.uploader.upload(file.path);
+                imageUrls.push(result.secure_url);
+            }
+        }
+
         const newReview = new Review({
             comment,
             rating,
             userId: currentUser._id,
-            reviewerName: currentUser.name, // Assuming the User model has a `name` field
-            reviewerEmail: currentUser.email, // Assuming the User model has an `email` field
-            productId, // Reference to the Product
+            reviewerName: currentUser.name,
+            reviewerEmail: currentUser.email,
+            productId,
+            images: imageUrls, 
         });
 
-        // Log the new review object
-        // console.log('New Review:', newReview);
-
-        // Save the review
         await newReview.save();
 
-        // Add the review to the product's reviews array
         currentProduct.reviews.push(newReview);
         await currentProduct.save();
 
-        // Respond with the new review object
         return res.status(201).json(newReview);
-
     } catch (error) {
+        console.error(error);
         return res.status(500).json({ message: 'Error saving review' });
     }
 };
@@ -512,7 +553,7 @@ export const getProductBySingleCategory = async (req, res) => {
     try {
         // Example route on backend to get products by category
         const category = await Category.findOne({ slug: req.params.slug });
-        const products = await Product.find({ category: category._id });
+        const products = await Product.find({ subCategory: category._id });
         res.json({ products });
     } catch (error) {
         res.status(500).json({ error: "Failed to fetch Product" });

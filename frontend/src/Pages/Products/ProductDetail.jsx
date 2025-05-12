@@ -27,8 +27,11 @@ const ProductDetail = () => {
 
     const url = `${SELLER_API_END_POINT}/product/${id}`;
 
-    const [selectedSize,setSelectedSize] = useState({})
+    const [selectedSize, setSelectedSize] = useState({})
+    const [selectedWeight, setSelectedWeight] = useState({})
+
     console.log(selectedSize)
+    console.log(selectedWeight)
     useEffect(() => {
 
         const fetchProduct = async () => {
@@ -175,26 +178,39 @@ const ProductDetail = () => {
                         <div className="text-green-600 font-semibold">inclusive of all taxes</div>
                     </div>
 
-                    <div className="mt-6">
-                        <h2 className="text-md font-semibold text-gray-800 mb-2">Select Size</h2>
-                        <div className="flex flex-wrap gap-4">
-                            {[
-                                { size: 'S', price: 299 },
-                                { size: 'M', price: 349 },
-                                { size: 'L', price: 399 },
-                                { size: 'XL', price: 449 },
-                                { size: 'XXL', price: 499 },
-                                { size: 'Free Size' },
-                            ].map((item, index) => (
-                                <div key={index} onClick={()=> setSelectedSize(item)} className="flex flex-col items-center">
-                                    <button className={`w-14 h-14 ${selectedSize.size == item.size ? 'active' : null} rounded-full border text-pink-600 font-medium hover:bg-pink-200 transition`}>
-                                        {item.size}
-                                    </button>
-                                    <span className="text-xs text-gray-600 mt-1">{item.price && (`₹${item.price}`)}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    
+                    {product.sizePrices && product.sizePrices.length > 0 && (
+  <div className="mt-6">
+    <h2 className="text-md font-semibold text-gray-800 mb-2">Select Size</h2>
+    <div className="flex flex-wrap gap-4">
+      {product.sizePrices.map((item, index) => (
+        <div key={index} onClick={() => setSelectedSize(item)} className="flex flex-col items-center">
+          <button className={`w-14 h-14 ${selectedSize.size === item.size ? 'bg-pink-200 border-pink-500' : ''} rounded-full border text-pink-600 font-medium hover:bg-pink-200 transition`}>
+            {item.size}
+          </button>
+          <span className="text-xs text-gray-600 mt-1">{item.price && `₹${item.price}`}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+{product.weightPrices && product.weightPrices.length > 0 && (
+  <div className="mt-6">
+    <h2 className="text-md font-semibold text-gray-800 mb-2">Select Weight</h2>
+    <div className="flex flex-wrap gap-4">
+      {product.weightPrices.map((item, index) => (
+        <div key={index} onClick={() => setSelectedWeight(item)} className="flex flex-col items-center">
+          <button className={`w-14 h-14 ${selectedWeight.weight === item.weight ? 'bg-pink-200 border-pink-500' : ''} rounded-full border text-pink-600 font-medium hover:bg-pink-200 transition`}>
+            {item.weight}
+          </button>
+          <span className="text-xs text-gray-600 mt-1">{item.price && `₹${item.price}`}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
 
 
                     <div className="mt-10 flex items-center gap-4">
@@ -210,7 +226,7 @@ const ProductDetail = () => {
                             </button>
                         ) : (
                             <>
-                                <button onClick={() => navigate(`/mcheckout/${product._id}`,{ state: { size: selectedSize } })} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button>
+                                <button onClick={() => navigate(`/mcheckout/${product._id}`, { state: { size: selectedSize, weight: selectedWeight } })} className="w-full rounded-xl bg-pink-500 py-3.5 cursor-pointer text-white transition hover:bg-pink-600">Buy now</button>
 
                                 <button onClick={() => addToCart(product._id, 1)}
                                     className={`w-full rounded-xl py-3.5 cursor-pointer text-white transition  ${isInStock

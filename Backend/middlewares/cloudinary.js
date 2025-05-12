@@ -1,7 +1,13 @@
-import cloudinary from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 cloudinary.config({
-  cloud_name: 'dfdenma4g',  // Aapke Cloudinary account se milta hai
-  api_key: '198284958138639',        // Aapke Cloudinary account se milta hai
-  api_secret: 'wCkgu_aoIGPEai3W89fKrlJsQrM'   // Aapke Cloudinary account se milta hai
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
 });
+
+export default cloudinary;

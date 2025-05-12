@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { USER_API_END_POINT } from '../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import './category.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 
 const HomeCategoryIcon = () => {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -40,9 +42,9 @@ const HomeCategoryIcon = () => {
 
   if (loading) {
     return (
-      <div className="flex gap-4">
+      <div className="catSliderSection mt-8 flex gap-4">
         {[1, 2, 3, 4, 5].map((_, index) => (
-          <div key={index} className="flex flex-col items-center animate-pulse space-y-2">
+          <div key={index} className="flex slick-list flex-col items-center animate-pulse space-y-2">
             <div className="w-16 h-16 bg-gray-300 rounded-full" />
             <div className="w-20 h-4 bg-gray-300 rounded" />
           </div>
@@ -151,11 +153,16 @@ const HomeCategoryIcon = () => {
       {/* Scrollable Body */}
       <div className="h-[calc(45vh-80px)] overflow-y-auto px-6 py-4">
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4">
-          {subCategories.map((sub, idx) => (
+
+          {subCategories.length == 0 ? (
+             <div className="flex items-center justify-center my-8">
+                     <Loader2 className="animate-spin h-6 w-6 text-gray-500" />
+                   </div>
+          ):(
+          subCategories.map((sub, idx) => (
             <div
-              key={idx} onClick={() => handleCategoryClick(sub)}
-              className="flex flex-col items-center p-3 rounded-xl border hover:shadow-md transition"
-            >
+              key={idx} onClick={()=> navigate(`/products/category/${sub.name}`)}
+              className="flex flex-col items-center p-3 rounded-xl border hover:shadow-md transition">
               <img
                 src={sub.imageUrl}
                 alt={sub.name}
@@ -163,7 +170,8 @@ const HomeCategoryIcon = () => {
               />
               <p className="text-sm font-medium text-gray-700">{sub.name}</p>
             </div>
-         ))}
+         )))
+         }
         </div>
       </div>
     </motion.div>

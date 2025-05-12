@@ -4,6 +4,7 @@ import isAuthenticate from "../middlewares/isAuthenticated.js";
 
 const router = express.Router()
 
+import upload from '../middlewares/multer.js';
 
 router.route('/register').post(register)
 router.route('/login/email').post(loginwithemail)
@@ -27,7 +28,7 @@ router.route('/products/category/:slug').get(getProductBySingleCategory);
 router.route('/categories/subcategories/:parentId').get(getSubCategory)
 
 router.route('/reviews/:productId').get(getReview)
-router.route('/add-reviews').post(addReview)
+router.route('/add-reviews').post(upload.array('images', 5), addReview);
 router.route('/review/:productId/:reviewId').delete(deleteReview)
 
 router.route('/product/wishlist').post(isAuthenticate,addWishlist)
