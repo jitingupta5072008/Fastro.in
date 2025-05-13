@@ -65,7 +65,7 @@ const SingleProductCheckout = () => {
 
         try {
             const response = await axios.post(
-                `${USER_API_END_POINT}/buy/checkout/mn`,
+                `${USER_API_END_POINT}/buy/checkout`,
                 {
                     paymentMethod: payment,
                     DeliveryTime: DeliveryTime,
@@ -74,7 +74,7 @@ const SingleProductCheckout = () => {
                     quantity,
                     weight: weight?.weight,
                     size: size?.size,
-                    deliveryCharge
+                    
                 },
                 {
                     headers: { Authorization: token },
@@ -203,7 +203,7 @@ const SingleProductCheckout = () => {
                         <span>Order Total</span>
                         <span>₹{totalOrderAmount}</span>
                     </div>
-                    <button onClick={handleCheckout} className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 rounded-lg transition">
+                    <button onClick={handleCheckout} disabled={loading} className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 rounded-lg transition">
                         {loading ? 'loading...' : 'CheckOut'}
                     </button>
                 </div>

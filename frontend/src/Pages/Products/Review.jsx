@@ -159,10 +159,13 @@ const Review = ({ productId, userId }) => {
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="text-yellow-400 flex text-sm">
+                                    <div class="text-pink-400 flex text-sm">
                                         {/* ★★★★☆ */}
                                         {Array.from({ length: comment.rating }, (_, i) => (
-                                            <Star key={i} className="w-4 h-4 fill-[orange] [stroke-width:0]" />
+                                            // <Star key={i} className="w-4 h-4 fill-[pink] [stroke-width:0]" />
+                                            <span className="w-4 h-4 text-xl [stroke-width:0] bold">
+                                            ★
+                                            </span>
                                         ))}
                                         {userId === comment.userId ? (
                                             <button onClick={() => handleDeleteReview(comment._id)}>{loading ? <Loader2 className='h-5 w-5' /> : '⛔'} </button>

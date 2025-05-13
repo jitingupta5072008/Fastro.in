@@ -50,6 +50,7 @@ const ProductDetail = () => {
 
     const addToCart = async (productId, quantity = 1) => {
         try {
+            setLoading(true)
             const res = await axios.post(`${USER_API_END_POINT}/add-to-cart`, { productId, quantity, size: selectedSize, weight: selectedWeight }, {
                 headers: { Authorization: token }
             });
@@ -57,6 +58,8 @@ const ProductDetail = () => {
         } catch (error) {
             console.error(error);
             toast.error(error.response?.data?.message || "Something went wrong");
+        }finally{
+            setLoading(false)
         }
     };
 
@@ -213,9 +216,10 @@ const ProductDetail = () => {
                                     ? ' text-gray-600 bg-pink-500 hover:bg-pink-600'
                                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                     }`}
-                                disabled={!isInStock}
+                                disabled={!isInStock || loading}
                             >
-                                {isInStock ? 'Add to Cart' : 'Out of Stock'}
+                                {loading ? 'Adding...' : isInStock ? 'Add to Cart' : 'Out of Stock'}
+
                             </button>
                         ) : (
                             <>
@@ -226,9 +230,10 @@ const ProductDetail = () => {
                                         ? ' text-white bg-pink-500 hover:bg-pink-600'
                                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                         }`}
-                                    disabled={!isInStock}
+                                    disabled={!isInStock || loading}
                                 >
-                                    {isInStock ? 'Add to Cart' : 'Out of Stock'}
+                                    {loading ? 'Adding...' : isInStock ? 'Add to Cart' : 'Out of Stock'}
+
                                 </button>
                             </>
 

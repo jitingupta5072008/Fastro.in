@@ -316,7 +316,7 @@ const CartPage = () => {
                     </div>
 
                     <button
-                        onClick={handleCheckout}
+                        onClick={handleCheckout} disabled={loading}
                         className="bg-pink-500 hover:bg-pink-600 mt-6 w-full py-3 font-medium text-white transition"
                     >
                         {loading ? 'loading...' : 'Proceed to Checkout'}
