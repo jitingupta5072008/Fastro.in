@@ -23,6 +23,13 @@ const SingleProductCheckout = () => {
     const [DeliveryTime, setDeliveryTime] = useState('');
     const isSelected = payment === 'Cash on Delivery';
 
+    const calculateDeliveryCharge = (amount) => {
+        if (amount < 199) return 30;
+        if (amount >= 199 && amount < 349) return 20;
+        if (amount >= 349 && amount < 499) return 10;
+        return 0;
+    };
+
     useEffect(() => {
         const fetchProduct = async () => {
             const res = await axios.get(url);
@@ -37,52 +44,51 @@ const SingleProductCheckout = () => {
         fetchUserAddress();
     }, []);
 
-    // const originalPrice = size?.price || product?.price || 0;
-    // const finalPrice = Math.floor(originalPrice - (originalPrice * product?.discountPercentage) / 100);
-    // const discountValue = originalPrice - finalPrice;
-    // const discountPercentage = Math.floor((discountValue / originalPrice) * 100);
-
     const getOriginalPrice = () => {
         if (size?.price) return size.price;
         if (weight?.price) return weight.price;
         return product?.price || 0;
     };
-    
+
     const originalPrice = getOriginalPrice();
     const finalPrice = Math.floor(originalPrice - (originalPrice * product?.discountPercentage) / 100);
     const discountValue = originalPrice - finalPrice;
     const discountPercentage = Math.floor((discountValue / originalPrice) * 100);
-    
-
+    const quantity = product?.minimumOrderQuantity || 1;
+    const totalProductPrice = finalPrice * quantity;
+    const deliveryCharge = calculateDeliveryCharge(totalProductPrice);
+    const totalOrderAmount = totalProductPrice + deliveryCharge;
 
     const handleCheckout = async () => {
         if (!payment || !DeliveryTime) return toast.error('Please Choose Payment Method or Delivery Time');
-        setLoading(true)
-        const quantity = product.minimumOrderQuantity;
-        const discountedAmount = finalPrice;
+        setLoading(true);
 
         try {
             const response = await axios.post(
-                `${USER_API_END_POINT}/buy/checkout/ma`,
+                `${USER_API_END_POINT}/buy/checkout/mn`,
                 {
                     paymentMethod: payment,
                     DeliveryTime: DeliveryTime,
                     productId: product._id,
-                    amount: discountedAmount,
+                    amount: totalOrderAmount,
                     quantity,
+                    weight: weight?.weight,
+                    size: size?.size,
+                    deliveryCharge
                 },
                 {
                     headers: { Authorization: token },
                 }
             );
+
             if (response.status === 200) {
-                navigate("/order-success", { state: { order: response.data.orders } });
+                navigate("/order-success", { state: { order: response.data.order } });
             }
         } catch (err) {
             console.error(err);
             toast.error("Failed to place order");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
 
@@ -90,24 +96,24 @@ const SingleProductCheckout = () => {
 
     return (
         <div className="max-w-6xl mx-auto p-4 md:flex md:gap-6">
+            {/* Product and Address Section */}
             <div className="w-full md:w-2/3 space-y-4">
+                {/* Product Info */}
                 <div className="border rounded-lg">
+                    {/* Estimated Delivery */}
                     <div className="flex items-center gap-2 px-4 py-2 border-b rounded-t-lg">
                         <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M3 3h14v14H3V3zm1 1v12h12V4H4zm4 2h4v1H8V6zm0 2h6v1H8V8zm0 2h6v1H8v-1z" />
                         </svg>
                         <p className="text-sm font-semibold text-gray-800">
-                            Estimated Delivery by <span className="font-medium text-black">Wednesday, 14th May</span>
+                            Estimated Delivery by <span className="font-medium text-black"> {(new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/(\d+)(?= )/, d => d + (["th","st","nd","rd"][(d%10>3)?0:((d%100-d%10!=10)*d%10)] || "th"))) + ' • ' + DeliveryTime} </span>
                         </p>
                     </div>
+                    {/* Product Row */}
                     <div className="flex px-4 py-3 gap-4">
                         <img src={productImages[0]} alt="Product" className="w-16 h-16 object-cover rounded" />
                         <div className="flex-1 text-sm">
-                            <div className="flex justify-between items-start">
-                                <h3 className="font-semibold text-gray-800 leading-snug max-w-[80%]">
-                                    {product.name}
-                                </h3>
-                            </div>
+                            <h3 className="font-semibold text-gray-800">{product.name}</h3>
                             <div className="text-gray-700 mt-1">
                                 ₹{finalPrice}
                                 {discountPercentage > 0 && (
@@ -117,20 +123,18 @@ const SingleProductCheckout = () => {
                                     </>
                                 )}
                             </div>
-                            <p className="text-xs text-gray-500 mt-1">All issue easy returns</p>
-
                             <p className="text-xs text-gray-600 mt-1">
-                                {size?.size && `Size: ${size.size} •`} {weight?.weight && `Weight: ${weight.weight}`} • Qty: {product.minimumOrderQuantity}
+                                {size?.size && `Size: ${size.size} •`} {weight?.weight && `Weight: ${weight.weight}`} • Qty: {quantity}
                             </p>
-
                         </div>
                     </div>
                     <div className="flex justify-between items-center text-sm text-gray-600 px-4 py-2 border-t rounded-b-lg">
                         <span>Sold by: {product.seller.shopName}</span>
-                        <span className="text-green-600">Free Delivery</span>
+                        <span className="text-green-600">{deliveryCharge === 0 ? "Free Delivery" : `Delivery ₹${deliveryCharge}`}</span>
                     </div>
                 </div>
 
+                {/* Address */}
                 {address && (
                     <div className="border rounded-lg p-4 shadow-sm">
                         <div className="flex items-center justify-between mb-2">
@@ -150,6 +154,7 @@ const SingleProductCheckout = () => {
                     </div>
                 )}
 
+                {/* Payment and Delivery */}
                 <div className="max-w-md p-4">
                     <h2 className="font-semibold text-lg mb-2">Select Payment Method</h2>
                     <div
@@ -157,7 +162,7 @@ const SingleProductCheckout = () => {
                         onClick={() => setPayment('Cash on Delivery')}
                     >
                         <div className="flex items-center gap-3">
-                            <span className="text-lg font-semibold text-gray-800">₹{finalPrice * product.minimumOrderQuantity}</span>
+                            <span className="text-lg font-semibold text-gray-800">₹{totalOrderAmount}</span>
                             <span className="h-4 border-r border-gray-300" />
                             <span className="font-medium text-gray-800">Cash on Delivery</span>
                             <img src="https://static-assets.meesho.com/videos/cod_icon_v2.gif" alt="cod" className="w-5 h-5 ml-1" />
@@ -177,38 +182,30 @@ const SingleProductCheckout = () => {
                 </div>
             </div>
 
+            {/* Price Summary */}
             <div className="w-full md:w-1/3 mt-6 md:mt-0 space-y-4">
                 <div className="border rounded-lg p-4 shadow-sm space-y-2">
                     <h3 className="font-semibold text-gray-700">Price Details (1 Item)</h3>
                     <div className="flex justify-between text-sm text-gray-600">
                         <span>Total Product Price</span>
-                        <span>+ ₹{originalPrice * product.minimumOrderQuantity}</span>
+                        <span>₹{originalPrice * quantity}</span>
                     </div>
                     <div className="flex justify-between text-sm text-green-600">
                         <span>Total Discounts</span>
-                        <span>- ₹{discountValue * product.minimumOrderQuantity}</span>
+                        <span>- ₹{discountValue * quantity}</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-600">
+                        <span>Delivery Charges</span>
+                        <span>{deliveryCharge === 0 ? "Free" : `+ ₹${deliveryCharge}`}</span>
                     </div>
                     <hr />
                     <div className="flex justify-between font-semibold">
                         <span>Order Total</span>
-                        <span>₹ {finalPrice * product.minimumOrderQuantity}</span>
-                    </div>
-                    {discountValue > 0 && (
-                        <div className="bg-green-100 text-green-800 p-2 rounded text-sm font-medium">
-                            ✅ Yay! Your total discount is ₹{discountValue}
-                        </div>
-                    )}
-                    <div className="text-xs text-gray-500 text-center mt-2">
-                        Clicking on 'Continue' will not deduct any money
+                        <span>₹{totalOrderAmount}</span>
                     </div>
                     <button onClick={handleCheckout} className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 rounded-lg transition">
-                        {loading
-                            ? 'loading...'
-                            : 'CheckOut'}
+                        {loading ? 'loading...' : 'CheckOut'}
                     </button>
-                </div>
-                <div className="border rounded-lg p-4 shadow-sm flex gap-4 items-start">
-                    <img src="https://images.meesho.com/images/marketing/1588578650850.webp" alt="Meesho Safe" className="w-full object-contain" />
                 </div>
             </div>
         </div>

@@ -7,6 +7,8 @@ const OrderSchema = new mongoose.Schema({
   totalAmount: Number,
   paymentMethod: String,
   DeliveryTime: String,
+  weight: String,
+  size: String,
 
   status: { type: String, default: "Pending" },
   

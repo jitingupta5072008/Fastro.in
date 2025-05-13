@@ -193,7 +193,7 @@ const Review = ({ productId, userId }) => {
                         </div>
                     ))
                 ) : (
-                    <p>No review yet.</p>
+                    <p className="flex items-center justify-center">No review yet.</p>
                 )}
 
 

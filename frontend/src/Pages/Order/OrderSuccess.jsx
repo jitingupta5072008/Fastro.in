@@ -3,68 +3,76 @@ import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const OrderSuccess = () => {
-    const location = useLocation();
-    const order = location.state?.order[0];
-    const navigate = useNavigate()
-    console.log(order);
+  const location = useLocation();
+  const order = location.state?.order[0];
+  const navigate = useNavigate()
+  console.log(order);
+
   return (
-    <>
-          <div class="max-w-md mx-auto p-4 space-y-4 text-gray-700">
-                <h2 class="text-lg font-semibold text-center">ORDER CONFIRMATION</h2>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(to right, #ffe4f1, #ffffff)'}}>
 
-                <div class="flex items-center gap-2 text-green-600">
-                    <CircleCheck class="w-5 h-5" />
-                    <div>
-                        <p>Thank you for shopping with us</p>
-                        <p class="text-sm text-gray-500">ID: #{order._id}</p>
-                    </div>
-                </div>
+      <div className="bg-white/80 backdrop-blur-md border border-pink-200 rounded-2xl shadow-xl w-full max-w-2xl p-6 text-center transition-all">
 
-                <div class="flex items-center gap-2 text-gray-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 9h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <p>Estimated delivery by <strong>
-                    {order.createdAt && new Date(order.createdAt).toLocaleDateString('en-GB', {
+        {/* <!-- Success Animation GIF --> */}
+        <div className="flex justify-center">
+          <iframe className="h-56 object-contain" src="https://lottie.host/embed/211e8660-bf0a-4cdb-a12d-41d83f211218/EwOvvLLJ7C.lottie"></iframe>
+        </div> 
+
+        {/* <!-- Headline with Pink Color --> */}
+        <h1 className="text-3xl md:text-4xl font-bold text-pink-600 mb-2">Order Confirmed!</h1>
+
+        {/* <!-- Paragraph --> */}
+        <p className="text-gray-700 text-lg mb-6">
+          Your order has been successfully placed and will be delivered via Cash on Delivery.
+        </p>
+
+        {/* <!-- Order Summary --> */}
+        <div className="bg-pink-50 rounded-xl p-4 text-left mb-6 border border-pink-100">
+          <div className="flex justify-between">
+            <span className="font-medium text-gray-700">Order ID:</span>
+            <span className="text-gray-900 font-semibold">#{order._id}</span>
+          </div>
+          <div className="flex justify-between mt-2">
+            <span className="font-medium text-gray-700">Estimated Delivery:</span>
+            <span className="text-gray-900">{order.createdAt && new Date(order.createdAt).toLocaleDateString('en-GB', {
                       day: 'numeric',
                       month: 'long',
                       year: 'numeric',
-                    })}
-                        </strong></p>
-                </div>
+                    })}</span>
+          </div>
+        </div>
 
-                <div class="flex gap-4 border rounded-xl p-3">
-                    <img src="https://images.meesho.com/images/products/17255130/pgzwt_512.jpg" alt="Product" class="w-16 h-16 rounded-lg object-cover"/>
-                        <div>
-                            <p class="font-semibold">{order?.items?.length > 0 ? order.items[0].name : "N/A"}</p>
-                            <p class="text-sm text-gray-500">Size: Freesize &nbsp; | &nbsp; Qty: {order?.qty} &nbsp; | &nbsp; Basic Return</p>
-                            <p class="font-semibold mt-1">₹{order?.items?.length > 0
-                        ? (
-                          (order.items[0].price -
-                            (order.items[0].price * order.items[0].discountPercentage) / 100) *
-                          (order.qty || 1)
-                        )
-                        : "N/A"}</p>
-                        </div>
-                </div>
-
+        {/* <!-- Product Section --> */}
+        <div className="bg-pink-50 rounded-xl p-4 text-left mb-6 border border-pink-100">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Your Products</h2>
+          <div className="space-y-4">
+            {order.products && order.products.map((product, index) => (
+              <div key={index} className="flex justify-between border-b pb-2">
                 <div>
-                    <p class="font-semibold mb-1">Delivery Address</p>
-                    <p>{order?.shippingAddress?.fullname} - <span class="text-gray-500">+91{order?.shippingAddress?.phone}</span></p>
-                    <p class="text-gray-600 text-sm">{order?.shippingAddress?.fulladdress}, {order?.shippingAddress?.city}, {order?.shippingAddress?.state} - {order?.shippingAddress?.pincode}</p>
+                  <p className="font-medium text-gray-700">{product.name}</p>
+                  <p className="text-gray-500">Quantity: {product.quantity}</p>
                 </div>
+                <div className="text-right">
+                  <p className="text-gray-700 font-semibold">₹{product.price * product.quantity}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-                <div>
-                    <p class="font-semibold mb-1">Payment Method</p>
-                    <p class="text-gray-600">{order?.shippingAddress?.paymentMethod}</p>
-                </div>
-                
-                <button onClick={()=> navigate('/')} class="w-full bg-pink-500 text-white py-2 rounded-full text-center font-semibold mt-4 hover:bg-pink-600 transition">
-                    Continue Shopping
-                </button>
-            </div>
-    </>
+        {/* <!-- Action Buttons with Pink Theme --> */}
+        <div className="flex flex-col md:flex-row gap-4 justify-center">
+          <a href="/" className="px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-lg transition">
+            Continue Shopping
+          </a>
+          <a href="/orders" className="px-6 py-3 border border-pink-300 hover:bg-pink-50 text-pink-700 font-semibold rounded-lg transition">
+            View Order
+          </a>
+        </div>
+      </div>
+
+    </div>
   )
 }
 
-export default OrderSuccess
+export default OrderSuccess;

@@ -12,7 +12,7 @@ import mongoose from 'mongoose';
 import Slider from '../models/slider.model.js';
 import client from '../middlewares/whatsappClient.js';
 import dotenv from 'dotenv';
-
+import fs from 'fs';
 
 import cloudinary from '../middlewares/cloudinary.js';
 
@@ -319,13 +319,13 @@ export const categoryWiseProduct = async (req, res) => {
     }
 };
 
-export const getSubCategory = async(req,res)=>{
+export const getSubCategory = async (req, res) => {
     try {
         const subCategories = await Category.find({ parentCategory: req.params.parentId });
         res.json({ subCategories });
-      } catch (err) {
+    } catch (err) {
         res.status(500).json({ error: 'Failed to fetch subcategories' });
-      }
+    }
 }
 
 export const getCategories = async (req, res) => {
@@ -435,7 +435,7 @@ export const addReview = async (req, res) => {
             reviewerName: currentUser.name,
             reviewerEmail: currentUser.email,
             productId,
-            images: imageUrls, 
+            images: imageUrls,
         });
 
         await newReview.save();
@@ -483,7 +483,7 @@ export const getRelatedProducts = async (req, res) => {
             category: currentProduct.category, // or tag/subcategory
             _id: { $ne: currentProduct._id }, // exclude current product
         })
-            .limit(5); // only 1 to 5 products
+            .limit(10); // only 1 to 5 products
 
         res.json({ related });
     } catch (err) {
@@ -661,118 +661,119 @@ export const removeFromCart = async (req, res) => {
 
 export const cartCheckout = async (req, res) => {
     try {
-      const user = await User.findById(req.user).populate({
-        path: "cart.product",
-        populate: { path: "seller" },
-      });
-  
-      if (!user.cart.length) {
-        return res.status(400).json({ message: "Cart is empty." });
-      }
-  
-      const orders = [];
-  
-      for (let cartItem of user.cart) {
-        const { product, quantity } = cartItem;
-  
-        const discount = typeof product.discountPercentage === "number" ? product.discountPercentage : 0;
-        const discountedPrice = product.price - (product.price * discount) / 100;
-        const total = discountedPrice * quantity;
-        
-
-        const newOrder = new Order({
-          userId: req.user,
-          items: [product._id],
-          qty: quantity.toString(),
-          totalAmount: total,
-          paymentMethod: req.body.paymentMethod,
-          DeliveryTime: req.body.DeliveryTime,
-          shippingAddress: user.address,
+        const user = await User.findById(req.user).populate({
+            path: "cart.product",
+            populate: { path: "seller" },
         });
-  
-        await newOrder.save();
-        orders.push(newOrder);
-        user.orders.push(newOrder._id);
-        await user.save()
-        // ✅ Push to seller's orders
-    //   if (product.seller && product.seller._id) {
-    //     const seller = await Seller.findById(product.seller._id);
-    //     if (seller) {
-    //       seller.orders.push(newOrder._id);
-    //       await seller.save();
-    //     }
-    //   }
-        const seller = await Seller.findById(product.seller._id);
-        seller.orders.push(newOrder._id);
-        await seller.save()
-  
-        // ✅ Notify Seller via WhatsApp
-        if (product.seller && product.seller.phone) {
-          const phone = `91${product.seller.phone}@c.us`;
-          const message = `Dear ${product.seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}${product._id}\nQty: ${quantity}\nDelivery Time: ${req.body.DeliveryTime}`;
-          await sendWhatsAppMessage(phone, message);
+
+        if (!user.cart.length) {
+            return res.status(400).json({ message: "Cart is empty." });
         }
-      }
-  
-      // ✅ Clear cart after order
-      user.cart = [];
-      await user.save();
-  
-      res.status(200).json({ message: "Order placed successfully", orders });
+
+        const orders = [];
+
+        for (let cartItem of user.cart) {
+            const { product, quantity } = cartItem;
+
+            const discount = typeof product.discountPercentage === "number" ? product.discountPercentage : 0;
+            const discountedPrice = product.price - (product.price * discount) / 100;
+            const total = discountedPrice * quantity;
+
+
+            const newOrder = new Order({
+                userId: req.user,
+                items: [product._id],
+                qty: quantity.toString(),
+                totalAmount: total,
+                paymentMethod: req.body.paymentMethod,
+                DeliveryTime: req.body.DeliveryTime,
+                shippingAddress: user.address,
+                weight: req.body.weight,
+                size: req.body.size,
+            });
+
+            await newOrder.save();
+            orders.push(newOrder);
+            user.orders.push(newOrder._id);
+            await user.save()
+
+            const seller = await Seller.findById(product.seller._id);
+            seller.orders.push(newOrder._id);
+            await seller.save()
+
+            // ✅ Notify Seller via WhatsApp
+            if (product.seller && product.seller.phone) {
+                const phone = `91${product.seller.phone}@c.us`;
+                const message = `Dear ${product.seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}${product._id}\nQty: ${quantity}\nDelivery Time: ${req.body.DeliveryTime}`;
+                await sendWhatsAppMessage(phone, message);
+            }
+        }
+        const order = await Order.findById(newOrder._id)
+                .populate('items.product');
+
+        // ✅ Clear cart after order
+        user.cart = [];
+        await user.save();
+
+        res.status(200).json({ message: "Order placed successfully", order });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  };
-  
+};
+
 export const buyCheckout = async (req, res) => {
-  try {
-    const { productId, paymentMethod, DeliveryTime, amount, quantity } = req.body;
-    const user = await User.findById(req.user);
+    try {
+        const { productId, paymentMethod, DeliveryTime, amount, quantity, weight, size } = req.body;
+        const user = await User.findById(req.user);
 
-    if (!user) {
-      return res.status(400).json({ message: "User not found." });
+        if (!user) {
+            return res.status(400).json({ message: "User not found." });
+        }
+
+        // ✅ Fetch the product to access seller and name
+        const product = await Product.findById(productId).populate("seller"); // assuming "seller" is a ref
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found." });
+        }
+
+        // ✅ Create the order
+        const newOrder = new Order({
+            userId: req.user,
+            items: [product._id],
+            qty: quantity.toString(),
+            totalAmount: amount,
+            paymentMethod,
+            DeliveryTime,
+            shippingAddress: user.address,
+            weight,
+            size
+        });
+
+        await newOrder.save();
+
+        // ✅ Link order to user
+        user.orders.push(newOrder._id);
+        await user.save();
+
+        // ✅ Link order to seller
+        const seller = product.seller;
+        if (seller) {
+            seller.orders.push(newOrder._id);
+            await seller.save();
+
+            // ✅ Notify Seller via WhatsApp
+            const phone = `91${seller.phone}@c.us`;
+            const message = `Dear ${seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}${product._id}\nQty: ${quantity}\nDelivery Time: ${DeliveryTime}`;
+            await sendWhatsAppMessage(phone, message);
+        }
+        const order = await Order.findById(newOrder._id)
+                .populate('items.product');
+
+        return res.status(200).json({ message: "Order placed successfully", order});
+
+    } catch (error) {
+        console.error("Checkout error:", error);
+        return res.status(500).json({ message: error.message });
     }
-
-    // ✅ Fetch the product to access seller and name
-    const product = await Product.findById(productId).populate("seller"); // assuming "seller" is a ref
-
-    if (!product) {
-      return res.status(404).json({ message: "Product not found." });
-    }
-
-    // ✅ Create the order
-    const newOrder = new Order({
-      userId: req.user,
-      items: [product._id],
-      qty: quantity.toString(),
-      totalAmount: amount,
-      paymentMethod,
-      DeliveryTime,
-      shippingAddress: user.address,
-    });
-
-    await newOrder.save();
-
-    // ✅ Link order to user
-    user.orders.push(newOrder._id);
-    await user.save();
-
-    // ✅ Link order to seller
-    const seller = product.seller;
-    if (seller) {
-      seller.orders.push(newOrder._id);
-      await seller.save();
-
-      // ✅ Notify Seller via WhatsApp
-      const phone = `91${seller.phone}@c.us`;
-      const message = `Dear ${seller.name},\nNew Order Received!\nProduct: ${product.name}\nClick to view: ${FRONTEND_URL}${product._id}\nQty: ${quantity}\nDelivery Time: ${DeliveryTime}`;
-      await sendWhatsAppMessage(phone, message);
-    }
-
-    return res.status(200).json({ message: "Order placed successfully", order: newOrder });
-
-  } catch (error) {
-    console.error("Checkout error:", error);
-    return res.status(500).json({ message: error.message });
-  }
 };

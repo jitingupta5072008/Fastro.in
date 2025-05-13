@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 
 const Footer = () => {
     const location = useLocation()
-    if (location.pathname === '/search' || location.pathname.startsWith('/address/') ) {
+    if (location.pathname === '/search' || location.pathname.startsWith('/address/') || location.pathname === '/order-success' ) {
       return null
     }
   

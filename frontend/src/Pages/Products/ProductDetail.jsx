@@ -30,8 +30,6 @@ const ProductDetail = () => {
     const [selectedSize, setSelectedSize] = useState({})
     const [selectedWeight, setSelectedWeight] = useState({})
 
-    console.log(selectedSize)
-    console.log(selectedWeight)
     useEffect(() => {
 
         const fetchProduct = async () => {
@@ -52,7 +50,7 @@ const ProductDetail = () => {
 
     const addToCart = async (productId, quantity = 1) => {
         try {
-            const res = await axios.post(`${USER_API_END_POINT}/add-to-cart`, { productId, quantity }, {
+            const res = await axios.post(`${USER_API_END_POINT}/add-to-cart`, { productId, quantity, size: selectedSize, weight: selectedWeight }, {
                 headers: { Authorization: token }
             });
             toast.success("Added to cart!");
@@ -63,7 +61,6 @@ const ProductDetail = () => {
     };
 
     const handleShare = async (productName, productUrl) => {
-        // const shareMessage = `Checkout this product: ${productName}\n${productUrl}`;
         const shareMessage = `Hey dear! 💬\n\nYeh product kisi khas ne aapke liye bheja hai — unhe laga yeh aapko zaroor pasand aayega 😊\nZaroor check karo, aur agar pasand aaye to bas ek button dabao — shaam tak yeh aapke ghar hoga! 🚚💨\n\n🛍️ *${productName}*\n🔗 ${productUrl}`;
 
         try {
@@ -71,17 +68,13 @@ const ProductDetail = () => {
                 await navigator.share({
                     title: productName,
                     text: shareMessage,
-                    // ❌ don't add url separately — kuch apps sirf url hi le lete hain, text ignore kar dete hain
                 });
 
             } else {
-                // Fallback: Copy to clipboard
                 await navigator.clipboard.writeText(shareMessage);
-                alert("Share not supported, copied to clipboard instead!");
             }
         } catch (error) {
             console.error("Share failed:", error);
-            alert("Failed to share. Try manually.");
         }
     };
 
