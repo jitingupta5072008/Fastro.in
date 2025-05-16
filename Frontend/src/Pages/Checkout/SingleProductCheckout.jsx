@@ -3,7 +3,7 @@ import { SELLER_API_END_POINT, USER_API_END_POINT } from '../../utils/api';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useOrder } from '../../context/OrderContext';
-import { CheckCircle, Circle, Truck } from 'lucide-react';
+import { CheckCircle, Circle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const SingleProductCheckout = () => {
@@ -74,7 +74,7 @@ const SingleProductCheckout = () => {
                     quantity,
                     weight: weight?.weight,
                     size: size?.size,
-
+                    
                 },
                 {
                     headers: { Authorization: token },
@@ -82,12 +82,11 @@ const SingleProductCheckout = () => {
             );
 
             if (response.status === 200) {
-                const order = response.data.order;
-                navigate(`/order-success/${order._id}`, { state: { order: response.data.order } });
+                navigate("/order-success", { state: { order: response.data.order } });
             }
         } catch (err) {
             console.error(err);
-            toast.error(err.response.data.message  || "Failed to place order");
+            toast.error("Failed to place order");
         } finally {
             setLoading(false);
         }
@@ -103,9 +102,11 @@ const SingleProductCheckout = () => {
                 <div className="border rounded-lg">
                     {/* Estimated Delivery */}
                     <div className="flex items-center gap-2 px-4 py-2 border-b rounded-t-lg">
-                        <Truck className="w-5 h-5 text-gray-600" />
+                        <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 3h14v14H3V3zm1 1v12h12V4H4zm4 2h4v1H8V6zm0 2h6v1H8V8zm0 2h6v1H8v-1z" />
+                        </svg>
                         <p className="text-sm font-semibold text-gray-800">
-                            Estimated Delivery by <span className="font-medium text-black"> {(new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/(\d+)(?= )/, d => d + (["th", "st", "nd", "rd"][(d % 10 > 3) ? 0 : ((d % 100 - d % 10 != 10) * d % 10)] || "th"))) + ' • ' + DeliveryTime} </span>
+                            Estimated Delivery by <span className="font-medium text-black"> {(new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/(\d+)(?= )/, d => d + (["th","st","nd","rd"][(d%10>3)?0:((d%100-d%10!=10)*d%10)] || "th"))) + ' • ' + DeliveryTime} </span>
                         </p>
                     </div>
                     {/* Product Row */}

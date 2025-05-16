@@ -19,7 +19,6 @@ import ShipAddress from './Pages/ShippingAddress/ShipAddress';
 import OrderDetail from './Pages/Order/OrderDetail';
 import OrderSuccess from './Pages/Order/OrderSuccess';
 import SingleProductCheckout from './Pages/Checkout/SingleProductCheckout';
-import CategoryProductCarousel from './Pages/category/CategoryProductCarousel';
 
 function App() {
 
@@ -57,8 +56,7 @@ function App() {
             <Route path='/categories' element={<FilterProduct />} />
             <Route path="/products/category/:slug" element={<CategoryProducts />} />
             <Route path="/order-details" element={<OrderDetail />} />
-            <Route path="/order-success/:orderId" element={<OrderSuccess />} />
-            <Route path="/categoryproduct" element={<CategoryProductCarousel />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
 
             {/* <Route path='/admin/dashboard' element={<ProtectedRoute><Dashboard /></ProtectedRoute>} /> */}
 

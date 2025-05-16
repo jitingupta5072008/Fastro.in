@@ -1,24 +1,12 @@
 import { CircleCheck } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { USER_API_END_POINT } from '../../utils/api';
-import toast from 'react-hot-toast';
+import React from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const OrderSuccess = () => {
-  const {orderId} = useParams()
-  console.log(orderId);
-  const [order,setOrder] = useState();
-  useEffect(()=>{
-    const fetchOrder = async ()=>{
-      try {
-        const res = await axios.get(`${USER_API_END_POINT}/orders_detail/${orderId}`);
-        setOrder(res.data)
-      } catch (error) {
-        toast.error('Order Fetch Failed')
-      }
-    }
-    fetchOrder();
-  },[orderId])
+  const location = useLocation();
+  const order = location.state?.order[0];
+  const navigate = useNavigate()
+  console.log(order);
 
   return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(to right, #ffe4f1, #ffffff)'}}>
@@ -46,7 +34,11 @@ const OrderSuccess = () => {
           </div>
           <div className="flex justify-between mt-2">
             <span className="font-medium text-gray-700">Estimated Delivery:</span>
-            <span className="text-gray-900">{(new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).replace(/(\d+)(?= )/, d => d + (["th", "st", "nd", "rd"][(d % 10 > 3) ? 0 : ((d % 100 - d % 10 != 10) * d % 10)] || "th")))}</span>
+            <span className="text-gray-900">{order.createdAt && new Date(order.createdAt).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    })}</span>
           </div>
         </div>
 
@@ -54,14 +46,14 @@ const OrderSuccess = () => {
         <div className="bg-pink-50 rounded-xl p-4 text-left mb-6 border border-pink-100">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Your Products</h2>
           <div className="space-y-4">
-            {order.items && order.items.map((product, index) => (
+            {order.products && order.products.map((product, index) => (
               <div key={index} className="flex justify-between border-b pb-2">
                 <div>
                   <p className="font-medium text-gray-700">{product.name}</p>
                   <p className="text-gray-500">Quantity: {product.quantity}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-gray-700 font-semibold">₹{order.totalAmount}</p>
+                  <p className="text-gray-700 font-semibold">₹{product.price * product.quantity}</p>
                 </div>
               </div>
             ))}
@@ -70,12 +62,12 @@ const OrderSuccess = () => {
 
         {/* <!-- Action Buttons with Pink Theme --> */}
         <div className="flex flex-col md:flex-row gap-4 justify-center">
-          <Link to="/" className="px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-lg transition">
+          <a href="/" className="px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-lg transition">
             Continue Shopping
-          </Link>
-          <Link to="/orders" className="px-6 py-3 border border-pink-300 hover:bg-pink-50 text-pink-700 font-semibold rounded-lg transition">
+          </a>
+          <a href="/orders" className="px-6 py-3 border border-pink-300 hover:bg-pink-50 text-pink-700 font-semibold rounded-lg transition">
             View Order
-          </Link>
+          </a>
         </div>
       </div>
 
