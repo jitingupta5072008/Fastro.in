@@ -1,0 +1,1 @@
+export  const FRONTEND_URL = "https://www.fastro.in/product/"
