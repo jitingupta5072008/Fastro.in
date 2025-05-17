@@ -399,12 +399,12 @@ export const getReview = async (req, res) => {
 
 export const addReview = async (req, res) => {
     const { rating, productId, userId, comment } = req.body;
-    // const files = req.files;
+
     if (!mongoose.Types.ObjectId.isValid(productId) || !mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid productId or userId format' });
     }
-    try {
 
+    try {
         const currentProduct = await Product.findById(productId);
         const currentUser = await User.findById(userId);
 
@@ -421,10 +421,9 @@ export const addReview = async (req, res) => {
 
         if (req.files && req.files.length > 0) {
             for (const file of req.files) {
-                const result = await cloudinary.uploader.upload(file.path);
+                const base64 = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+                const result = await cloudinary.uploader.upload(base64);
                 imageUrls.push(result.secure_url);
-
-                fs.unlinkSync(file.path);
             }
         }
 
