@@ -564,8 +564,17 @@ export const getProductBySingleCategory = async (req, res) => {
 
 export const products = async (req, res) => {
     try {
-        const products = await Product.find();
-        res.json({ products });
+        const categories = ['Fashion','Electronics','Groceries','Books','Vegetables','Food'];
+        const productData = {};
+
+        await Promise.all(categories.map(async (cat)=>{
+            const products = await Product.find({category: cat}).select('name description price discountPercentage images availabilityStatus').limit(8).lean();
+
+            productData[cat] = products;
+        }));
+
+        res.status(200).json({products: productData})
+        
     } catch (error) {
         // console.log(error);
         res.status(400).json({ message: error.message });

@@ -6,23 +6,9 @@ import OrderTracking from './OrderTracking';
 const OrderDetail = () => {
   const location = useLocation();
   const product = location.state?.product;
-  console.log(product);
   const productItem = product.items[0];
   const address = product.shippingAddress;
 
-  // For now hardcode status. In future, use product.status like "Shipped", "Delivered", etc.
-//   const orderStatus = "Order Placed"; // or "Shipped", "OutForDelivery", "Placed"
-
-//   const trackingSteps = [
-//     { label: "Order Placed", icon: <CircleCheck className="w-4 h-4" /> },
-//     { label: "Shipped", icon: <PackageCheck className="w-4 h-4" /> },
-//     { label: "Out for Delivery", icon: <Truck className="w-4 h-4" /> },
-//     { label: "Delivered", icon: <LocateFixed className="w-4 h-4" /> },
-//   ];
-  
-  // Simulate current order status index (Replace with product.status logic)
-//   const currentStepIndex = 3; // 0 = Placed, 1 = Shipped, etc.
-  
 
   return (
     <div className="max-w-xl mx-auto p-4 space-y-6 text-gray-800 bg-white rounded-xl shadow-md mt-4">

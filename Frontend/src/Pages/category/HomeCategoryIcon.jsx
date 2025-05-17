@@ -42,14 +42,18 @@ const HomeCategoryIcon = () => {
 
   if (loading) {
     return (
-      <div className="catSliderSection mt-8 flex gap-4">
-        {[1, 2, 3, 4, 5].map((_, index) => (
-          <div key={index} className="flex slick-list flex-col items-center animate-pulse space-y-2">
-            <div className="w-16 h-16 bg-gray-300 rounded-full" />
-            <div className="w-20 h-4 bg-gray-300 rounded" />
-          </div>
-        ))}
+      <div class="catSliderSection mt-8">
+        <div class="rectangle hd"></div>
+        <div class="slider-content mt-4">
+          {[1, 2, 3, 4, 5].map((_, index) => (
+            <div key={index} class="slider-item">
+              <div class="circle"></div>
+              <div class="rectangle"></div>
+            </div>
+          ))}
+        </div>
       </div>
+
     );
   }
 
@@ -122,65 +126,65 @@ const HomeCategoryIcon = () => {
     </div>
 
 
-   {/* Bottom Popup for Subcategories */}
+    {/* Bottom Popup for Subcategories */}
 
-   <AnimatePresence>
-  {selectedCategory && (
-    <motion.div
-      initial={{ y: "100%" }}
-      animate={{ y: 0 }}
-      exit={{ y: "100%" }}
-      transition={{ duration: 0.4 }}
-      className="fixed bottom-[60px] md:bottom-[0px] lg:bottom-[0px] h-[45vh] left-0 right-0 bg-white rounded-t-3xl shadow-lg z-[100]"
-    >
-      {/* Fixed Header */}
-      <div className="px-6 py-4 border-b flex justify-between items-center sticky top-0 bg-white z-10">
-        <div>
-          <h2 className="text-xl font-semibold">{selectedCategory.name}</h2>
-          <p className="text-sm text-gray-500">Explore Subcategories</p>
-        </div>
-        <button
-          onClick={() => {
-            setSelectedCategory(null);
-            setSubCategories([]);
-          }}
-          className="text-gray-500 hover:text-black text-2xl font-bold"
+    <AnimatePresence>
+      {selectedCategory && (
+        <motion.div
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          exit={{ y: "100%" }}
+          transition={{ duration: 0.4 }}
+          className="fixed bottom-[60px] md:bottom-[0px] lg:bottom-[0px] h-[45vh] left-0 right-0 bg-white rounded-t-3xl shadow-lg z-[100]"
         >
-          ×
-        </button>
-      </div>
-
-      {/* Scrollable Body */}
-      <div className="h-[calc(45vh-80px)] overflow-y-auto px-6 py-4">
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4">
-
-          {subCategories.length == 0 ? (
-             <div className="flex items-center justify-center my-8">
-                     <Loader2 className="animate-spin h-6 w-6 text-gray-500" />
-                   </div>
-          ):(
-          subCategories.map((sub, idx) => (
-            <div
-              key={idx} onClick={()=> navigate(`/products/category/${sub.name}`)}
-              className="flex flex-col items-center p-3 rounded-xl border hover:shadow-md transition">
-              <img
-                src={sub.imageUrl}
-                alt={sub.name}
-                className="w-14 h-14 object-contain mb-2"
-              />
-              <p className="text-sm font-medium text-gray-700">{sub.name}</p>
+          {/* Fixed Header */}
+          <div className="px-6 py-4 border-b flex justify-between items-center sticky top-0 bg-white z-10">
+            <div>
+              <h2 className="text-xl font-semibold">{selectedCategory.name}</h2>
+              <p className="text-sm text-gray-500">Explore Subcategories</p>
             </div>
-         )))
-         }
-        </div>
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
+            <button
+              onClick={() => {
+                setSelectedCategory(null);
+                setSubCategories([]);
+              }}
+              className="text-gray-500 hover:text-black text-2xl font-bold"
+            >
+              ×
+            </button>
+          </div>
+
+          {/* Scrollable Body */}
+          <div className="h-[calc(45vh-80px)] overflow-y-auto px-6 py-4">
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4">
+
+              {subCategories.length == 0 ? (
+                <div className="flex items-center justify-center my-8">
+                  <Loader2 className="animate-spin h-6 w-6 text-gray-500" />
+                </div>
+              ) : (
+                subCategories.map((sub, idx) => (
+                  <div
+                    key={idx} onClick={() => navigate(`/products/category/${sub.name}`)}
+                    className="flex flex-col items-center p-3 rounded-xl border hover:shadow-md transition">
+                    <img
+                      src={sub.imageUrl}
+                      alt={sub.name}
+                      className="w-14 h-14 object-contain mb-2"
+                    />
+                    <p className="text-sm font-medium text-gray-700">{sub.name}</p>
+                  </div>
+                )))
+              }
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
 
 
 
-    </>
+  </>
   );
 };
 

@@ -56,7 +56,7 @@ const OrderSuccess = () => {
                       day: 'numeric',
                       month: 'long',
                       year: 'numeric',
-                    })}</span>
+                    })} {order.DeliveryTime}</span>
           </div>
         </div>
 
@@ -68,7 +68,7 @@ const OrderSuccess = () => {
               <div key={index} className="flex justify-between border-b pb-2">
                 <div>
                   <p className="font-medium text-gray-700">{product.name}</p>
-                  <p className="text-gray-500">Quantity: {product.quantity}</p>
+                  <p className="text-gray-500">Quantity: {order.qty}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-gray-700 font-semibold">₹{order.totalAmount}</p>

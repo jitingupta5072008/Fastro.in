@@ -82,7 +82,7 @@ const SingleProductCheckout = () => {
             );
 
             if (response.status === 200) {
-                navigate("/order-success", { state: { order: response.data.order } });
+                navigate(`/order-success/${response.data.order._id}`, { state: { order: response.data.order } });
             }
         } catch (err) {
             console.error(err);

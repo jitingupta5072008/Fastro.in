@@ -173,7 +173,7 @@ const OrderPage = () => {
                   <p className="text-gray-900 font-semibold mt-1">
                     {/* ₹{order.totalAmount} */}
 
-                    ₹{Math.floor((order.items[0].price - (order.items[0].price * order.items[0].discountPercentage) / 100) * order.qty)}
+                    ₹{order.totalAmount}
                   </p>
                 </div>
 

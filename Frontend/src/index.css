@@ -2,3 +2,57 @@
     margin: 0;
     padding: 0;
 }
+
+
+/* Main wrapper to contain the slider */
+  .catSliderSection {
+    margin-top: 20px;
+    overflow-x: auto; /* Enable horizontal scroll */
+    padding: 10px; /* Some padding to the container */
+  }
+
+  /* Slider content to ensure items are laid out in a row */
+  .slider-content {
+    display: flex;
+    gap: 16px; /* Space between items */
+  }
+
+  /* Styling for each slider item */
+  .slider-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: pulse 1.5s infinite; /* Optional animation */
+    gap: 8px;
+  }
+
+  /* Circle styling */
+  .circle {
+    width: 64px;
+    height: 64px;
+    background-color: #e0e0e0; /* Gray background */
+    border-radius: 50%;
+  }
+
+  /* Rectangle styling */
+  .rectangle {
+    width: 80px;
+    height: 16px;
+    background-color: #e0e0e0; /* Gray background */
+    border-radius: 8px;
+  }
+
+  /* Responsive styles: for small devices */
+  @media (max-width: 600px) {
+    .catSliderSection {
+      padding: 0 8px; /* Adjust padding for small screens */
+    }
+    
+    .slider-content {
+      flex-wrap: nowrap; /* Prevent wrapping of items */
+    }
+
+    .slider-item {
+      flex-shrink: 0; /* Prevent items from shrinking */
+    }
+  }

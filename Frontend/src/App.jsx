@@ -56,7 +56,7 @@ function App() {
             <Route path='/categories' element={<FilterProduct />} />
             <Route path="/products/category/:slug" element={<CategoryProducts />} />
             <Route path="/order-details" element={<OrderDetail />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
+            <Route path="/order-success/:orderId" element={<OrderSuccess />} />
 
             {/* <Route path='/admin/dashboard' element={<ProtectedRoute><Dashboard /></ProtectedRoute>} /> */}
 
