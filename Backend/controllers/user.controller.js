@@ -551,15 +551,42 @@ export const getSlider = async (req, res) => {
 }
 
 export const getProductBySingleCategory = async (req, res) => {
-    try {
-        // Example route on backend to get products by category
-        const category = await Category.findOne({ slug: req.params.slug });
-        const products = await Product.find({ subCategory: category._id });
-        res.json({ products });
-    } catch (error) {
-        res.status(500).json({ error: "Failed to fetch Product" });
+  try {
+    const { slug } = req.params;
+
+    let products = [];
+
+    // Step 1: Try finding it as a parent category (slug match)
+    const parentCategory = await Category.findOne({ slug, isParent: true });
+
+    if (parentCategory) {
+      // Get all subcategories of this parent category
+      const subCategories = await Category.find({ parentCategory: parentCategory._id });
+      const subCategoryIds = subCategories.map(sub => sub._id);
+
+      // Fetch all products under these subcategories
+      products = await Product.find({ subCategory: { $in: subCategoryIds } });
+    } else {
+      // Step 2: Try finding it as a subcategory (by name or slug)
+      const subCategory = await Category.findOne({
+        $or: [{ name: slug }, { slug }],
+        isParent: false
+      });
+
+      if (!subCategory) {
+        return res.status(404).json({ error: "Category or Subcategory not found" });
+      }
+
+      // Fetch products under this subcategory
+      products = await Product.find({ subCategory: subCategory._id });
     }
-}
+
+    res.json({ products });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch Product" });
+  }
+};
 export const products = async (req, res) => {
     try {
         const categoryNames = ['Fashion', 'Electronics', 'Groceries', 'Books', 'Vegetables', 'Food'];

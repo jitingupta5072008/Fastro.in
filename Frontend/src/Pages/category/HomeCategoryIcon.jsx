@@ -135,7 +135,7 @@ const HomeCategoryIcon = () => {
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
           transition={{ duration: 0.4 }}
-          className="fixed bottom-[60px] md:bottom-[0px] lg:bottom-[0px] h-[45vh] left-0 right-0 bg-white rounded-t-3xl shadow-lg z-[100]"
+          className="fixed bottom-[60px] md:bottom-[0px] lg:bottom-[0px] h-[35vh] left-0 right-0 bg-white rounded-t-3xl shadow-lg z-[100]"
         >
           {/* Fixed Header */}
           <div className="px-6 py-4 border-b flex justify-between items-center sticky top-0 bg-white z-10">
@@ -155,7 +155,7 @@ const HomeCategoryIcon = () => {
           </div>
 
           {/* Scrollable Body */}
-          <div className="h-[calc(45vh-80px)] overflow-y-auto px-6 py-4">
+          <div className="h-[calc(35vh-80px)] overflow-y-auto px-6 py-4">
             <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4">
 
               {subCategories.length == 0 ? (

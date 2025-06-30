@@ -37,7 +37,7 @@ const Slider = () => {
     }
 
     return (
-        <div className="flex justify-center items-center mt-8 shadow-lg block md:hidden sm:hidden">
+        <div className="flex justify-center items-center  shadow-lg block md:hidden sm:hidden">
             <div className="max-w-lg">
                 <Carousel autoSlide={true}>
                     {slides.map((s, index) => (
@@ -46,7 +46,7 @@ const Slider = () => {
                             key={index}
                                 src={s.imageUrl}
                                 alt={`Slide ${index + 1}`}
-                                className="w-full h-auto object-cover"
+                                className="w-full h-auto object-cover rounded-lg"
                                 onClick={() => navigate(`products/category/${s.category.slug}`)}
                             />
                         
